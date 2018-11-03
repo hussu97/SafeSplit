@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Arrays;
 import java.util.List;
 
+
 public class SignInActivity extends Activity implements View.OnClickListener{
 
     private int RC_SIGN_IN = 123;
