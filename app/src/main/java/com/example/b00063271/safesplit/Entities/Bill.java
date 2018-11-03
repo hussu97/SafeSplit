@@ -8,6 +8,7 @@ public class Bill {
     private double billAmt;
     private String id;
 
+    public Bill(){}
     public Bill(List<String> userIds, double billAmt) {
         this.userIds = userIds;
         this.billAmt = billAmt;

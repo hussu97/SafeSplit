@@ -13,11 +13,12 @@ public class BillDB {
         db = FirebaseDatabase.getInstance();
         rf = db.getReference(DB_NAME);
     }
-    public static void addBill(Bill bill){
+    public void addBill(Bill bill){
         String key = rf.push().getKey();
         rf.child(key).setValue(bill);
     }
-    public static void deleteBill(Bill bill){
+    public void deleteBill(Bill bill){
         rf.child(bill.getId()).removeValue();
     }
+
 }

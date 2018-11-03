@@ -8,6 +8,7 @@ public class User {
     private double mobile;
     private List<String> billIds;
 
+    public User(){}
     public User(String name, double mobile, List<String> billIds) {
         this.name = name;
         this.mobile = mobile;
