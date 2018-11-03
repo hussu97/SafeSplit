@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Safe Split</string>
+    <string name="accsettingsbutton">Account Settings</string>
+    <string name="notisettingsbutton">Notification Settings</string>
+    <string name="passcodebutton">Passcode</string>
+    <string name="logoutbutton">Log Out</string>
+    <string name="addbillbutton">+</string>
+    <string name="addusertv">Add to bill:</string>
+    <string name="friendnametv" />
+</resources>
