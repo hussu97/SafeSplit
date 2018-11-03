@@ -3,6 +3,7 @@ package com.example.b00063271.safesplit;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -11,7 +12,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.b00063271.safesplit.Database.UserDB;
+import com.example.b00063271.safesplit.Entities.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SignUpActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
@@ -23,6 +30,7 @@ public class SignUpActivity extends AppCompatActivity {
     private Button signUpButton;
     private TextView loginLink;
     private FirebaseAuth mAuth;
+    private UserDB userDB;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,6 +43,7 @@ public class SignUpActivity extends AppCompatActivity {
         signUpButton = (Button) findViewById(R.id.btn_signup);
         loginLink = (TextView) findViewById(R.id.link_login);
         mAuth = FirebaseAuth.getInstance();
+        userDB = new UserDB(this);
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,34 +79,46 @@ public class SignUpActivity extends AppCompatActivity {
         progressDialog.setMessage("Creating Account...");
         progressDialog.show();
 
-        String name = nameEditText.getText().toString();
-        String email = emailEditText.getText().toString();
-        String password = passwordEditText.getText().toString();
+        final String name = nameEditText.getText().toString();
+        final String email = emailEditText.getText().toString();
+        final String password = passwordEditText.getText().toString();
         String reEnterPassword = rePasswordEditText.getText().toString();
 
-        // TODO: Implement your own signup logic here.
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success");
+                            String userID = mAuth.getCurrentUser().getUid();
+                            User user = new User(name,email);
+                            user.setID(userID);
+                            userDB.addUser(userID,user);
+                            progressDialog.dismiss();
+                            SignUpActivity.this.onSignupSuccess(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            SignUpActivity.this.onSignupFailed();
+                        }
 
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onSignupSuccess or onSignupFailed
-                        // depending on success
-                        onSignupSuccess();
-                        // onSignupFailed();
-                        progressDialog.dismiss();
+                        // ...
                     }
-                }, 3000);
+                });
     }
 
 
-    public void onSignupSuccess() {
+    public void onSignupSuccess(User user) {
         signUpButton.setEnabled(true);
-        setResult(RESULT_OK, null);
+        Intent intent = new Intent();
+        intent.putExtra("user",user.getID());
+        setResult(RESULT_OK, intent);
         finish();
     }
 
     public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), "SignUp failed", Toast.LENGTH_LONG).show();
 
         signUpButton.setEnabled(true);
     }

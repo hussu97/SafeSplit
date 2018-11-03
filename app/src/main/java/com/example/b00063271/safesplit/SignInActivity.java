@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.b00063271.safesplit.Database.UserDB;
+import com.example.b00063271.safesplit.Entities.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -29,6 +31,7 @@ public class SignInActivity extends AppCompatActivity {
     private Button loginButton;
     private TextView signupLink;
     private FirebaseAuth mAuth;
+    private UserDB userDB;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +41,9 @@ public class SignInActivity extends AppCompatActivity {
         loginButton = (Button)findViewById(R.id.btn_login);
         signupLink = (TextView)findViewById(R.id.link_signup);
         mAuth = FirebaseAuth.getInstance();
+
+        userDB = new UserDB(this);
+
         loginButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -58,6 +64,17 @@ public class SignInActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+//        if(currentUser!=null){
+//            Intent intent = new Intent(this,SignOutActivity.class);
+//            intent.putExtra("user",currentUser.getUid());
+//            startActivity(intent);
+//        }
+    }
     public void login() {
         Log.d(TAG, "Login");
 
@@ -85,8 +102,9 @@ public class SignInActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            SignInActivity.this.onLoginSuccess();
                             progressDialog.dismiss();
+                            SignInActivity.this.onLoginSuccess(user.getUid());
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -98,16 +116,17 @@ public class SignInActivity extends AppCompatActivity {
                     }
                 });
     }
-
+    public void updateGetUser(User user){
+        emailEditText.setText(user.getEmail());
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == RESULT_OK) {
-
-                // TODO: Implement successful signup logic here
-                // By default we just finish the Activity and log them in automatically
-                this.finish();
+                Intent intent = getIntent();
+                String userID = intent.getStringExtra("user");
+                userDB.getUser(userID);
             }
         }
     }
@@ -118,9 +137,11 @@ public class SignInActivity extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
-    public void onLoginSuccess() {
+    public void onLoginSuccess(String uID) {
         loginButton.setEnabled(true);
-        finish();
+        Intent intent = new Intent(this, SignOutActivity.class);
+        intent.putExtra("user",uID);
+        startActivity(intent);
     }
 
     public void onLoginFailed() {

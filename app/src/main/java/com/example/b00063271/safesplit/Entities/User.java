@@ -5,14 +5,18 @@ import java.util.List;
 public class User {
     private String ID;
     private String name;
-    private double mobile;
+    private String email;
     private List<String> billIds;
 
     public User(){}
-    public User(String name, double mobile, List<String> billIds) {
+    public User(String name, String email, List<String> billIds) {
         this.name = name;
-        this.mobile = mobile;
+        this.email = email;
         this.billIds = billIds;
+    }
+    public User(String name, String email){
+        this.name = name;
+        this.email = email;
     }
 
     public List<String> getBillIds() {
@@ -39,11 +43,11 @@ public class User {
         this.name = name;
     }
 
-    public double getMobile() {
-        return mobile;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMobile(double mobile) {
-        this.mobile = mobile;
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

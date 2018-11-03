@@ -1,11 +1,15 @@
 package com.example.b00063271.safesplit.Database;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.example.b00063271.safesplit.Entities.User;
+import com.example.b00063271.safesplit.SignInActivity;
+import com.example.b00063271.safesplit.SignOutActivity;
+import com.example.b00063271.safesplit.SignUpActivity;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -18,19 +22,26 @@ import java.util.ArrayList;
 public class UserDB {
     private static final String TAG = "UserDB";
     private static final String DB_NAME = "users";
-    private static FirebaseDatabase db;
-    private static DatabaseReference rf;
-    private Context context;
-    public UserDB(Context context){
-        this.context = context;
+    private static FirebaseDatabase db = FirebaseDatabase.getInstance();
+    private static DatabaseReference rf = db.getReference(DB_NAME);
+    private SignInActivity sIn;
+    private SignOutActivity sOut;
+    private SignUpActivity sUp;
+    public UserDB(SignInActivity context){
+        this.sIn = context;
     }
-    public static void initializeUserDB(){
-         db = FirebaseDatabase.getInstance();
-         rf = db.getReference(DB_NAME);
+    public UserDB(SignOutActivity context){
+        this.sOut = context;
+    }
+    public UserDB(SignUpActivity context){
+        this.sUp = context;
     }
     public void addUser(User user){
         String key = rf.push().getKey();
         rf.child(key).setValue(user);
+    }
+    public void addUser(String userID, User user){
+        rf.child(userID).setValue(user);
     }
     public void deleteUser(User user){
         rf.child(user.getID()).removeValue();
@@ -43,7 +54,7 @@ public class UserDB {
                 String key = dataSnapshot.getKey();
                 user[0] = dataSnapshot.getValue(User.class);
                 user[0].setID(key);
-                //context.updateGetUser(user);
+                sIn.updateGetUser(user[0]);
             }
 
             @Override

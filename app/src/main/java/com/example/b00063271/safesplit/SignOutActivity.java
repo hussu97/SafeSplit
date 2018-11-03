@@ -15,6 +15,7 @@ import com.example.b00063271.safesplit.Entities.User;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,7 +34,7 @@ public class SignOutActivity extends Activity implements View.OnClickListener{
         addUserBtn = (Button)findViewById(R.id.addUser);
         addUserBtn.setOnClickListener(this);
         signOutBtn.setOnClickListener(this);
-        UserDB.initializeUserDB();
+
         BillDB.initializeBillDB();
     }
 
@@ -41,14 +42,8 @@ public class SignOutActivity extends Activity implements View.OnClickListener{
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.signOutBtn:
-                AuthUI.getInstance()
-                        .signOut(this)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            public void onComplete(@NonNull Task<Void> task) {
-                                Log.d(TAG, "Signed out");
-                                startActivity(new Intent(getApplicationContext(),SignInActivity.class));
-                            }
-                        });
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(this, SignInActivity.class));
                 break;
             case R.id.addUser:
                 List<String>l = Arrays.asList("1","2");
