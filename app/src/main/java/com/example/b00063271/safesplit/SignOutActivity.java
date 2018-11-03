@@ -52,9 +52,9 @@ public class SignOutActivity extends Activity implements View.OnClickListener{
                 break;
             case R.id.addUser:
                 List<String>l = Arrays.asList("1","2");
-                UserDB.addUser(new User("Hussain",1234,l));
+               // UserDB.addUser(new User("Hussain",1234,l));
                 List<String>el = Arrays.asList("1","2");
-                BillDB.addBill(new Bill(el,234.56));
+               // BillDB.addBill(new Bill(el,234.56));
         }
     }
 }

@@ -60,7 +60,7 @@ public class UserDB {
                 String key = dataSnapshot.getKey();
                 User user = dataSnapshot.getValue(User.class);
                 user.setID(key);
-                context.updateGetUserListener(user);
+                //context.updateGetUserListener(user);
             }
 
             @Override
@@ -77,7 +77,7 @@ public class UserDB {
                 for( DataSnapshot ds: dataSnapshot.getChildren()){
                     friends.add(getUser(ds.getKey()));
                 }
-                context.updateUserList(friends);
+                //context.updateUserList(friends);
             }
 
             @Override

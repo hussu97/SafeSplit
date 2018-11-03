@@ -65,7 +65,7 @@ public class BillDB {
                 String key = dataSnapshot.getKey();
                 Bill bill = dataSnapshot.getValue(Bill.class);
                 bill.setID(key);
-                context.updateGetBillListener(bill);
+                //context.updateGetBillListener(bill);
             }
 
             @Override
@@ -82,7 +82,7 @@ public class BillDB {
                 for( DataSnapshot ds: dataSnapshot.getChildren()){
                     friends.add(getBill(ds.getKey()));
                 }
-                context.updateBillUsersList(friends);
+                //context.updateBillUsersList(friends);
             }
 
             @Override
