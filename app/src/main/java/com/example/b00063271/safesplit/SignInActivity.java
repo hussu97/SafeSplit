@@ -94,27 +94,28 @@ public class SignInActivity extends AppCompatActivity {
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
 
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            progressDialog.dismiss();
-                            SignInActivity.this.onLoginSuccess(user.getUid());
-
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            SignInActivity.this.onLoginFailed();
-                            progressDialog.dismiss();
-                        }
-
-                        // ...
-                    }
-                });
+//        mAuth.signInWithEmailAndPassword(email, password)
+//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        if (task.isSuccessful()) {
+//                            // Sign in success, update UI with the signed-in user's information
+//                            Log.d(TAG, "signInWithEmail:success");
+//                            FirebaseUser user = mAuth.getCurrentUser();
+//                            progressDialog.dismiss();
+//                            SignInActivity.this.onLoginSuccess(user.getUid());
+//
+//                        } else {
+//                            // If sign in fails, display a message to the user.
+//                            Log.w(TAG, "signInWithEmail:failure", task.getException());
+//                            SignInActivity.this.onLoginFailed();
+//                            progressDialog.dismiss();
+//                        }
+//
+//                        // ...
+//                    }
+//                });
+        onLoginSuccess("hi");
     }
     public void updateGetUser(User user){
         emailEditText.setText(user.getEmail());
@@ -139,7 +140,7 @@ public class SignInActivity extends AppCompatActivity {
 
     public void onLoginSuccess(String uID) {
         loginButton.setEnabled(true);
-        Intent intent = new Intent(this, SignOutActivity.class);
+        Intent intent = new Intent(this, HomeScreenActivity.class);
         intent.putExtra("user",uID);
         startActivity(intent);
     }

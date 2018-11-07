@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/naviagation_friends"
+        android:icon="@drawable/baseline_accessibility_black_18dp"
+        android:title="@string/title_friends" />
+
+    <item
+        android:id="@+id/navigation_groups"
+        android:icon="@drawable/high_five"
+        android:title="@string/title_groups" />
+
+    <item
+        android:id="@+id/navigation_new_bill"
+        android:icon="@drawable/baseline_add_black_18dp"
+        android:title="@string/title_add" />
+    <item
+        android:id="@+id/navigation_dashboard"
+        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:title="@string/title_dashboard" />
+
+
+    <item
+        android:id="@+id/naviagtion_me"
+        android:icon="@drawable/happiness"
+        android:title="@string/title_me" />
+
+</menu>

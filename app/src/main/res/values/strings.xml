@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Safe Split</string>
+    <string name="title_activity_home_screen">HomeScreenActivity</string>
+    <string name="title_friends">friends</string>
+    <string name="title_add"></string>
+    <string name="title_dashboard">dashboard</string>
+    <string name="title_groups">groups</string>
+    <string name="title_me">me</string>
+    <string name="title_home">Homee</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
