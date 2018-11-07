@@ -1,11 +1,10 @@
 package com.example.b00063271.safesplit.Database;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.example.b00063271.safesplit.Entities.Bill;
-import com.example.b00063271.safesplit.Entities.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

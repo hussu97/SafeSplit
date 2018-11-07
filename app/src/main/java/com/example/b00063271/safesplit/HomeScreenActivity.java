@@ -2,12 +2,12 @@ package com.example.b00063271.safesplit;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -15,7 +15,6 @@ import android.widget.TextView;
 public class HomeScreenActivity extends AppCompatActivity implements FriendsFragment.OnFragmentInteractionListener,DashboardFragment.OnFragmentInteractionListener
                 ,ProfileFragment.OnFragmentInteractionListener,GroupsFragment.OnFragmentInteractionListener{
 
-    private TextView mTextMessage;
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     private final String TAG="HSActivity";
@@ -26,8 +25,6 @@ public class HomeScreenActivity extends AppCompatActivity implements FriendsFrag
         setContentView(R.layout.activity_home_screen);
         fragmentManager = getSupportFragmentManager();
         openFragment(new FriendsFragment());
-
-        mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }

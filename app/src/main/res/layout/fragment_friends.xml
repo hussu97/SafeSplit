@@ -6,21 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".FriendsFragment">
 
+
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabs"
+        android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <com.google.android.material.tabs.TabItem
-            android:icon="@drawable/ic_icon_a_24"
-            android:text="@string/tab_a_label"/>
-        <com.google.android.material.tabs.TabItem
-            android:icon="@drawable/ic_icon_b_24"
-            android:text="@string/tab_b_label"/>
-        <com.google.android.material.tabs.TabItem
-            android:icon="@drawable/ic_icon_c_24"
-            android:text="@string/tab_c_label"/>
+            android:id="@+id/owe_tab_item"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/left_tab" />
 
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/owed_tab_item"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/center_tab" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/total_balance_tab_item"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/right_tab" />
     </com.google.android.material.tabs.TabLayout>
-
 </FrameLayout>
