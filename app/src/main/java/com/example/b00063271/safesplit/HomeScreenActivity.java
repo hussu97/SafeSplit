@@ -1,5 +1,6 @@
 package com.example.b00063271.safesplit;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -44,7 +45,8 @@ public class HomeScreenActivity extends AppCompatActivity implements FriendsFrag
                 case R.id.navigation_groups:
                     return openFragment(new GroupsFragment());
                 case R.id.navigation_new_bill:
-                    Log.d(TAG, "onNavigationItemSelected: Entering + activity");
+                    startActivity(new Intent(getApplicationContext(),NewBillActivity.class));
+                    overridePendingTransition(R.anim.push_bottom_up,R.anim.push_top_down);
                     return true;
             }
             return false;
