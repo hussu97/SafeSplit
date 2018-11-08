@@ -24,6 +24,7 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     private final String TAG="HSActivity";
+    private String userID="xJNsNNf39VJ62aiETsiO";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,7 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.naviagation_friends:
-                    return openFragment(new MainFragment());
+                    return openFragment(MainFragment.newInstance(userID));
                 case R.id.navigation_dashboard:
                     return openFragment(new DashboardFragment());
                 case R.id.naviagtion_me:
@@ -50,8 +51,8 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
                 case R.id.navigation_groups:
                     return openFragment(new GroupsFragment());
                 case R.id.navigation_new_bill:
-                    startActivity(new Intent(getApplicationContext(),NewBillActivity.class));
-                    overridePendingTransition(R.anim.push_bottom_up,R.anim.push_top_down);
+                    startActivity(new Intent(getApplicationContext(),AddUsers.class));
+                    overridePendingTransition(R.anim.push_bottom_up,R.anim.remain_same_position);
                     return true;
             }
             return false;

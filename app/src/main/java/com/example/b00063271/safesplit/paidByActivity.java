@@ -1,14 +1,13 @@
 package com.example.b00063271.safesplit;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.Activity;
 import android.os.Bundle;
 
-public class NewBillActivity extends AppCompatActivity {
+public class paidByActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_bill);
+        setContentView(R.layout.activity_paid_by);
     }
 }
