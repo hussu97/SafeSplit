@@ -6,12 +6,19 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FriendsFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -22,6 +29,7 @@ public class FriendsFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private ViewPager viewPager;
     private TabLayout tabLayout;
     private TabItem moneyOwedTabItem;
     private TabItem moneyOweTabItem;
@@ -46,19 +54,69 @@ public class FriendsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        setRetainInstance(true);
 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_friends, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_friends,container, false);
+        // Setting ViewPager for each Tabs
+        viewPager = (ViewPager) view.findViewById(R.id.friends_view_pager);
+        setupViewPager(viewPager);
+        // Set Tabs inside Toolbar
+        tabLayout = (TabLayout) view.findViewById(R.id.friends_tab_layout);
+        tabLayout.setupWithViewPager(viewPager);
+        return view;
+
+    }
+
+
+    // Add Fragments to Tabs
+    private void setupViewPager(ViewPager viewPager) {
+        Adapter adapter = new Adapter(getChildFragmentManager());
+        adapter.addFragment(new GroupsFragment(), "Money Owed");
+        adapter.addFragment(new ProfileFragment(), "Money Owe");
+        adapter.addFragment(new DashboardFragment(), "Total balance");
+        viewPager.setAdapter(adapter);
+
+
+
+    }
+
+    static class Adapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public Adapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        tabLayout = (TabLayout)getView().findViewById(R.id.tabLayout);
+        tabLayout = (TabLayout)getView().findViewById(R.id.friends_tab_layout);
     }
 
 
