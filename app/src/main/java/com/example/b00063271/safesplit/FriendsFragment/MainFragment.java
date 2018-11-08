@@ -1,4 +1,4 @@
-package com.example.b00063271.safesplit;
+package com.example.b00063271.safesplit.FriendsFragment;
 
 import android.content.Context;
 import android.net.Uri;
@@ -14,19 +14,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.b00063271.safesplit.DashboardFragment;
+import com.example.b00063271.safesplit.GroupsFragment;
+import com.example.b00063271.safesplit.ProfileFragment;
+import com.example.b00063271.safesplit.R;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FriendsFragment extends Fragment {
+public class MainFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String userID;
 
     private OnFragmentInteractionListener mListener;
     private ViewPager viewPager;
@@ -35,14 +36,13 @@ public class FriendsFragment extends Fragment {
     private TabItem moneyOweTabItem;
     private TabItem totalBalanceTabItem;
 
-    public FriendsFragment() {
+    public MainFragment() {
         // Required empty public constructor
     }
-    public static FriendsFragment newInstance(String param1, String param2) {
-        FriendsFragment fragment = new FriendsFragment();
+    public static MainFragment newInstance(String userID) {
+        MainFragment fragment = new MainFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM1, userID);
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,8 +51,9 @@ public class FriendsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            userID = getArguments().getString(ARG_PARAM1);
+        }else{
+            userID = "xJNsNNf39VJ62aiETsiO";
         }
         setRetainInstance(true);
 
@@ -61,7 +62,7 @@ public class FriendsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_friends,container, false);
+        View view = inflater.inflate(R.layout.fragment_friends_main,container, false);
         // Setting ViewPager for each Tabs
         viewPager = (ViewPager) view.findViewById(R.id.friends_view_pager);
         setupViewPager(viewPager);
@@ -76,13 +77,10 @@ public class FriendsFragment extends Fragment {
     // Add Fragments to Tabs
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getChildFragmentManager());
-        adapter.addFragment(new GroupsFragment(), "Money Owed");
-        adapter.addFragment(new ProfileFragment(), "Money Owe");
-        adapter.addFragment(new DashboardFragment(), "Total balance");
+        adapter.addFragment(MoneyOwedFragment.newInstance(userID), "Money Owed");
+        adapter.addFragment(new MoneyOweFragment(), "Money Owe");
+        adapter.addFragment(TotalBalanceFragment.newInstance("",""), "Total balance");
         viewPager.setAdapter(adapter);
-
-
-
     }
 
     static class Adapter extends FragmentPagerAdapter {
