@@ -202,6 +202,7 @@ public class TotalBalanceFragment extends Fragment {
         totalBalListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
+
     }
 
     public void onButtonPressed(Uri uri) {
