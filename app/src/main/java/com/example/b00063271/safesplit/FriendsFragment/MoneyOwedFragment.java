@@ -1,15 +1,23 @@
 package com.example.b00063271.safesplit.FriendsFragment;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
 import com.example.b00063271.safesplit.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.tabs.TabItem;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -26,6 +34,7 @@ public class MoneyOwedFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private FirebaseFirestore db;
     private final String TAG = "MoneyOwedFrag";
+    private TabItem moneyOwedTabItem;
 
     public MoneyOwedFragment() {
         // Required empty public constructor
@@ -55,6 +64,7 @@ public class MoneyOwedFragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                             }
+                            updateList();
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
                         }
@@ -66,7 +76,10 @@ public class MoneyOwedFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_money_owed, container, false);
+        View view =  inflater.inflate(R.layout.fragment_money_owed, container, false);
+        moneyOwedTabItem = (TabItem) view.findViewById(R.id.owed_tab_item);
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -92,17 +105,8 @@ public class MoneyOwedFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+    private void updateList(){    }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);

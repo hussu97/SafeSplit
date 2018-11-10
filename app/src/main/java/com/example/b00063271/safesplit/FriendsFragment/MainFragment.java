@@ -1,6 +1,7 @@
 package com.example.b00063271.safesplit.FriendsFragment;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -10,9 +11,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.b00063271.safesplit.DashboardFragment;
 import com.example.b00063271.safesplit.GroupsFragment;
@@ -26,6 +31,10 @@ import java.util.List;
 
 public class MainFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
+
+    private final int MONEY_OWED_TAB =0;
+    private final int MONEY_OWE_TAB =1;
+    private final int TOTAL_BALANCE_TAB =2;
 
     private String userID;
 
@@ -69,10 +78,24 @@ public class MainFragment extends Fragment {
         // Set Tabs inside Toolbar
         tabLayout = (TabLayout) view.findViewById(R.id.friends_tab_layout);
         tabLayout.setupWithViewPager(viewPager);
+        moneyOwedTabItem = (TabItem)view.findViewById(R.id.owed_tab_item);
+        updateLists();
         return view;
 
     }
 
+    private void updateLists(){
+        String text2 = text + CepVizyon.getPhoneCode() + "\n\n"
+                + getText(R.string.currentversion) + CepVizyon.getLicenseText();
+
+        Spannable spannable = new SpannableString(text2);
+
+        spannable.setSpan(new ForegroundColorSpan(Color.WHITE), text.length(), (text + CepVizyon.getPhoneCode()).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        myTextView.setText(spannable, TextView.BufferType.SPANNABLE);
+
+        tabLayout.getTabAt(MONEY_OWED_TAB).setText;
+    }
 
     // Add Fragments to Tabs
     private void setupViewPager(ViewPager viewPager) {
@@ -110,11 +133,6 @@ public class MainFragment extends Fragment {
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        tabLayout = (TabLayout)getView().findViewById(R.id.friends_tab_layout);
     }
 
 
