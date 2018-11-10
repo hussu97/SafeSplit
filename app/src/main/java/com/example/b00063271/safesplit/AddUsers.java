@@ -17,7 +17,6 @@ import android.widget.MultiAutoCompleteTextView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 // Contacts------------------------------------
 //---------------------------------------------
 import java.util.ArrayList;
@@ -38,10 +37,7 @@ public class AddUsers extends AppCompatActivity implements AdapterView.OnItemCli
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setTheme(R.style.Theme_AppCompat_Light_DarkActionBar);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setActionBar(myToolbar);
-
+        setTheme(R.style.Theme_AppCompat_Light_DarkActionBar);
 
         setContentView(R.layout.activity_add_users);
         FRIENDS = new ArrayList<>();
@@ -163,6 +159,7 @@ public class AddUsers extends AppCompatActivity implements AdapterView.OnItemCli
                     Toast.makeText(getApplicationContext(), "Please add users!", Toast.LENGTH_SHORT).show();
                 else{
                     intent.putExtra("users", users);
+                    intent.putExtra("payer", "You");
                     startActivity(intent);
                 }
                 break;

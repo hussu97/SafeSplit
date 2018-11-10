@@ -1,9 +1,12 @@
 package com.example.b00063271.safesplit;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -14,21 +17,35 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 
-public class AddBill extends Activity {
+public class AddBill extends AppCompatActivity {
 
-    private Button paidby;
-    private Button split;
-    private EditText amount;
+    // PRIVATES
     private Spinner splitSpinner;
     private AlertDialog.Builder b;
-    private ArrayList<String> users;
+
+    // STATICS
+    static Button paidby;
+    static Button split;
+    static EditText amount;
+    static Boolean First = true;
+
+
+
+    static ArrayList<String> users;
+    static HashMap<String, Float> payers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_bill);
+
+        ActionBar actionBar = getActionBar();
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.RED));
 
         paidby = (Button) findViewById(R.id.paidbybutton);
         split = (Button) findViewById(R.id.splitbutton);
@@ -36,33 +53,25 @@ public class AddBill extends Activity {
 
         // Get Users
         users = new ArrayList<String>();
-        users.add("Custom");
-        users.add("You");
+
+        // Get Payers
+        payers = new HashMap<>();
+
+        if(First){
+            payers.put("You", 0f);
+            First = false;
+            paidby.setText("You");
+
+            users.add("Custom");
+            users.add("You");
+        }
+        else{
+
+        }
+
         ArrayList<String> fromprev = getIntent().getStringArrayListExtra("users");
         for(int i = 0; i < fromprev.size(); i++)
             users.add(fromprev.get(i));
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, users);
-        /*
-        splitSpinner = (Spinner) findViewById(R.id.splitspinner);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        splitSpinner.setAdapter(adapter);
-        */
-
-        b = new AlertDialog.Builder(this);
-        b.setTitle("Paid by");
-        b.setAdapter(adapter, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                if(which == 0)
-                    startActivity(new Intent(getApplicationContext(), paidByActivity.class));
-                else if (which == 1)
-                    paidby.setText("you");
-                else
-                    paidby.setText(users.get(which));
-            }
-        });
 
         paidby.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +80,10 @@ public class AddBill extends Activity {
                     Toast.makeText(getApplicationContext(), "Please enter an amount!", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    b.show();
+                    // b.show();
+                    Intent dialogintent = new Intent(getApplicationContext(), paidByActivity.class);
+                    dialogintent.putExtra("users", users);
+                    startActivity(dialogintent);
                 }
             }
         });
@@ -89,4 +101,15 @@ public class AddBill extends Activity {
         });
 
     }
+
+    static void UpdateView(){
+        if (payers.size() == 1){
+            paidby.setText(payers.keySet().iterator().next());
+        }
+        else{
+            paidby.setText("Custom");
+
+        }
+    }
+
 }

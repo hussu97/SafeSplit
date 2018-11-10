@@ -5,14 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".paidByActivity">
+    tools:context=".CustomPayment">
 
     <ListView
-        android:id="@+id/participants"
+        android:id="@+id/custom_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:padding="5dp" />
-
-
+        android:layout_height="match_parent" />
 </LinearLayout>

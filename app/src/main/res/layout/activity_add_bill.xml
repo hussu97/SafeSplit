@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/stage2"
     android:orientation="vertical"
     tools:context=".AddBill">
 
@@ -21,6 +22,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/currency"
+            android:textColor="#FFF"
             android:textSize="30sp" />
 
         <EditText
@@ -31,9 +33,11 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="5dp"
             android:layout_weight="1"
+            android:backgroundTint="@color/bluestage1"
             android:ems="10"
             android:hint="0.00"
             android:inputType="numberDecimal"
+            android:textColor="#FFF"
             android:textSize="30sp" />
     </TableRow>
 
@@ -49,6 +53,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/paidby"
+            android:textColor="#FFF"
             android:textSize="12sp" />
 
         <Button
@@ -71,6 +76,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/split"
+            android:textColor="#FFF"
             android:textSize="12sp" />
 
         <Button
@@ -92,6 +98,7 @@
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:text="."
+            android:textColor="#FFF"
             android:textSize="24sp" />
     </TableRow>
 
