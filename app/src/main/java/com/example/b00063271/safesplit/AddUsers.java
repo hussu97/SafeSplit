@@ -17,15 +17,18 @@ import android.widget.MultiAutoCompleteTextView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 // Contacts------------------------------------
 //---------------------------------------------
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import static com.example.b00063271.safesplit.SafeSplitApp.contactData;
 
 
-public class AddUsers extends Activity implements AdapterView.OnItemClickListener, MultiAutoCompleteTextView.OnEditorActionListener {
+public class AddUsers extends AppCompatActivity implements AdapterView.OnItemClickListener, MultiAutoCompleteTextView.OnEditorActionListener {
 
     static ArrayList<String> FRIENDS;
     private ListView friendslist;
@@ -35,6 +38,11 @@ public class AddUsers extends Activity implements AdapterView.OnItemClickListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        setTheme(R.style.Theme_AppCompat_Light_DarkActionBar);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setActionBar(myToolbar);
+
+
         setContentView(R.layout.activity_add_users);
         FRIENDS = new ArrayList<>();
         for(int i = 0; i < contactData.size(); i++){
@@ -80,13 +88,20 @@ public class AddUsers extends Activity implements AdapterView.OnItemClickListene
         //Auto Complete
         //------------------------------------------------------------------------------------------
         simpleMultiAutoCompleteTextView = (MultiAutoCompleteTextView) findViewById(R.id.multiAutoCompleteTextView);
+        simpleMultiAutoCompleteTextView.setDropDownBackgroundResource(R.color.colorPrimaryDark);
         ArrayAdapter<String> friends = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, FRIENDS);
         simpleMultiAutoCompleteTextView.setAdapter(friends);
 
         simpleMultiAutoCompleteTextView.setThreshold(1);
         simpleMultiAutoCompleteTextView.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
         simpleMultiAutoCompleteTextView.setHint("Add to bill"); // set hint in a MultiAutoCompleteTextView
-        simpleMultiAutoCompleteTextView.setOnItemClickListener(this);
+        simpleMultiAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                simpleMultiAutoCompleteTextView.setText(check());
+                simpleMultiAutoCompleteTextView.setSelection(simpleMultiAutoCompleteTextView.getText().length());
+            }
+        });
         simpleMultiAutoCompleteTextView.setOnEditorActionListener(this);
         simpleMultiAutoCompleteTextView.addTextChangedListener(new TextWatcher() {
             @Override
@@ -201,9 +216,21 @@ public class AddUsers extends Activity implements AdapterView.OnItemClickListene
     public void onItemClick(AdapterView<?> parent, View v,int position, long id){
         simpleMultiAutoCompleteTextView.setText(check());
         String entered = simpleMultiAutoCompleteTextView.getText().toString();
-        if (entered != null) simpleMultiAutoCompleteTextView.setText(entered + FRIENDS.get(position) + ", ");
-        else simpleMultiAutoCompleteTextView.setText(FRIENDS.get(position) + ", ");
-        System.out.println(entered + "-----------------------------------");
+        System.out.println(entered + "11111111111111111111111111111");
+
+        if (entered != null) {
+            System.out.println("case 1");
+            System.out.println(entered + "22222222222222222222222222222");
+            simpleMultiAutoCompleteTextView.setText(entered + FRIENDS.get(position) + ", ");
+            System.out.println("Position: " + position);
+            System.out.println(entered + "33333333333333333333333333333");
+        }
+        else {
+            System.out.println("case 2");
+            simpleMultiAutoCompleteTextView.setText(FRIENDS.get(position) + ", ");
+        }
+
+        System.out.println(entered + "444444444444444444444444444444");
         System.out.println(simpleMultiAutoCompleteTextView.getText().toString() + "==============================");
         simpleMultiAutoCompleteTextView.setText(check());
         simpleMultiAutoCompleteTextView.setSelection(simpleMultiAutoCompleteTextView.getText().length());

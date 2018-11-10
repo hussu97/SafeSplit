@@ -28,6 +28,7 @@ public class SignInActivity extends AppCompatActivity {
     private TextView signupLink;
     private FirebaseAuth mAuth;
     private UserDB userDB;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
