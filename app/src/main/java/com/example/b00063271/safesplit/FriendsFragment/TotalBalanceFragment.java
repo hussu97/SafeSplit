@@ -101,6 +101,7 @@ public class TotalBalanceFragment extends Fragment {
         totalBalAmtTextView = (TextView) view.findViewById(R.id.moneyOweAmt);
         totalBalSettleUpButton = (ImageButton) view.findViewById(R.id.moneyOweSettleUp);
         return view;
+
     }
 
     private void getBalTransactions(String userMobile){
