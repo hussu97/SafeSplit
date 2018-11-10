@@ -167,7 +167,7 @@ public class MainFragment extends Fragment {
         Adapter adapter = new Adapter(getChildFragmentManager());
         adapter.addFragment(MoneyOwedFragment.newInstance(userMobile), "Money Owed");
         adapter.addFragment(MoneyOweFragment.newInstance(userMobile), "Money Owe");
-        adapter.addFragment(TotalBalanceFragment.newInstance("",""), "Total balance");
+        adapter.addFragment(TotalBalanceFragment.newInstance(userMobile), "Total balance");
         viewPager.setAdapter(adapter);
     }
 

@@ -147,8 +147,6 @@ public class MoneyOweFragment extends Fragment {
                 }
             });
         }
-        Log.d(TAG, "getOweTransactionDetails: updateList");
-        updateList();
     }
 
     private void updateList(){
@@ -160,7 +158,6 @@ public class MoneyOweFragment extends Fragment {
         SimpleAdapter adapter = new SimpleAdapter(getActivity(), data, resource, from, to);
         moneyOweListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-
     }
 
     @Override

@@ -158,8 +158,6 @@ public class MoneyOwedFragment extends Fragment {
                 }
             });
         }
-        Log.d(TAG, "getOwedTransactionDetails: updateList");
-        updateList();
     }
     private void updateList(){
         Log.d(TAG, "updateList: "+data.size());
