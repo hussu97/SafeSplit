@@ -161,6 +161,17 @@ public class MoneyOwedFragment extends Fragment {
         Log.d(TAG, "getOwedTransactionDetails: updateList");
         updateList();
     }
+    private void updateList(){
+        Log.d(TAG, "updateList: "+data.size());
+        int resource = R.layout.money_owed_list;
+        String[] from = {"person", "amount"};
+        int[] to = {R.id.moneyOwedPerson, R.id.moneyOwedAmt};
+        // create and set the adapter
+        SimpleAdapter adapter = new SimpleAdapter(getActivity(), data, resource, from, to);
+        moneyOwedListView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -177,17 +188,6 @@ public class MoneyOwedFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-    private void updateList(){
-        Log.d(TAG, "updateList: "+data.size());
-        int resource = R.layout.money_owed_list;
-        String[] from = {"person", "amount"};
-        int[] to = {R.id.moneyOwedPerson, R.id.moneyOwedAmt};
-        // create and set the adapter
-        SimpleAdapter adapter = new SimpleAdapter(getActivity(), data, resource, from, to);
-        moneyOwedListView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-
     }
 
     public interface OnFragmentInteractionListener {
