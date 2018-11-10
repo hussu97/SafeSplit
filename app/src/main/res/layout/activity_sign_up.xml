@@ -36,6 +36,37 @@
 
 
         <!--  Email Label -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="15dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="15dp"
+                android:paddingRight="10dp"
+                android:text="+971" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_weight="100">
+
+                <EditText
+                    android:id="@+id/input_mobile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Mobile"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </TableRow>
+
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -6,25 +6,31 @@ public class User {
     private String ID;
     private String name;
     private String email;
-    private List<String> billIds;
+    private String mobile;
+    private List<String> transactionIds;
+    private List<String> groupIds;
+    private List<History> histories;
 
-    public User(){}
-    public User(String name, String email, List<String> billIds) {
+    public User(String ID, String name, String email, String mobile, List<String> transactionIds, List<String> groupIds, List<History> histories) {
+        this.ID = ID;
         this.name = name;
         this.email = email;
-        this.billIds = billIds;
+        this.mobile = mobile;
+        this.transactionIds = transactionIds;
+        this.groupIds = groupIds;
+        this.histories = histories;
     }
-    public User(String name, String email){
+
+    public User() {
+    }
+
+    public User(String name, String email, String mobile, List<String> transactionIds, List<String> groupIds, List<History> histories) {
         this.name = name;
         this.email = email;
-    }
-
-    public List<String> getBillIds() {
-        return billIds;
-    }
-
-    public void setBillIds(List<String> billIds) {
-        this.billIds = billIds;
+        this.mobile = mobile;
+        this.transactionIds = transactionIds;
+        this.groupIds = groupIds;
+        this.histories = histories;
     }
 
     public String getID() {
@@ -49,5 +55,37 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public List<String> getTransactionIds() {
+        return transactionIds;
+    }
+
+    public void setTransactionIds(List<String> transactionIds) {
+        this.transactionIds = transactionIds;
+    }
+
+    public List<String> getGroupIds() {
+        return groupIds;
+    }
+
+    public void setGroupIds(List<String> groupIds) {
+        this.groupIds = groupIds;
+    }
+
+    public List<History> getHistories() {
+        return histories;
+    }
+
+    public void setHistories(List<History> histories) {
+        this.histories = histories;
     }
 }

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.b00063271.safesplit.Database.BillDB;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Arrays;
@@ -25,8 +24,6 @@ public class SignOutActivity extends Activity implements View.OnClickListener{
         addUserBtn = (Button)findViewById(R.id.addUser);
         addUserBtn.setOnClickListener(this);
         signOutBtn.setOnClickListener(this);
-
-        BillDB.initializeBillDB();
     }
 
     @Override

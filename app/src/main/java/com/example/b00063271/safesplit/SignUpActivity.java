@@ -26,6 +26,7 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText emailEditText;
     private EditText passwordEditText;
     private EditText rePasswordEditText;
+    private EditText mobileEditText;
     private Button signUpButton;
     private TextView loginLink;
     private FirebaseAuth mAuth;
@@ -39,6 +40,7 @@ public class SignUpActivity extends AppCompatActivity {
         emailEditText = (EditText) findViewById(R.id.input_email);
         passwordEditText = (EditText) findViewById(R.id.input_password);
         rePasswordEditText = (EditText) findViewById(R.id.input_reEnterPassword);
+        mobileEditText = (EditText) findViewById(R.id.input_mobile);
         signUpButton = (Button) findViewById(R.id.btn_signup);
         loginLink = (TextView) findViewById(R.id.link_login);
         mAuth = FirebaseAuth.getInstance();
@@ -81,6 +83,7 @@ public class SignUpActivity extends AppCompatActivity {
         final String name = nameEditText.getText().toString();
         final String email = emailEditText.getText().toString();
         final String password = passwordEditText.getText().toString();
+        final String mobile = mobileEditText.getText().toString();
         String reEnterPassword = rePasswordEditText.getText().toString();
 
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -91,8 +94,9 @@ public class SignUpActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             String userID = mAuth.getCurrentUser().getUid();
-                            User user = new User(name,email);
+                            User user = new User(name,email,mobile,null,null,null);
                             user.setID(userID);
+                            Log.d(TAG, "onComplete: "+userID);
                             userDB.addUser(userID,user);
                             progressDialog.dismiss();
                             SignUpActivity.this.onSignupSuccess(user);
@@ -118,7 +122,6 @@ public class SignUpActivity extends AppCompatActivity {
 
     public void onSignupFailed() {
         Toast.makeText(getBaseContext(), "SignUp failed", Toast.LENGTH_LONG).show();
-
         signUpButton.setEnabled(true);
     }
 

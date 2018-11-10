@@ -85,16 +85,6 @@ public class MainFragment extends Fragment {
     }
 
     private void updateLists(){
-        String text2 = text + CepVizyon.getPhoneCode() + "\n\n"
-                + getText(R.string.currentversion) + CepVizyon.getLicenseText();
-
-        Spannable spannable = new SpannableString(text2);
-
-        spannable.setSpan(new ForegroundColorSpan(Color.WHITE), text.length(), (text + CepVizyon.getPhoneCode()).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        myTextView.setText(spannable, TextView.BufferType.SPANNABLE);
-
-        tabLayout.getTabAt(MONEY_OWED_TAB).setText;
     }
 
     // Add Fragments to Tabs
