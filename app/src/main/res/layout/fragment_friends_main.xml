@@ -19,7 +19,8 @@
             android:id="@+id/owe_tab_item"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/left_tab" />
+            android:text="@string/left_tab"
+            />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/owed_tab_item"
@@ -44,12 +45,5 @@
         android:layout_gravity="bottom">
 
     </androidx.viewpager.widget.ViewPager>
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="TextView" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

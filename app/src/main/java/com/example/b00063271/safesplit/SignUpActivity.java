@@ -97,7 +97,7 @@ public class SignUpActivity extends AppCompatActivity {
                             User user = new User(name,email,mobile,null,null,null);
                             user.setID(userID);
                             Log.d(TAG, "onComplete: "+userID);
-                            userDB.addUser(userID,user);
+                            userDB.addUser(user);
                             progressDialog.dismiss();
                             SignUpActivity.this.onSignupSuccess(user);
                         } else {
