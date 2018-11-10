@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.ListView;
 
 public class HomeScreenActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener,DashboardFragment.OnFragmentInteractionListener
                 ,ProfileFragment.OnFragmentInteractionListener,GroupsFragment.OnFragmentInteractionListener,MoneyOweFragment.OnFragmentInteractionListener, MoneyOwedFragment.OnFragmentInteractionListener,
@@ -23,6 +24,7 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
+    private ListView listView;
     private final String TAG="HSActivity";
     private String userID="xJNsNNf39VJ62aiETsiO";
 
@@ -31,6 +33,7 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
         fragmentManager = getSupportFragmentManager();
+        listView = (ListView)findViewById(R.id.money_owed_listview);
         openFragment(new MainFragment());
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);

@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -46,7 +47,7 @@ public class MainFragment extends Fragment {
     private final int MONEY_OWE_TAB =1;
     private final int TOTAL_BALANCE_TAB =2;
 
-    private String userID;
+    private String userMobile;
 
     private OnFragmentInteractionListener mListener;
     private ViewPager viewPager;
@@ -54,6 +55,7 @@ public class MainFragment extends Fragment {
     private TabItem moneyOwedTabItem;
     private TabItem moneyOweTabItem;
     private TabItem totalBalanceTabItem;
+    private ListView listView;
 
     private final String TRANSACTION_COLLECTION = "transaction";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -119,9 +121,9 @@ public class MainFragment extends Fragment {
         totalBalanceTransactions=new ArrayList<>();
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            userID = getArguments().getString(ARG_PARAM1);
+            userMobile = getArguments().getString(ARG_PARAM1);
         }else{
-            userID = "xJNsNNf39VJ62aiETsiO";
+            userMobile = "12345";
         }
         setRetainInstance(true);
 
@@ -129,10 +131,11 @@ public class MainFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-        getTransactions(String.valueOf(12345));
+        getTransactions(userMobile);
         View view = inflater.inflate(R.layout.fragment_friends_main,container, false);
         // Setting ViewPager for each Tabs
         viewPager = (ViewPager) view.findViewById(R.id.friends_view_pager);
+        listView = (ListView) view.findViewById(R.id.money_owed_listview);
         setupViewPager(viewPager);
         // Set Tabs inside Toolbar
         tabLayout = (TabLayout) view.findViewById(R.id.friends_tab_layout);
@@ -162,7 +165,7 @@ public class MainFragment extends Fragment {
     // Add Fragments to Tabs
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getChildFragmentManager());
-        adapter.addFragment(MoneyOwedFragment.newInstance(userID), "Money Owed");
+        adapter.addFragment(MoneyOwedFragment.newInstance(userMobile), "Money Owed");
         adapter.addFragment(new MoneyOweFragment(), "Money Owe");
         adapter.addFragment(TotalBalanceFragment.newInstance("",""), "Total balance");
         viewPager.setAdapter(adapter);
