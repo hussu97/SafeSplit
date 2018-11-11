@@ -16,14 +16,6 @@ public class Transactions {
         this.to = to;
     }
 
-    public Transactions(double amount, String id, String from, String to) {
-
-        Amount = amount;
-        Id = id;
-        this.from = from;
-        this.to = to;
-    }
-
     public double getAmount() {
         return Amount;
     }

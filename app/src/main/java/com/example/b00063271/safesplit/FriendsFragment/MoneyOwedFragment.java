@@ -1,8 +1,10 @@
 package com.example.b00063271.safesplit.FriendsFragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -11,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -18,6 +21,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.example.b00063271.safesplit.Entities.Transactions;
 import com.example.b00063271.safesplit.Entities.User;
 import com.example.b00063271.safesplit.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,12 +30,15 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabItem;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Transaction;
 
 import org.w3c.dom.Text;
 
@@ -40,9 +47,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
-public class MoneyOwedFragment extends Fragment {
+public class MoneyOwedFragment extends Fragment implements AdapterView.OnItemClickListener {
     private static final String ARG_PARAM1 = "param1";
     private final String TAG = "MoneyOwedFrag";
 
@@ -62,6 +70,7 @@ public class MoneyOwedFragment extends Fragment {
     private TextView moneyOwedAmtTextView;
     private TextView moneyOwedPersonTextView;
     private ImageButton moneyOwedSettleUpButton;
+    private SimpleAdapter simpleAdapter;
     private HashMap<String,Double> owedTransactions;
     private ArrayList<HashMap<String,String>>data;
 
@@ -99,6 +108,7 @@ public class MoneyOwedFragment extends Fragment {
         moneyOwedPersonTextView = (TextView) view.findViewById(R.id.moneyOwedPerson);
         moneyOwedPersonTextView = (TextView) view.findViewById(R.id.moneyOwedAmt);
         moneyOwedSettleUpButton = (ImageButton) view.findViewById(R.id.moneyOwedSettleUp);
+        moneyOwedListView.setOnItemClickListener(this);
         return view;
     }
 
@@ -165,11 +175,52 @@ public class MoneyOwedFragment extends Fragment {
         String[] from = {"person", "amount"};
         int[] to = {R.id.moneyOwedPerson, R.id.moneyOwedAmt};
         // create and set the adapter
-        SimpleAdapter adapter = new SimpleAdapter(getActivity(), data, resource, from, to);
-        moneyOwedListView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-
+        simpleAdapter=new SimpleAdapter(getActivity(),data,resource,from,to) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+                ImageButton b = (ImageButton) v.findViewById(R.id.moneyOwedSettleUp);
+                final String person = ((TextView) v.findViewById(R.id.moneyOwedPerson)).getText().toString();
+                final String amt = ((TextView) v.findViewById(R.id.moneyOwedAmt)).getText().toString();
+                b.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View arg0) {
+                        AlertDialog.Builder builder;
+                        builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Material_Dialog_Alert);
+                        builder.setTitle("Settle Up")
+                                .setMessage("Are you sure you want to create a transaction to receive "+amt+" from "+person)
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        createTransaction(userMobile,person,Double.valueOf(amt));
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // do nothing
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
+                });
+                return v;
+            }
+        };
+        moneyOwedListView.setAdapter(simpleAdapter);
+        simpleAdapter.notifyDataSetChanged();
     }
+
+    private void createTransaction(String from, String to, double amount){
+        final DocumentReference df = rf_t.document();
+        Transactions transaction = new Transactions(amount,from,to);
+        df.set(transaction).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                rf_u.document(userMobile).update("transactionIds", FieldValue.arrayUnion(df));
+            }
+        });
+    }
+
 
     @Override
     public void onAttach(Context context) {
@@ -186,6 +237,13 @@ public class MoneyOwedFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        SimpleAdapter adapter = (SimpleAdapter) parent.getAdapter();
+        ListView currentLv = (ListView) view;
+        Object item = adapter.getItem(position);
     }
 
     public interface OnFragmentInteractionListener {
