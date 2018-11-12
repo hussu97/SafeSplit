@@ -209,7 +209,7 @@ public class MoneyOwedFragment extends Fragment implements AdapterView.OnItemCli
                                 .setMessage("Are you sure you want to create a transaction to receive "+amt+" from "+to)
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
-                                        createTransaction(userMobile,userMobile,to,toID,Double.valueOf(amt));
+                                        createTransaction(to,toID,userName,userMobile,Double.valueOf(amt));
                                     }
                                 })
                                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

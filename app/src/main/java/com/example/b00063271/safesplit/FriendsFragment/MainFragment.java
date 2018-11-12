@@ -71,7 +71,7 @@ public class MainFragment extends Fragment {
     private double totalBalance=0;
 
     private void getTransactions(String userMobile){
-        rf.whereEqualTo("from",userMobile)
+        rf.whereEqualTo("toID",userMobile)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
@@ -87,7 +87,7 @@ public class MainFragment extends Fragment {
                 updateLists();
             }
         });
-        rf.whereEqualTo("to",userMobile)
+        rf.whereEqualTo("fromID",userMobile)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
@@ -171,8 +171,8 @@ public class MainFragment extends Fragment {
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getChildFragmentManager());
         adapter.addFragment(MoneyOwedFragment.newInstance(userMobile,userName), "Money Owed");
-        adapter.addFragment(MoneyOweFragment.newInstance(userMobile), "Money Owe");
-        adapter.addFragment(TotalBalanceFragment.newInstance(userMobile), "Total balance");
+        adapter.addFragment(MoneyOweFragment.newInstance(userMobile,userName), "Money Owe");
+        adapter.addFragment(TotalBalanceFragment.newInstance(userMobile,userName), "Total balance");
         viewPager.setAdapter(adapter);
     }
 

@@ -40,6 +40,7 @@ import androidx.fragment.app.Fragment;
 
 public class MoneyOweFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
     private final String TAG = "MoneyOweFrag";
 
     private final String TRANSACTION_COLLECTION = "transaction";
@@ -50,6 +51,7 @@ public class MoneyOweFragment extends Fragment {
     private CollectionReference rf_u = db.collection(USERS_COLLECTION);
 
     private String userMobile;
+    private String userName;
 
     private OnFragmentInteractionListener mListener;
 
@@ -67,10 +69,11 @@ public class MoneyOweFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static MoneyOweFragment newInstance(String param1) {
+    public static MoneyOweFragment newInstance(String param1, String param2) {
         MoneyOweFragment fragment = new MoneyOweFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -83,6 +86,7 @@ public class MoneyOweFragment extends Fragment {
         data = new ArrayList<>();
         if (getArguments() != null) {
             userMobile = getArguments().getString(ARG_PARAM1);
+            userName = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -170,7 +174,7 @@ public class MoneyOweFragment extends Fragment {
             map.put("amount",String.valueOf(entry.getValue()));
             data.add(map);
         }
-        int resource = R.layout.money_owed_list;
+        int resource = R.layout.money_owe_list;
         String[] from = {"from","fromID", "amount"};
         int[] to = {R.id.moneyOwePerson,R.id.moneyOwePersonID, R.id.moneyOweAmt};
         // create and set the adapter
@@ -188,10 +192,10 @@ public class MoneyOweFragment extends Fragment {
                         AlertDialog.Builder builder;
                         builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Material_Dialog_Alert);
                         builder.setTitle("Settle Up")
-                                .setMessage("Are you sure you want to create a transaction to receive "+amt+" from "+from)
+                                .setMessage("Are you sure you want to create a transaction to send "+amt+" to "+from)
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
-                                        createTransaction(from,fromID,userMobile,userMobile,Double.valueOf(amt));
+                                        createTransaction(userName,userMobile,from,fromID,Double.valueOf(amt));
                                     }
                                 })
                                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -239,7 +243,6 @@ public class MoneyOweFragment extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }
