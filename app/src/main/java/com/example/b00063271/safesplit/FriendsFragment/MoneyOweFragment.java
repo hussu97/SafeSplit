@@ -60,6 +60,7 @@ public class MoneyOweFragment extends Fragment {
     private ImageButton moneyOweSettleUpButton;
     private SimpleAdapter simpleAdapter;
     private HashMap<String,Double> oweTransactions;
+    private HashMap<String,String> oweTransactionsNames;
     private ArrayList<HashMap<String,String>> data;
 
     public MoneyOweFragment() {
@@ -78,6 +79,7 @@ public class MoneyOweFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         oweTransactions = new HashMap<>();
+        oweTransactionsNames = new HashMap<>();
         data = new ArrayList<>();
         if (getArguments() != null) {
             userMobile = getArguments().getString(ARG_PARAM1);
@@ -111,6 +113,7 @@ public class MoneyOweFragment extends Fragment {
                     @Override
                     public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
                         oweTransactions.clear();
+                        oweTransactionsNames.clear();
                         data.clear();
                         Log.d(TAG, "onEvent: in snapShot getOwedTrans "+queryDocumentSnapshots.size());
                         for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
@@ -120,10 +123,7 @@ public class MoneyOweFragment extends Fragment {
                             String from = doc.getString("from");
                             double prev_amount = oweTransactions.containsKey(fromID) ? oweTransactions.get(fromID) : 0;
                             oweTransactions.put(fromID, prev_amount + amount);
-                            map.put("from",from);
-                            map.put("fromID",fromID);
-                            map.put("amount",String.valueOf(prev_amount+amount));
-                            data.add(map);
+                            oweTransactionsNames.put(fromID,from);
                         }
                         updateList();
                     }
@@ -163,7 +163,13 @@ public class MoneyOweFragment extends Fragment {
 //    }
 
     private void updateList(){
-        Log.d(TAG, "updateList: "+data.size());
+        for(Map.Entry<String, Double> entry : oweTransactions.entrySet()){
+            HashMap<String,String> map = new HashMap<>();
+            map.put("from",oweTransactionsNames.get(entry.getKey()));
+            map.put("fromID",entry.getKey());
+            map.put("amount",String.valueOf(entry.getValue()));
+            data.add(map);
+        }
         int resource = R.layout.money_owed_list;
         String[] from = {"from","fromID", "amount"};
         int[] to = {R.id.moneyOwePerson,R.id.moneyOwePersonID, R.id.moneyOweAmt};

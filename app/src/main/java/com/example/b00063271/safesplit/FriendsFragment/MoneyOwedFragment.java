@@ -74,6 +74,7 @@ public class MoneyOwedFragment extends Fragment implements AdapterView.OnItemCli
     private ImageButton moneyOwedSettleUpButton;
     private SimpleAdapter simpleAdapter;
     private HashMap<String,Double> owedTransactions;
+    private HashMap<String,String> owedTransactionsNames;
     private ArrayList<HashMap<String,String>>data;
 
     public MoneyOwedFragment() {
@@ -93,6 +94,7 @@ public class MoneyOwedFragment extends Fragment implements AdapterView.OnItemCli
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         owedTransactions = new HashMap<>();
+        owedTransactionsNames = new HashMap<>();
         data = new ArrayList<>();
         Log.d(TAG, "onCreate: ");
         if (getArguments() != null) {
@@ -129,19 +131,17 @@ public class MoneyOwedFragment extends Fragment implements AdapterView.OnItemCli
                     @Override
                     public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
                         owedTransactions.clear();
+                        owedTransactionsNames.clear();
                         data.clear();
                         Log.d(TAG, "onEvent: in snapShot getOwedTrans "+queryDocumentSnapshots.size());
                         for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
                             HashMap<String,String> map=new HashMap<>();
                             double amount = doc.getDouble("amount");
                             String toID = doc.getString("toID");
-                            String to = doc.getString("from");
+                            String to = doc.getString("to");
                             double prev_amount = owedTransactions.containsKey(toID) ? owedTransactions.get(toID) : 0;
                             owedTransactions.put(toID, prev_amount + amount);
-                            map.put("to",to);
-                            map.put("toID",toID);
-                            map.put("amount",String.valueOf(prev_amount+amount));
-                            data.add(map);
+                            owedTransactionsNames.put(toID,to);
                         }
                         updateList();
                     }
@@ -180,6 +180,13 @@ public class MoneyOwedFragment extends Fragment implements AdapterView.OnItemCli
 //        }
 //    }
     private void updateList(){
+        for(Map.Entry<String, Double> entry : owedTransactions.entrySet()){
+            HashMap<String,String> map = new HashMap<>();
+            map.put("to",owedTransactionsNames.get(entry.getKey()));
+            map.put("toID",entry.getKey());
+            map.put("amount",String.valueOf(entry.getValue()));
+            data.add(map);
+        }
         Log.d(TAG, "updateList: "+data.size());
         int resource = R.layout.money_owed_list;
         String[] from = {"to","toID", "amount"};

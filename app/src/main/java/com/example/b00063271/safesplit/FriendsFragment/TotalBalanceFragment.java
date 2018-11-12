@@ -57,8 +57,12 @@ public class TotalBalanceFragment extends Fragment {
     private ImageButton totalBalSettleUpButton;
     private HashMap<String,Double> balTransactions;
     private HashMap<String,Double> oweTransactions;
+    private HashMap<String,String> oweTransactionsNames;
     private HashMap<String,Double> owedTransactions;
+    private HashMap<String,String> owedTransactionsNames;
     private ArrayList<HashMap<String,String>> data,dataOwed,dataOwe;
+    private int dataOweSize =0;
+    private int dataOwedSize =0;
 
     private boolean OWE_FLAG;
     private boolean OWED_FLAG;
@@ -80,7 +84,9 @@ public class TotalBalanceFragment extends Fragment {
         super.onCreate(savedInstanceState);
         balTransactions = new HashMap<>();
         oweTransactions = new HashMap<>();
+        oweTransactionsNames = new HashMap<>();
         owedTransactions = new HashMap<>();
+        owedTransactionsNames = new HashMap<>();
         OWE_FLAG=false;
         OWED_FLAG=false;
         dataOwed = new ArrayList<>();
@@ -154,16 +160,19 @@ public class TotalBalanceFragment extends Fragment {
 //            });
 //        }
         data.clear();
-        for(HashMap<String,String> hm:dataOwe){
-            String amount = hm.get("amount");
-            String from = hm.get("from");
-            String fromID = hm.get("fromID");
-            HashMap<String,String> map = new HashMap<>();
-            map.put("person",from);
-            map.put("personID",fromID);
-            map.put("amount",amount);
-            data.add(map);
+        if(dataOwe.size()>dataOweSize || dataOwed.size() > dataOwedSize) {
+            for(Map.Entry<String, Double> entry : oweTransactions.entrySet()){
+                HashMap<String,String> map = new HashMap<>();
+                String fromID = entry.getKey();
+                map.put("from",oweTransactionsNames.get(entry.getKey()));
+                double prev_amount = owedTransactions.containsKey(fromID) ? owedTransactions.get(fromID) : 0;
+                map.put("fromID",entry.getKey());
+                map.put("amount",String.valueOf(entry.getValue()));
+                data.add(map);
+            }
         }
+        dataOweSize = dataOwe.size();
+        dataOwedSize = dataOwed.size();
         for(HashMap<String,String> hm:dataOwed){
             double amount = Double.valueOf(hm.get("amount"));
             String to = hm.get("to");
@@ -178,7 +187,8 @@ public class TotalBalanceFragment extends Fragment {
                     @Override
                     public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
                         oweTransactions.clear();
-                        dataOwe.clear();
+                        oweTransactionsNames.clear();
+                        data.clear();
                         Log.d(TAG, "onEvent: in snapShot getOwedTrans "+queryDocumentSnapshots.size());
                         for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
                             HashMap<String,String> map=new HashMap<>();
@@ -187,12 +197,9 @@ public class TotalBalanceFragment extends Fragment {
                             String from = doc.getString("from");
                             double prev_amount = oweTransactions.containsKey(fromID) ? oweTransactions.get(fromID) : 0;
                             oweTransactions.put(fromID, prev_amount + amount);
-                            map.put("from",from);
-                            map.put("fromID",fromID);
-                            map.put("amount",String.valueOf(prev_amount+amount));
-                            dataOwe.add(map);
+                            oweTransactionsNames.put(fromID,from);
                         }
-                        getBalTransactionDetails();
+                        updateList();
                     }
                 });
     }
@@ -204,21 +211,19 @@ public class TotalBalanceFragment extends Fragment {
                     @Override
                     public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
                         owedTransactions.clear();
-                        dataOwed.clear();
+                        owedTransactionsNames.clear();
+                        data.clear();
                         Log.d(TAG, "onEvent: in snapShot getOwedTrans "+queryDocumentSnapshots.size());
                         for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
                             HashMap<String,String> map=new HashMap<>();
                             double amount = doc.getDouble("amount");
                             String toID = doc.getString("toID");
-                            String to = doc.getString("from");
+                            String to = doc.getString("to");
                             double prev_amount = owedTransactions.containsKey(toID) ? owedTransactions.get(toID) : 0;
                             owedTransactions.put(toID, prev_amount + amount);
-                            map.put("to",to);
-                            map.put("toID",toID);
-                            map.put("amount",String.valueOf(prev_amount+amount));
-                            dataOwed.add(map);
+                            owedTransactionsNames.put(toID,to);
                         }
-                        getBalTransactionDetails();
+                        updateList();
                     }
                 });
     }
