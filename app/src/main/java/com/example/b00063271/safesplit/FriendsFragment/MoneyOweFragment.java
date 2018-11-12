@@ -81,6 +81,7 @@ public class MoneyOweFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate: Called");
         oweTransactions = new HashMap<>();
         oweTransactionsNames = new HashMap<>();
         data = new ArrayList<>();
@@ -93,6 +94,7 @@ public class MoneyOweFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView: Called");
         // Inflate the layout for this fragment
         getOweTransactions(userMobile);
         View view =  inflater.inflate(R.layout.fragment_money_owe, container, false);
@@ -133,39 +135,7 @@ public class MoneyOweFragment extends Fragment {
                     }
                 });
     }
-
-//    private void getOweTransactionDetails(){
-//        for (Map.Entry<String, Double> entry : oweTransactions.entrySet())
-//        {
-//            final String toID = entry.getKey();
-//            final double amount = entry.getValue();
-//            Log.d(TAG, "getOweTransactionDetails: "+toID);
-//            Log.d(TAG, "getOweTransactionDetails: "+amount);
-//            rf_u.document(toID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                @Override
-//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                    Log.d(TAG, "onComplete: ");
-//                    HashMap<String,String> map=new HashMap<>();
-//                    map.put("amount",String.valueOf(amount));
-//                    if(task.isSuccessful()){
-//                        User user = task.getResult().toObject(User.class);
-//                        if(user!=null){
-//                            Log.d(TAG, "onComplete: User details"+user.getName());
-//                            map.put("person",user.getName());
-//                        } else{
-//                            map.put("person",toID);
-//                        }
-//                    } else {
-//                        map.put("person",toID);
-//                    }
-//                    Log.d(TAG, "onComplete: "+map.toString());
-//                    data.add(map);
-//                    if(data.size()==oweTransactions.size())updateList();
-//                }
-//            });
-//        }
-//    }
-
+    
     private void updateList(){
         for(Map.Entry<String, Double> entry : oweTransactions.entrySet()){
             HashMap<String,String> map = new HashMap<>();

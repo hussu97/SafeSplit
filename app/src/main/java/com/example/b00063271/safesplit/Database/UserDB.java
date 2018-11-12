@@ -26,9 +26,8 @@ import java.util.Map;
 
 public class UserDB {
     private static final String TAG = "UserDB";
-    private static final String USER_COLLECTION = "users";
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private static CollectionReference rf = db.collection(USER_COLLECTION);
+    private static CollectionReference rf = db.collection(C.COLLECTION_USERS);
     private SignInActivity sIn;
     private SignOutActivity sOut;
     private SignUpActivity sUp;
@@ -44,18 +43,18 @@ public class UserDB {
     public void addUser(User u){
         final User user = u;
         Map<String, Object> docData = new HashMap<>();
-        docData.put("name", user.getName());
-        docData.put("mobile", user.getMobile());
-        docData.put("transactionIds", user.getTransactionIds());
-        docData.put("email", user.getEmail());
-        docData.put("groupIds",user.getGroupIds());
+        docData.put(C.USERS_NAME, user.getName());
+        docData.put(C.USERS_MOBILE, user.getMobile());
+        docData.put(C.USERS_TRANSACTIONS, user.getTransactionIds());
+        docData.put(C.USERS_EMAIL, user.getEmail());
+        docData.put(C.USERS_GROUPS,user.getGroupIds());
         docData.put("id",user.getID());
         Log.d(TAG, "addUser: "+user.getMobile());
         rf.document(user.getMobile()).set(docData).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(user.getHistories()==null) user.setHistories(new ArrayList<History>());
-                rf.document(user.getMobile()).collection("history").document().set(user.getHistories());
+                rf.document(user.getMobile()).collection(C.COLLECTION_USERS_HISTORY).document().set(user.getHistories());
             }
         });
 

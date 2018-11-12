@@ -37,9 +37,13 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
         Intent intent = getIntent();
         userMobile = intent.getStringExtra("userID");
         userName = intent.getStringExtra("userName");
+        if(userMobile==null){
+            userMobile="12345";
+            userName="Hussu";
+        }
         fragmentManager = getSupportFragmentManager();
         listView = (ListView)findViewById(R.id.money_owed_listview);
-        openFragment(new MainFragment());
+        openFragment(MainFragment.newInstance(userMobile,userName));
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
@@ -51,6 +55,7 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.naviagation_friends:
+                    Log.d(TAG, "onNavigationItemSelected: "+userMobile+" "+userName);
                     return openFragment(MainFragment.newInstance(userMobile,userName));
                 case R.id.navigation_dashboard:
                     return openFragment(new DashboardFragment());
@@ -73,7 +78,6 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
         fragmentTransaction.commit();
         return true;
     }
-
 
     @Override
     public void onFragmentInteraction(Uri uri) {
