@@ -41,6 +41,7 @@ import java.util.List;
 
 public class MainFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
 
     private final String TAG = "FriendsMainFrag";
     private final int MONEY_OWED_TAB =0;
@@ -48,6 +49,7 @@ public class MainFragment extends Fragment {
     private final int TOTAL_BALANCE_TAB =2;
 
     private String userMobile;
+    private String userName;
 
     private OnFragmentInteractionListener mListener;
     private ViewPager viewPager;
@@ -106,10 +108,11 @@ public class MainFragment extends Fragment {
     public MainFragment() {
         // Required empty public constructor
     }
-    public static MainFragment newInstance(String userID) {
+    public static MainFragment newInstance(String userID,String userName) {
         MainFragment fragment = new MainFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, userID);
+        args.putString(ARG_PARAM2, userName);
         fragment.setArguments(args);
         return fragment;
     }
@@ -122,8 +125,10 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             userMobile = getArguments().getString(ARG_PARAM1);
+            userName = getArguments().getString(ARG_PARAM2);
         }else{
             userMobile = "12345";
+            userName = "Hussu";
         }
         setRetainInstance(true);
 
@@ -165,7 +170,7 @@ public class MainFragment extends Fragment {
     // Add Fragments to Tabs
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getChildFragmentManager());
-        adapter.addFragment(MoneyOwedFragment.newInstance(userMobile), "Money Owed");
+        adapter.addFragment(MoneyOwedFragment.newInstance(userMobile,userName), "Money Owed");
         adapter.addFragment(MoneyOweFragment.newInstance(userMobile), "Money Owe");
         adapter.addFragment(TotalBalanceFragment.newInstance(userMobile), "Total balance");
         viewPager.setAdapter(adapter);

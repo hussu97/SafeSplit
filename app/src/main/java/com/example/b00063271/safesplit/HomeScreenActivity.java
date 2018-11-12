@@ -26,12 +26,17 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
     private FragmentTransaction fragmentTransaction;
     private ListView listView;
     private final String TAG="HSActivity";
-    private String userID="xJNsNNf39VJ62aiETsiO";
+
+    private String userMobile="xJNsNNf39VJ62aiETsiO";
+    private String userName ="Hussu";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
+        Intent intent = getIntent();
+        userMobile = intent.getStringExtra("userID");
+        userName = intent.getStringExtra("userName");
         fragmentManager = getSupportFragmentManager();
         listView = (ListView)findViewById(R.id.money_owed_listview);
         openFragment(new MainFragment());
@@ -46,7 +51,7 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.naviagation_friends:
-                    return openFragment(MainFragment.newInstance(userID));
+                    return openFragment(MainFragment.newInstance(userMobile,userName));
                 case R.id.navigation_dashboard:
                     return openFragment(new DashboardFragment());
                 case R.id.naviagtion_me:

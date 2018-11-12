@@ -99,7 +99,7 @@ public class MoneyOweFragment extends Fragment {
 
     private void getOweTransactions(String userMobile){
         Log.d(TAG, "getOwedTransactions: "+userMobile);
-        rf_t.whereEqualTo("from",userMobile)
+        rf_t.whereEqualTo("toID",userMobile)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {

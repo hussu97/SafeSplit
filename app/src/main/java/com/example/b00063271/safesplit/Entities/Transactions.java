@@ -2,18 +2,20 @@ package com.example.b00063271.safesplit.Entities;
 
 public class Transactions {
     private double Amount;
-    private String Id;
     private String from;
     private String to;
+    private String fromID;
+    private String toID;
 
     public Transactions() {
     }
 
-    public Transactions(double amount, String from, String to) {
-
+    public Transactions(String from, String fromID,String to,String toID,double amount) {
         Amount = amount;
         this.from = from;
         this.to = to;
+        this.fromID = fromID;
+        this.toID = toID;
     }
 
     public double getAmount() {
@@ -22,14 +24,6 @@ public class Transactions {
 
     public void setAmount(double amount) {
         Amount = amount;
-    }
-
-    public String getId() {
-        return Id;
-    }
-
-    public void setId(String id) {
-        Id = id;
     }
 
     public String getFrom() {
@@ -46,5 +40,21 @@ public class Transactions {
 
     public void setTo(String to) {
         this.to = to;
+    }
+
+    public String getFromID() {
+        return fromID;
+    }
+
+    public void setFromID(String fromID) {
+        this.fromID = fromID;
+    }
+
+    public String getToID() {
+        return toID;
+    }
+
+    public void setToID(String toID) {
+        this.toID = toID;
     }
 }
