@@ -13,6 +13,12 @@
         android:layout_marginLeft="20dp">
 
         <TextView
+            android:id="@+id/moneyOwePersonID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+
+        <TextView
             android:id="@+id/moneyOwePerson"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

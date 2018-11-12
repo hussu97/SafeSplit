@@ -58,7 +58,7 @@ public class TotalBalanceFragment extends Fragment {
     private HashMap<String,Double> balTransactions;
     private HashMap<String,Double> oweTransactions;
     private HashMap<String,Double> owedTransactions;
-    private ArrayList<HashMap<String,String>> data;
+    private ArrayList<HashMap<String,String>> data,dataOwed,dataOwe;
 
     private boolean OWE_FLAG;
     private boolean OWED_FLAG;
@@ -83,7 +83,8 @@ public class TotalBalanceFragment extends Fragment {
         owedTransactions = new HashMap<>();
         OWE_FLAG=false;
         OWED_FLAG=false;
-        data = new ArrayList<>();
+        dataOwed = new ArrayList<>();
+        dataOwe = new ArrayList<>();
         if (getArguments() != null) {
             userMobile = getArguments().getString(ARG_PARAM1);
         }
@@ -111,7 +112,6 @@ public class TotalBalanceFragment extends Fragment {
 
     private void getBalTransactionDetailsAux(){
         balTransactions.clear();
-        data.clear();
         for (Map.Entry<String, Double> entry : oweTransactions.entrySet()){
             double prev_amount = balTransactions.containsKey(entry.getKey()) ? balTransactions.get(entry.getKey()) : 0;
             balTransactions.put(entry.getKey(),prev_amount-entry.getValue());
@@ -124,78 +124,109 @@ public class TotalBalanceFragment extends Fragment {
     }
 
     private void getBalTransactionDetails(){
-        for (Map.Entry<String, Double> entry : balTransactions.entrySet())
-        {
-            final String balID = entry.getKey();
-            final double amount = entry.getValue();
-            Log.d(TAG, "getBalTransactionDetails: "+balID);
-            Log.d(TAG, "getBalTransactionDetails: "+amount);
-            rf_u.document(balID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    Log.d(TAG, "onComplete: ");
-                    HashMap<String,String> map=new HashMap<>();
-                    map.put("amount",String.valueOf(amount));
-                    if(task.isSuccessful()){
-                        User user = task.getResult().toObject(User.class);
-                        if(user!=null){
-                            Log.d(TAG, "onComplete: User details"+user.getName());
-                            map.put("person",user.getName());
-                        } else{
-                            map.put("person",balID);
-                        }
-                    } else {
-                        map.put("person",balID);
-                    }
-                    Log.d(TAG, "onComplete: "+map.toString());
-                    data.add(map);
-                    if(data.size()==balTransactions.size()) updateList();
-                }
-            });
+//        for (Map.Entry<String, Double> entry : balTransactions.entrySet())
+//        {
+//            final String balID = entry.getKey();
+//            final double amount = entry.getValue();
+//            Log.d(TAG, "getBalTransactionDetails: "+balID);
+//            Log.d(TAG, "getBalTransactionDetails: "+amount);
+//            rf_u.document(balID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                    Log.d(TAG, "onComplete: ");
+//                    HashMap<String,String> map=new HashMap<>();
+//                    map.put("amount",String.valueOf(amount));
+//                    if(task.isSuccessful()){
+//                        User user = task.getResult().toObject(User.class);
+//                        if(user!=null){
+//                            Log.d(TAG, "onComplete: User details"+user.getName());
+//                            map.put("person",user.getName());
+//                        } else{
+//                            map.put("person",balID);
+//                        }
+//                    } else {
+//                        map.put("person",balID);
+//                    }
+//                    Log.d(TAG, "onComplete: "+map.toString());
+//                    data.add(map);
+//                    if(data.size()==balTransactions.size()) updateList();
+//                }
+//            });
+//        }
+        data.clear();
+        for(HashMap<String,String> hm:dataOwe){
+            String amount = hm.get("amount");
+            String from = hm.get("from");
+            String fromID = hm.get("fromID");
+            HashMap<String,String> map = new HashMap<>();
+            map.put("person",from);
+            map.put("personID",fromID);
+            map.put("amount",amount);
+            data.add(map);
+        }
+        for(HashMap<String,String> hm:dataOwed){
+            double amount = Double.valueOf(hm.get("amount"));
+            String to = hm.get("to");
+            String toID = hm.get("toID");
         }
     }
 
     private void getOweTransactions(String userMobile){
         Log.d(TAG, "getOwedTransactions: "+userMobile);
-        rf_t.whereEqualTo("from",userMobile)
+        rf_t.whereEqualTo("toID",userMobile)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                        owedTransactions.clear();
+                        oweTransactions.clear();
+                        dataOwe.clear();
                         Log.d(TAG, "onEvent: in snapShot getOwedTrans "+queryDocumentSnapshots.size());
                         for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
+                            HashMap<String,String> map=new HashMap<>();
                             double amount = doc.getDouble("amount");
-                            String fromID = doc.getString("to");
+                            String fromID = doc.getString("fromID");
+                            String from = doc.getString("from");
                             double prev_amount = oweTransactions.containsKey(fromID) ? oweTransactions.get(fromID) : 0;
                             oweTransactions.put(fromID, prev_amount + amount);
+                            map.put("from",from);
+                            map.put("fromID",fromID);
+                            map.put("amount",String.valueOf(prev_amount+amount));
+                            dataOwe.add(map);
                         }
-                        getBalTransactionDetailsAux();
+                        getBalTransactionDetails();
                     }
                 });
     }
 
     private void getOwedTransactions(String userMobile){
         Log.d(TAG, "getOwedTransactions: "+userMobile);
-        rf_t.whereEqualTo("to",userMobile)
+        rf_t.whereEqualTo("fromID",userMobile)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                owedTransactions.clear();
-                Log.d(TAG, "onEvent: in snapShot getOwedTrans "+queryDocumentSnapshots.size());
-                for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
-                    double amount = doc.getDouble("amount");
-                    String fromID = doc.getString("from");
-                    double prev_amount = owedTransactions.containsKey(fromID) ? owedTransactions.get(fromID) : 0;
-                    owedTransactions.put(fromID, prev_amount + amount);
-                }
-                getBalTransactionDetailsAux();
-            }});
+                    @Override
+                    public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                        owedTransactions.clear();
+                        dataOwed.clear();
+                        Log.d(TAG, "onEvent: in snapShot getOwedTrans "+queryDocumentSnapshots.size());
+                        for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
+                            HashMap<String,String> map=new HashMap<>();
+                            double amount = doc.getDouble("amount");
+                            String toID = doc.getString("toID");
+                            String to = doc.getString("from");
+                            double prev_amount = owedTransactions.containsKey(toID) ? owedTransactions.get(toID) : 0;
+                            owedTransactions.put(toID, prev_amount + amount);
+                            map.put("to",to);
+                            map.put("toID",toID);
+                            map.put("amount",String.valueOf(prev_amount+amount));
+                            dataOwed.add(map);
+                        }
+                        getBalTransactionDetails();
+                    }
+                });
     }
 
     private void updateList(){
         Log.d(TAG, "updateList: " + data.size());
         int resource = R.layout.total_bal_list;
-        String[] from = {"person", "amount"};
+        String[] from = {"person", "personID","amount"};
         int[] to = {R.id.totalBalPerson, R.id.totalBalAmt};
         // create and set the adapter
         SimpleAdapter adapter = new SimpleAdapter(getActivity(), data, resource, from, to);

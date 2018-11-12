@@ -1,6 +1,7 @@
 package com.example.b00063271.safesplit.FriendsFragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,14 +13,18 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.example.b00063271.safesplit.Entities.Transactions;
 import com.example.b00063271.safesplit.Entities.User;
 import com.example.b00063271.safesplit.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabItem;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -30,6 +35,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 public class MoneyOweFragment extends Fragment {
@@ -52,6 +58,7 @@ public class MoneyOweFragment extends Fragment {
     private TextView moneyOweAmtTextView;
     private TextView moneyOwePersonTextView;
     private ImageButton moneyOweSettleUpButton;
+    private SimpleAdapter simpleAdapter;
     private HashMap<String,Double> oweTransactions;
     private ArrayList<HashMap<String,String>> data;
 
@@ -107,57 +114,105 @@ public class MoneyOweFragment extends Fragment {
                         data.clear();
                         Log.d(TAG, "onEvent: in snapShot getOwedTrans "+queryDocumentSnapshots.size());
                         for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
+                            HashMap<String,String> map=new HashMap<>();
                             double amount = doc.getDouble("amount");
-                            String fromID = doc.getString("to");
+                            String fromID = doc.getString("fromID");
+                            String from = doc.getString("from");
                             double prev_amount = oweTransactions.containsKey(fromID) ? oweTransactions.get(fromID) : 0;
                             oweTransactions.put(fromID, prev_amount + amount);
+                            map.put("from",from);
+                            map.put("fromID",fromID);
+                            map.put("amount",String.valueOf(prev_amount+amount));
+                            data.add(map);
                         }
-                        getOweTransactionDetails();
+                        updateList();
                     }
                 });
     }
 
-    private void getOweTransactionDetails(){
-        for (Map.Entry<String, Double> entry : oweTransactions.entrySet())
-        {
-            final String toID = entry.getKey();
-            final double amount = entry.getValue();
-            Log.d(TAG, "getOweTransactionDetails: "+toID);
-            Log.d(TAG, "getOweTransactionDetails: "+amount);
-            rf_u.document(toID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    Log.d(TAG, "onComplete: ");
-                    HashMap<String,String> map=new HashMap<>();
-                    map.put("amount",String.valueOf(amount));
-                    if(task.isSuccessful()){
-                        User user = task.getResult().toObject(User.class);
-                        if(user!=null){
-                            Log.d(TAG, "onComplete: User details"+user.getName());
-                            map.put("person",user.getName());
-                        } else{
-                            map.put("person",toID);
-                        }
-                    } else {
-                        map.put("person",toID);
-                    }
-                    Log.d(TAG, "onComplete: "+map.toString());
-                    data.add(map);
-                    if(data.size()==oweTransactions.size())updateList();
-                }
-            });
-        }
-    }
+//    private void getOweTransactionDetails(){
+//        for (Map.Entry<String, Double> entry : oweTransactions.entrySet())
+//        {
+//            final String toID = entry.getKey();
+//            final double amount = entry.getValue();
+//            Log.d(TAG, "getOweTransactionDetails: "+toID);
+//            Log.d(TAG, "getOweTransactionDetails: "+amount);
+//            rf_u.document(toID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                    Log.d(TAG, "onComplete: ");
+//                    HashMap<String,String> map=new HashMap<>();
+//                    map.put("amount",String.valueOf(amount));
+//                    if(task.isSuccessful()){
+//                        User user = task.getResult().toObject(User.class);
+//                        if(user!=null){
+//                            Log.d(TAG, "onComplete: User details"+user.getName());
+//                            map.put("person",user.getName());
+//                        } else{
+//                            map.put("person",toID);
+//                        }
+//                    } else {
+//                        map.put("person",toID);
+//                    }
+//                    Log.d(TAG, "onComplete: "+map.toString());
+//                    data.add(map);
+//                    if(data.size()==oweTransactions.size())updateList();
+//                }
+//            });
+//        }
+//    }
 
     private void updateList(){
         Log.d(TAG, "updateList: "+data.size());
-        int resource = R.layout.money_owe_list;
-        String[] from = {"person", "amount"};
-        int[] to = {R.id.moneyOwePerson, R.id.moneyOweAmt};
+        int resource = R.layout.money_owed_list;
+        String[] from = {"from","fromID", "amount"};
+        int[] to = {R.id.moneyOwePerson,R.id.moneyOwePersonID, R.id.moneyOweAmt};
         // create and set the adapter
-        SimpleAdapter adapter = new SimpleAdapter(getActivity(), data, resource, from, to);
-        moneyOweListView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        simpleAdapter=new SimpleAdapter(getActivity(),data,resource,from,to) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+                ImageButton b = (ImageButton) v.findViewById(R.id.moneyOweSettleUp);
+                final String from = ((TextView) v.findViewById(R.id.moneyOwePerson)).getText().toString();
+                final String amt = ((TextView) v.findViewById(R.id.moneyOweAmt)).getText().toString();
+                final String fromID = ((TextView) v.findViewById(R.id.moneyOwePersonID)).getText().toString();
+                b.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View arg0) {
+                        AlertDialog.Builder builder;
+                        builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Material_Dialog_Alert);
+                        builder.setTitle("Settle Up")
+                                .setMessage("Are you sure you want to create a transaction to receive "+amt+" from "+from)
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        createTransaction(from,fromID,userMobile,userMobile,Double.valueOf(amt));
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // do nothing
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
+                });
+                return v;
+            }
+        };
+        moneyOweListView.setAdapter(simpleAdapter);
+        simpleAdapter.notifyDataSetChanged();
+    }
+
+    private void createTransaction(String from, String fromID, String to, String toID, double amount){
+        final DocumentReference df = rf_t.document();
+        Transactions transaction = new Transactions(from,fromID,to,toID,amount);
+        df.set(transaction).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                rf_u.document(userMobile).update("transactionIds", FieldValue.arrayUnion(df.getId()));
+            }
+        });
     }
 
     @Override
