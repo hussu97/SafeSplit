@@ -92,7 +92,8 @@ public class AddBill extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Please enter an amount!", Toast.LENGTH_SHORT).show();
                 }
                 else{
-
+                    Intent intent = new Intent(getApplicationContext(), SplitActivity.class);
+                    startActivity(intent);
                 }
             }
         });
