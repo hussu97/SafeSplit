@@ -117,24 +117,6 @@ public class CustomPayment extends AppCompatActivity {
                     finish();
                 }
             }
-            case R.id.set:{
-                System.out.println("1 =================================================");
-
-                System.out.println("2222" + users.size());
-                if (payers.size() > 1) {
-                    for (int i = 0; i < users.size(); i++) {
-                        View wantedView = participants.getChildAt(i);
-                        System.out.println("5 setBTN=============================================="+participants.getChildCount());
-                        TextView individual_TV = (TextView) wantedView.findViewById(R.id.user_participant);
-                        EditText individual_ED = (EditText) wantedView.findViewById(R.id.payed_amount);
-                        String who = individual_TV.getText().toString();
-                        if(payers.containsKey(who)) individual_ED.setText(payers.get(who).toString());
-                    }
-                }
-
-                System.out.println("2 =================================================");
-
-            }
         }
         return true;
     }

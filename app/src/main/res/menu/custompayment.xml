@@ -6,8 +6,5 @@
         android:id="@+id/done"
         android:title="Done"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/set"
-        android:title="Set"
-        app:showAsAction="always" />
+
 </menu>

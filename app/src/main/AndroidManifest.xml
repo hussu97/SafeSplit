@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.b00063271.safesplit">
 
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
-    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
 
     <application
         android:name=".SafeSplitApp"
@@ -25,10 +25,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddUsers"></activity>
-        <activity android:name=".AddBill"/>
-        <activity android:name=".paidByActivity"></activity>
-
+        <activity android:name=".AddUsers" />
+        <activity android:name=".AddBill" />
+        <activity
+            android:name=".CustomPayment"
+            android:windowSoftInputMode="stateHidden|adjustNothing" />
+        <activity
+            android:name=".paidByActivity"
+            android:theme="@android:style/Theme.DeviceDefault.Dialog" />
+        <activity android:name=".SplitActivity"></activity>
     </application>
 
 </manifest>
