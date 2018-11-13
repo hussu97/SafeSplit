@@ -126,49 +126,7 @@ public class TotalBalanceFragment extends Fragment {
         getOwedTransactions(userMobile);
     }
 
-//    private void getBalTransactionDetailsAux(){
-//        balTransactions.clear();
-//        for (Map.Entry<String, Double> entry : oweTransactions.entrySet()){
-//            double prev_amount = balTransactions.containsKey(entry.getKey()) ? balTransactions.get(entry.getKey()) : 0;
-//            balTransactions.put(entry.getKey(),prev_amount-entry.getValue());
-//        }
-//        for (Map.Entry<String, Double> entry : owedTransactions.entrySet()){
-//            double prev_amount = balTransactions.containsKey(entry.getKey()) ? balTransactions.get(entry.getKey()) : 0;
-//            balTransactions.put(entry.getKey(),entry.getValue()-prev_amount);
-//        }
-//        getBalTransactionDetails();
-//    }
-
     private void getBalTransactionDetails(){
-//        for (Map.Entry<String, Double> entry : balTransactions.entrySet())
-//        {
-//            final String balID = entry.getKey();
-//            final double amount = entry.getValue();
-//            Log.d(TAG, "getBalTransactionDetails: "+balID);
-//            Log.d(TAG, "getBalTransactionDetails: "+amount);
-//            rf_u.document(balID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                @Override
-//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                    Log.d(TAG, "onComplete: ");
-//                    HashMap<String,String> map=new HashMap<>();
-//                    map.put("amount",String.valueOf(amount));
-//                    if(task.isSuccessful()){
-//                        User user = task.getResult().toObject(User.class);
-//                        if(user!=null){
-//                            Log.d(TAG, "onComplete: User details"+user.getName());
-//                            map.put("person",user.getName());
-//                        } else{
-//                            map.put("person",balID);
-//                        }
-//                    } else {
-//                        map.put("person",balID);
-//                    }
-//                    Log.d(TAG, "onComplete: "+map.toString());
-//                    data.add(map);
-//                    if(data.size()==balTransactions.size()) updateList();
-//                }
-//            });
-//        }
         data.clear();
         if(oweTransactions.size()==0){
             for (Map.Entry<String, Double> entry : owedTransactions.entrySet()) {
