@@ -25,7 +25,7 @@ public class AddBill extends AppCompatActivity {
     static Button paidby;
     static Button split;
     static EditText amount;
-    static Boolean First = true;
+    private Boolean First = true;
 
 
 

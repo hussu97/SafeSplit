@@ -9,17 +9,25 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import static com.example.b00063271.safesplit.AddBill.payers;
+import static com.example.b00063271.safesplit.AddBill.users;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link spliequally.OnFragmentInteractionListener} interface
+ * {@link splitequally.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link spliequally#newInstance} factory method to
+ * Use the {@link splitequally#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class spliequally extends Fragment {
+public class splitequally extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -31,7 +39,7 @@ public class spliequally extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public spliequally() {
+    public splitequally() {
         // Required empty public constructor
     }
 
@@ -41,11 +49,11 @@ public class spliequally extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment spliequally.
+     * @return A new instance of fragment splitequally.
      */
     // TODO: Rename and change types and number of parameters
-    public static spliequally newInstance(String param1, String param2) {
-        spliequally fragment = new spliequally();
+    public static splitequally newInstance(String param1, String param2) {
+        splitequally fragment = new splitequally();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -62,11 +70,35 @@ public class spliequally extends Fragment {
         }
     }
 
+
+    static ListView equalpayers;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_spliequally, container, false);
+
+        //List View
+        //------------------------------------------------------------------------------------------
+        equalpayers = (ListView) view.findViewById(R.id.equalpayerslist);
+
+        ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+        for (String user:users){
+            HashMap<String, String> map = new HashMap<String, String>();
+            map.put("name", user);
+            data.add(map);
+        }
+
+
+        int resource = R.layout.equalpayerslist_item;
+        String[] from = {"name"};
+        int[] to = {R.id.textView4};
+
+        SimpleAdapter adapter = new SimpleAdapter(getContext(), data, resource, from, to);
+        equalpayers.setAdapter(adapter);
+        //equalpayers.setOnItemClickListener(this);
+        //------------------------------------------------------------------------------------------
         return view;
     }
 
