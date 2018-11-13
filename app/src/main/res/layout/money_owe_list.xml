@@ -40,8 +40,8 @@
 
         <ImageButton
             android:id="@+id/moneyOweSettleUp"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="60sp"
+            android:layout_height="60sp"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/settle_up" />

@@ -48,7 +48,7 @@ public class CustomAdapter extends BaseAdapter{
         String activityEnd = result.get(position).split("-")[2];
         String descriptionFinal = activityStart + activityAmt + activityEnd;
         Spannable spannable = new SpannableString(descriptionFinal);
-        spannable.setSpan(new ForegroundColorSpan(Color.RED), activityStart.length(), (activityStart + activityAmt).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannable.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.colorSecondary)), activityStart.length(), (activityStart + activityAmt).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         holder.tv.setText(spannable, TextView.BufferType.SPANNABLE);
         holder.img.setImageResource(imageId.get(position));
         return rowView;

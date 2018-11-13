@@ -18,17 +18,18 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"
             app:srcCompat="@drawable/settle_up"
-            />
+            android:tint="@color/colorSecondary"/>
 
         <TextView
             android:id="@+id/dashboardItemTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
             android:padding="5dp"
-            android:textSize="20sp"
-            android:text="TextView" />
+            android:text=""
+            android:textColor="@color/stage8"
+            android:textSize="20sp" />
 
     </LinearLayout>
 
