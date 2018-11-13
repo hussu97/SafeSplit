@@ -40,6 +40,7 @@ import androidx.fragment.app.Fragment;
 
 public class MoneyOweFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
     private final String TAG = "MoneyOweFrag";
 
     private final String TRANSACTION_COLLECTION = "transaction";
@@ -50,6 +51,7 @@ public class MoneyOweFragment extends Fragment {
     private CollectionReference rf_u = db.collection(USERS_COLLECTION);
 
     private String userMobile;
+    private String userName;
 
     private OnFragmentInteractionListener mListener;
 
@@ -67,10 +69,11 @@ public class MoneyOweFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static MoneyOweFragment newInstance(String param1) {
+    public static MoneyOweFragment newInstance(String param1, String param2) {
         MoneyOweFragment fragment = new MoneyOweFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -78,17 +81,20 @@ public class MoneyOweFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate: Called");
         oweTransactions = new HashMap<>();
         oweTransactionsNames = new HashMap<>();
         data = new ArrayList<>();
         if (getArguments() != null) {
             userMobile = getArguments().getString(ARG_PARAM1);
+            userName = getArguments().getString(ARG_PARAM2);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView: Called");
         // Inflate the layout for this fragment
         getOweTransactions(userMobile);
         View view =  inflater.inflate(R.layout.fragment_money_owe, container, false);
@@ -129,39 +135,7 @@ public class MoneyOweFragment extends Fragment {
                     }
                 });
     }
-
-//    private void getOweTransactionDetails(){
-//        for (Map.Entry<String, Double> entry : oweTransactions.entrySet())
-//        {
-//            final String toID = entry.getKey();
-//            final double amount = entry.getValue();
-//            Log.d(TAG, "getOweTransactionDetails: "+toID);
-//            Log.d(TAG, "getOweTransactionDetails: "+amount);
-//            rf_u.document(toID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                @Override
-//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                    Log.d(TAG, "onComplete: ");
-//                    HashMap<String,String> map=new HashMap<>();
-//                    map.put("amount",String.valueOf(amount));
-//                    if(task.isSuccessful()){
-//                        User user = task.getResult().toObject(User.class);
-//                        if(user!=null){
-//                            Log.d(TAG, "onComplete: User details"+user.getName());
-//                            map.put("person",user.getName());
-//                        } else{
-//                            map.put("person",toID);
-//                        }
-//                    } else {
-//                        map.put("person",toID);
-//                    }
-//                    Log.d(TAG, "onComplete: "+map.toString());
-//                    data.add(map);
-//                    if(data.size()==oweTransactions.size())updateList();
-//                }
-//            });
-//        }
-//    }
-
+    
     private void updateList(){
         for(Map.Entry<String, Double> entry : oweTransactions.entrySet()){
             HashMap<String,String> map = new HashMap<>();
@@ -170,7 +144,7 @@ public class MoneyOweFragment extends Fragment {
             map.put("amount",String.valueOf(entry.getValue()));
             data.add(map);
         }
-        int resource = R.layout.money_owed_list;
+        int resource = R.layout.money_owe_list;
         String[] from = {"from","fromID", "amount"};
         int[] to = {R.id.moneyOwePerson,R.id.moneyOwePersonID, R.id.moneyOweAmt};
         // create and set the adapter
@@ -188,10 +162,10 @@ public class MoneyOweFragment extends Fragment {
                         AlertDialog.Builder builder;
                         builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Material_Dialog_Alert);
                         builder.setTitle("Settle Up")
-                                .setMessage("Are you sure you want to create a transaction to receive "+amt+" from "+from)
+                                .setMessage("Are you sure you want to create a transaction to send "+amt+" to "+from)
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
-                                        createTransaction(from,fromID,userMobile,userMobile,Double.valueOf(amt));
+                                        createTransaction(userName,userMobile,from,fromID,Double.valueOf(amt));
                                     }
                                 })
                                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -239,7 +213,6 @@ public class MoneyOweFragment extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }
