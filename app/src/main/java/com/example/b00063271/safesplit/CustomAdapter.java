@@ -1,4 +1,5 @@
 package com.example.b00063271.safesplit;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.text.Spannable;
@@ -6,12 +7,10 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -21,7 +20,6 @@ public class CustomAdapter extends BaseAdapter{
     ArrayList<Integer> imageId;
     private static LayoutInflater inflater=null;
     public CustomAdapter(DashboardFragment mainActivity, ArrayList<String> prgmNameList, ArrayList<Integer> prgmImages) {
-        // TODO Auto-generated constructor stub
         result=prgmNameList;
         context=mainActivity.getContext();
         imageId=prgmImages;

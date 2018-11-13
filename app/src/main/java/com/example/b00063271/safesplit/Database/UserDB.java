@@ -1,7 +1,5 @@
 package com.example.b00063271.safesplit.Database;
 
-import androidx.annotation.NonNull;
-
 import android.util.Log;
 
 import com.example.b00063271.safesplit.Entities.History;
@@ -16,6 +14,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import androidx.annotation.NonNull;
 
 public class UserDB {
     private static final String TAG = "UserDB";

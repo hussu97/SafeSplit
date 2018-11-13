@@ -16,15 +16,11 @@ import android.widget.TextView;
 import com.example.b00063271.safesplit.Database.ActivityDB;
 import com.example.b00063271.safesplit.Database.C;
 import com.example.b00063271.safesplit.Entities.Transactions;
-import com.example.b00063271.safesplit.Entities.User;
 import com.example.b00063271.safesplit.R;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabItem;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -36,7 +32,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
@@ -47,9 +42,6 @@ public class TotalBalanceFragment extends Fragment {
 
     private final String TRANSACTION_COLLECTION = "transaction";
     private final String USERS_COLLECTION = "users";
-
-    private final int OWED = 0;
-    private final int OWE = 1;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference rf_t = db.collection(TRANSACTION_COLLECTION);

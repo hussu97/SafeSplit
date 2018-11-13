@@ -3,20 +3,21 @@ package com.example.b00063271.safesplit;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
+import android.util.Log;
+import android.view.MenuItem;
+import android.widget.ListView;
 
 import com.example.b00063271.safesplit.FriendsFragment.MainFragment;
 import com.example.b00063271.safesplit.FriendsFragment.MoneyOweFragment;
 import com.example.b00063271.safesplit.FriendsFragment.MoneyOwedFragment;
 import com.example.b00063271.safesplit.FriendsFragment.TotalBalanceFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.appcompat.app.AppCompatActivity;
-import android.util.Log;
-import android.view.MenuItem;
-import android.widget.ListView;
 
 public class HomeScreenActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener,DashboardFragment.OnFragmentInteractionListener
                 ,ProfileFragment.OnFragmentInteractionListener,GroupsFragment.OnFragmentInteractionListener,MoneyOweFragment.OnFragmentInteractionListener, MoneyOwedFragment.OnFragmentInteractionListener,

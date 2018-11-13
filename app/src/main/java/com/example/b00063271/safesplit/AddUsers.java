@@ -17,14 +17,16 @@ import android.widget.MultiAutoCompleteTextView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-// Contacts------------------------------------
-//---------------------------------------------
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import static com.example.b00063271.safesplit.SafeSplitApp.contactData;
+
+// Contacts------------------------------------
+//---------------------------------------------
 
 
 public class AddUsers extends AppCompatActivity implements AdapterView.OnItemClickListener, MultiAutoCompleteTextView.OnEditorActionListener {

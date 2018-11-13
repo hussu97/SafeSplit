@@ -1,12 +1,6 @@
 package com.example.b00063271.safesplit;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,9 +14,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import static com.example.b00063271.safesplit.AddBill.UpdateView;
 import static com.example.b00063271.safesplit.AddBill.amount;
-import static com.example.b00063271.safesplit.AddBill.paidby;
 import static com.example.b00063271.safesplit.AddBill.payers;
 
 public class CustomPayment extends AppCompatActivity {

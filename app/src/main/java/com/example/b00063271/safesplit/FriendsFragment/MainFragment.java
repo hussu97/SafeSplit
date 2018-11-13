@@ -1,45 +1,26 @@
 package com.example.b00063271.safesplit.FriendsFragment;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TabHost;
-import android.widget.TextView;
 
-import com.example.b00063271.safesplit.DashboardFragment;
 import com.example.b00063271.safesplit.Database.C;
 import com.example.b00063271.safesplit.Database.TransactionDB;
-import com.example.b00063271.safesplit.GroupsFragment;
-import com.example.b00063271.safesplit.ProfileFragment;
 import com.example.b00063271.safesplit.R;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 public class MainFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -102,6 +83,7 @@ public class MainFragment extends Fragment {
         } else Log.d(TAG, "onCreate: Error, invalid Credentials");
         setRetainInstance(true);
     }
+    private TabItem tabItem;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FriendsFragment.MainFragment">
+    tools:context=".FriendsFragment.MainFragment"
+    android:background="@color/colorPrimaryDark">
 
 
     <com.google.android.material.tabs.TabLayout
@@ -13,7 +14,9 @@
         android:layout_height="wrap_content"
         app:tabMaxWidth="0dp"
         app:tabGravity="fill"
-        app:tabMode="fixed">
+        app:tabMode="fixed"
+        app:tabIndicatorColor="@color/colorSecondary"
+        app:tabTextColor="@color/colorSecondary">
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/owe_tab_item"
@@ -40,11 +43,11 @@
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/friends_view_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         app:layout_anchor="@+id/friends_tab_layout"
         app:layout_anchorGravity="bottom"
-        android:layout_gravity="bottom">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     </androidx.viewpager.widget.ViewPager>
 
