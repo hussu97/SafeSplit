@@ -13,6 +13,8 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.example.b00063271.safesplit.Database.ActivityDB;
+import com.example.b00063271.safesplit.Database.C;
 import com.example.b00063271.safesplit.Entities.Transactions;
 import com.example.b00063271.safesplit.Entities.User;
 import com.example.b00063271.safesplit.R;
@@ -42,6 +44,8 @@ public class MoneyOweFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private final String TAG = "MoneyOweFrag";
+
+    private ActivityDB activityDB;
 
     private final String TRANSACTION_COLLECTION = "transaction";
     private final String USERS_COLLECTION = "users";
@@ -82,6 +86,7 @@ public class MoneyOweFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: Called");
+        activityDB = new ActivityDB();
         oweTransactions = new HashMap<>();
         oweTransactionsNames = new HashMap<>();
         data = new ArrayList<>();
@@ -123,12 +128,11 @@ public class MoneyOweFragment extends Fragment {
                         data.clear();
                         Log.d(TAG, "onEvent: in snapShot getOwedTrans "+queryDocumentSnapshots.size());
                         for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
-                            HashMap<String,String> map=new HashMap<>();
-                            double amount = doc.getDouble("amount");
+                            double amount = C.round(doc.getDouble("amount"));
                             String fromID = doc.getString("fromID");
                             String from = doc.getString("from");
                             double prev_amount = oweTransactions.containsKey(fromID) ? oweTransactions.get(fromID) : 0;
-                            oweTransactions.put(fromID, prev_amount + amount);
+                            oweTransactions.put(fromID, C.round(prev_amount + amount));
                             oweTransactionsNames.put(fromID,from);
                         }
                         updateList();
@@ -161,11 +165,12 @@ public class MoneyOweFragment extends Fragment {
                     public void onClick(View arg0) {
                         AlertDialog.Builder builder;
                         builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Material_Dialog_Alert);
-                        builder.setTitle("Settle Up")
+                        builder.setTitle(C.SETTLE_UP)
                                 .setMessage("Are you sure you want to create a transaction to send "+amt+" to "+from)
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         createTransaction(userName,userMobile,from,fromID,Double.valueOf(amt));
+                                        activityDB.createActivity(userMobile,"You settled your debt with "+from+" by paying -"+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP);
                                     }
                                 })
                                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

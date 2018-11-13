@@ -11,6 +11,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="40sp"
         android:scrollbars="vertical"
-        android:visibility="visible" />
+        android:visibility="visible"
+        android:padding="10dp"/>
 
 </FrameLayout>

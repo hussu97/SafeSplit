@@ -21,13 +21,13 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.example.b00063271.safesplit.Database.ActivityDB;
+import com.example.b00063271.safesplit.Database.C;
+import com.example.b00063271.safesplit.Entities.Activities;
 import com.example.b00063271.safesplit.Entities.Transactions;
 import com.example.b00063271.safesplit.Entities.User;
 import com.example.b00063271.safesplit.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabItem;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -54,6 +54,8 @@ public class MoneyOwedFragment extends Fragment implements AdapterView.OnItemCli
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private final String TAG = "MoneyOwedFrag";
+
+    private ActivityDB activityDB;
 
     private final String TRANSACTION_COLLECTION = "transaction";
     private final String USERS_COLLECTION = "users";
@@ -93,6 +95,7 @@ public class MoneyOwedFragment extends Fragment implements AdapterView.OnItemCli
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activityDB = new ActivityDB();
         owedTransactions = new HashMap<>();
         owedTransactionsNames = new HashMap<>();
         data = new ArrayList<>();
@@ -135,12 +138,11 @@ public class MoneyOwedFragment extends Fragment implements AdapterView.OnItemCli
                         data.clear();
                         Log.d(TAG, "onEvent: in snapShot getOwedTrans "+queryDocumentSnapshots.size());
                         for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
-                            HashMap<String,String> map=new HashMap<>();
-                            double amount = doc.getDouble("amount");
+                            double amount = C.round(doc.getDouble("amount"));
                             String toID = doc.getString("toID");
                             String to = doc.getString("to");
                             double prev_amount = owedTransactions.containsKey(toID) ? owedTransactions.get(toID) : 0;
-                            owedTransactions.put(toID, prev_amount + amount);
+                            owedTransactions.put(toID, C.round(prev_amount + amount));
                             owedTransactionsNames.put(toID,to);
                         }
                         updateList();
@@ -148,37 +150,6 @@ public class MoneyOwedFragment extends Fragment implements AdapterView.OnItemCli
                 });
     }
 
-//    private void getOwedTransactionDetails(){
-//        for (Map.Entry<String, Double> entry : owedTransactions.entrySet())
-//        {
-//            final String fromID = entry.getKey();
-//            final double amount = entry.getValue();
-//            Log.d(TAG, "getOwedTransactionDetails: "+fromID);
-//            Log.d(TAG, "getOwedTransactionDetails: "+amount);
-//            rf_u.document(fromID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                @Override
-//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                    Log.d(TAG, "onComplete: ");
-//                    HashMap<String,String> map=new HashMap<>();
-//                    map.put("amount",String.valueOf(amount));
-//                    if(task.isSuccessful()){
-//                        User user = task.getResult().toObject(User.class);
-//                        if(user!=null){
-//                            Log.d(TAG, "onComplete: User details"+user.getName());
-//                            map.put("person",user.getName());
-//                        } else{
-//                            map.put("person",fromID);
-//                        }
-//                    } else {
-//                        map.put("person",fromID);
-//                    }
-//                    Log.d(TAG, "onComplete: "+map.toString());
-//                    data.add(map);
-//                    if(data.size()==owedTransactions.size())updateList();
-//                }
-//            });
-//        }
-//    }
     private void updateList(){
         for(Map.Entry<String, Double> entry : owedTransactions.entrySet()){
             HashMap<String,String> map = new HashMap<>();
@@ -205,11 +176,12 @@ public class MoneyOwedFragment extends Fragment implements AdapterView.OnItemCli
                     public void onClick(View arg0) {
                         AlertDialog.Builder builder;
                         builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Material_Dialog_Alert);
-                        builder.setTitle("Settle Up")
+                        builder.setTitle(C.SETTLE_UP)
                                 .setMessage("Are you sure you want to create a transaction to receive "+amt+" from "+to)
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         createTransaction(to,toID,userName,userMobile,Double.valueOf(amt));
+                                        activityDB.createActivity(userMobile,"You settled your debt with "+to+" by receiving -"+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP);
                                     }
                                 })
                                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -234,7 +206,7 @@ public class MoneyOwedFragment extends Fragment implements AdapterView.OnItemCli
         df.set(transaction).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                rf_u.document(userMobile).update("transactionIds", FieldValue.arrayUnion(df.getId()));
+                rf_u.document(userMobile).update(C.USERS_TRANSACTIONS, FieldValue.arrayUnion(df.getId()));
             }
         });
     }

@@ -1,13 +1,21 @@
 package com.example.b00063271.safesplit;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.example.b00063271.safesplit.Database.C;
 import com.google.android.material.tabs.TabLayout;
@@ -19,10 +27,14 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import javax.annotation.Nullable;
 
 public class DashboardFragment extends Fragment {
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private final String TAG = "DashboardFrag";
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -32,6 +44,8 @@ public class DashboardFragment extends Fragment {
     private String userMobile;
     private String userName;
 
+    private ArrayList<String> activities;
+    private ArrayList<Integer> activityType;
     private ListView dashboardListView;
     private OnFragmentInteractionListener mListener;
 
@@ -51,6 +65,8 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activities = new ArrayList<>();
+        activityType = new ArrayList<>();
         if (getArguments() != null) {
             userMobile = getArguments().getString(ARG_PARAM1);
             userName = getArguments().getString(ARG_PARAM2);
@@ -72,11 +88,26 @@ public class DashboardFragment extends Fragment {
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                activities.clear();
+                activityType.clear();
                 for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
-                    doc.getString(C.USERS_HISTORY_ACTIVITY);
+                    activities.add(doc.getString(C.USERS_HISTORY_ACTIVITY));
+                    int type = (int)Math.round(doc.getDouble(C.USERS_HISTORY_TYPE));
+                    switch(type){
+                        case C.ACTIVITY_TYPE_SETTLE_UP:
+                            activityType.add(R.drawable.baseline_accessibility_black_18dp);
+                            break;
+                            default:
+                                Log.d(TAG, "onEvent: Type not found");
+                    }
                 }
+                updateList();
             }
         });
+    }
+
+    private void updateList() {
+        dashboardListView.setAdapter(new CustomAdapter(this, activities,activityType));
     }
 
     public void onButtonPressed(Uri uri) {

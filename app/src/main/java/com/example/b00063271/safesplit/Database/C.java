@@ -21,7 +21,7 @@ public class C {
     public static final String COLLECTION_USERS_HISTORY = "history";
     public static final String USERS_HISTORY_ACTIVITY = "activityString";
     public static final String USERS_HISTORY_AMOUNT = "amount";
-    public static final String USERS_HISTORY_TYPE = "type";
+    public static final String USERS_HISTORY_TYPE = "activityType";
     public static final String USERS_HISTORY_TOS = "to";
     public static final String USERS_HISTORY_GROUP = "group";
 
@@ -29,6 +29,10 @@ public class C {
     public static final String GROUPS_NAME = "name";
     public static final String GROUPS_TRANSACTIONS = "transactionIds";
     public static final String GROUPS_USERS = "userIds";
+
+    public static final String SETTLE_UP = "Settle Up";
+
+    public static final int ACTIVITY_TYPE_SETTLE_UP = 1030;
 
     public static final int CALLBACK_GET_TRANSACTIONS = 35;
 }

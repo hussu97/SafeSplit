@@ -58,7 +58,7 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
                     Log.d(TAG, "onNavigationItemSelected: "+userMobile+" "+userName);
                     return openFragment(MainFragment.newInstance(userMobile,userName));
                 case R.id.navigation_dashboard:
-                    return openFragment(new DashboardFragment());
+                    return openFragment(DashboardFragment.newInstance(userMobile,userName));
                 case R.id.naviagtion_me:
                     return openFragment(new ProfileFragment());
                 case R.id.navigation_groups:

@@ -13,6 +13,8 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.example.b00063271.safesplit.Database.ActivityDB;
+import com.example.b00063271.safesplit.Database.C;
 import com.example.b00063271.safesplit.Entities.Transactions;
 import com.example.b00063271.safesplit.Entities.User;
 import com.example.b00063271.safesplit.R;
@@ -56,6 +58,8 @@ public class TotalBalanceFragment extends Fragment {
     private String userMobile;
     private String userName;
 
+    private ActivityDB activityDB;
+
     private OnFragmentInteractionListener mListener;
 
     private TabItem totalBalTabItem;
@@ -70,11 +74,6 @@ public class TotalBalanceFragment extends Fragment {
     private HashMap<String,String> owedTransactionsNames;
     private ArrayList<HashMap<String,String>> data;
     private SimpleAdapter simpleAdapter;
-    private int dataOweSize =0;
-    private int dataOwedSize =0;
-
-    private boolean OWE_FLAG;
-    private boolean OWED_FLAG;
 
     public TotalBalanceFragment() {
         // Required empty public constructor
@@ -92,14 +91,13 @@ public class TotalBalanceFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activityDB = new ActivityDB();
         balTransactions = new HashMap<>();
         oweTransactions = new HashMap<>();
         oweTransactionsNames = new HashMap<>();
         owedTransactions = new HashMap<>();
         owedTransactionsNames = new HashMap<>();
         data = new ArrayList<>();
-        OWE_FLAG=false;
-        OWED_FLAG=false;
         if (getArguments() != null) {
             userMobile = getArguments().getString(ARG_PARAM1);
             userName = getArguments().getString(ARG_PARAM2);
@@ -133,7 +131,7 @@ public class TotalBalanceFragment extends Fragment {
                 HashMap<String, String> map = new HashMap<>();
                 map.put("person", owedTransactionsNames.get(entry.getKey()));
                 map.put("personID", entry.getKey());
-                map.put("amount", String.valueOf(entry.getValue()));
+                map.put("amount", String.valueOf(C.round(entry.getValue())));
                 data.add(map);
             }
         } else {
@@ -142,12 +140,10 @@ public class TotalBalanceFragment extends Fragment {
                 map.put("person", oweTransactionsNames.get(entry.getKey()));
                 double owed_amount = owedTransactions.containsKey(entry.getKey()) ? owedTransactions.get(entry.getKey()) : 0;
                 map.put("personID", entry.getKey());
-                map.put("amount", String.valueOf(owed_amount-entry.getValue()));
+                map.put("amount", String.valueOf(C.round(owed_amount-entry.getValue())));
                 data.add(map);
             }
         }
-        dataOweSize = oweTransactions.size();
-        dataOwedSize = owedTransactions.size();
         updateList();
     }
 
@@ -161,12 +157,11 @@ public class TotalBalanceFragment extends Fragment {
                         oweTransactionsNames.clear();
                         Log.d(TAG, "onEvent: in snapShot getOwedTrans "+queryDocumentSnapshots.size());
                         for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
-                            HashMap<String,String> map=new HashMap<>();
-                            double amount = doc.getDouble("amount");
+                            double amount = C.round(doc.getDouble("amount"));
                             String fromID = doc.getString("fromID");
                             String from = doc.getString("from");
                             double prev_amount = oweTransactions.containsKey(fromID) ? oweTransactions.get(fromID) : 0;
-                            oweTransactions.put(fromID, prev_amount + amount);
+                            oweTransactions.put(fromID, C.round(prev_amount + amount));
                             oweTransactionsNames.put(fromID,from);
                         }
                         getBalTransactionDetails();
@@ -185,18 +180,17 @@ public class TotalBalanceFragment extends Fragment {
                         Log.d(TAG, "onEvent: in snapShot getOwedTrans "+queryDocumentSnapshots.size());
                         for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
                             HashMap<String,String> map=new HashMap<>();
-                            double amount = doc.getDouble("amount");
+                            double amount = C.round(doc.getDouble("amount"));
                             String toID = doc.getString("toID");
                             String to = doc.getString("to");
                             double prev_amount = owedTransactions.containsKey(toID) ? owedTransactions.get(toID) : 0;
-                            owedTransactions.put(toID, prev_amount + amount);
+                            owedTransactions.put(toID, C.round(prev_amount + amount));
                             owedTransactionsNames.put(toID,to);
                         }
                         getBalTransactionDetails();
                     }
                 });
     }
-
     private void updateList(){
         int resource = R.layout.total_bal_list;
         String[] from = {"person", "personID","amount"};
@@ -222,8 +216,10 @@ public class TotalBalanceFragment extends Fragment {
                                         double amount = Double.valueOf(amt);
                                         if(amount>0){
                                             createTransaction(person,personID,userName,userMobile,amount);
+                                            activityDB.createActivity(userMobile,"You settled your debt with "+person+" by receiving -"+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP);
                                         } else {
-                                            createTransaction(userName,userMobile,person,personID,amount);
+                                            createTransaction(userName,userMobile,person,personID,-1*amount);
+                                            activityDB.createActivity(userMobile,"You settled your debt with "+person+" by paying -"+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP);
                                         }
                                     }
                                 })
