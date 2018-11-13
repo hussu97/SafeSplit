@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 
 import com.example.b00063271.safesplit.FriendsFragment.MainFragment;
@@ -12,6 +13,7 @@ import com.example.b00063271.safesplit.FriendsFragment.MoneyOweFragment;
 import com.example.b00063271.safesplit.FriendsFragment.MoneyOwedFragment;
 import com.example.b00063271.safesplit.FriendsFragment.TotalBalanceFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,12 +22,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 public class HomeScreenActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener,DashboardFragment.OnFragmentInteractionListener
-                ,ProfileFragment.OnFragmentInteractionListener,GroupsFragment.OnFragmentInteractionListener,MoneyOweFragment.OnFragmentInteractionListener, MoneyOwedFragment.OnFragmentInteractionListener,
-        TotalBalanceFragment.OnFragmentInteractionListener{
+                ,ProfileFragment.OnFragmentInteractionListener,GroupsFragment.OnFragmentInteractionListener,MoneyOwedFragment.OnFragmentInteractionListener,
+        MoneyOweFragment.OnFragmentInteractionListener,TotalBalanceFragment.OnFragmentInteractionListener,View.OnClickListener {
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     private ListView listView;
+    private FloatingActionButton floatingActionButton;
     private final String TAG="HSActivity";
 
     private String userMobile="xJNsNNf39VJ62aiETsiO";
@@ -44,6 +47,8 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
         }
         fragmentManager = getSupportFragmentManager();
         listView = (ListView)findViewById(R.id.money_owed_listview);
+        floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+        floatingActionButton.setOnClickListener(this);
         openFragment(MainFragment.newInstance(userMobile,userName));
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -64,10 +69,6 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
                     return openFragment(new ProfileFragment());
                 case R.id.navigation_groups:
                     return openFragment(new GroupsFragment());
-                case R.id.navigation_new_bill:
-                    startActivity(new Intent(getApplicationContext(),AddUsers.class));
-                    overridePendingTransition(R.anim.push_bottom_up,R.anim.remain_same_position);
-                    return true;
             }
             return false;
         }
@@ -83,5 +84,15 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
     @Override
     public void onFragmentInteraction(Uri uri) {
         Log.d(TAG, "onFragmentInteraction: "+uri);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch(view.getId()){
+            case R.id.floatingActionButton:
+                startActivity(new Intent(getApplicationContext(),AddUsers.class));
+                overridePendingTransition(R.anim.push_bottom_up,R.anim.remain_same_position);
+                break;
+        }
     }
 }
