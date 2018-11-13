@@ -54,9 +54,6 @@ public class SafeSplitApp extends Application {
         @Override
         protected void onPostExecute(String result){
             Collections.sort(contactData, new MapComparator("name"));
-            for(int i = 0; i < 20; i++){
-                System.out.println(contactData.get(i).get("name"));
-            }
         }
     }
 
@@ -69,7 +66,6 @@ public class SafeSplitApp extends Application {
 
         @Override
         public int compare(Map<String, String> first, Map<String, String> second){
-            // TODO: Null checking, both for maps and values
             String firstValue = first.get(key);
             String secondValue = second.get(key);
             return firstValue.compareTo(secondValue);

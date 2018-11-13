@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/naviagation_friends"
@@ -24,7 +23,6 @@
         android:icon="@drawable/ic_dashboard_black_24dp"
         android:title="@string/title_dashboard"
         android:visible="true"/>
-
 
     <item
         android:id="@+id/naviagtion_me"

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
@@ -14,7 +13,6 @@ import java.util.HashMap;
 
 import static com.example.b00063271.safesplit.AddBill.UpdateView;
 import static com.example.b00063271.safesplit.AddBill.amount;
-import static com.example.b00063271.safesplit.AddBill.paidby;
 import static com.example.b00063271.safesplit.AddBill.payers;
 
 public class paidByActivity extends Activity {

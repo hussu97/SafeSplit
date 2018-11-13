@@ -3,20 +3,21 @@ package com.example.b00063271.safesplit;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
+import android.util.Log;
+import android.view.MenuItem;
+import android.widget.ListView;
 
 import com.example.b00063271.safesplit.FriendsFragment.MainFragment;
 import com.example.b00063271.safesplit.FriendsFragment.MoneyOweFragment;
 import com.example.b00063271.safesplit.FriendsFragment.MoneyOwedFragment;
 import com.example.b00063271.safesplit.FriendsFragment.TotalBalanceFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.appcompat.app.AppCompatActivity;
-import android.util.Log;
-import android.view.MenuItem;
-import android.widget.ListView;
 
 public class HomeScreenActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener,DashboardFragment.OnFragmentInteractionListener
                 ,ProfileFragment.OnFragmentInteractionListener,GroupsFragment.OnFragmentInteractionListener,MoneyOweFragment.OnFragmentInteractionListener, MoneyOwedFragment.OnFragmentInteractionListener,
@@ -26,15 +27,24 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
     private FragmentTransaction fragmentTransaction;
     private ListView listView;
     private final String TAG="HSActivity";
-    private String userID="xJNsNNf39VJ62aiETsiO";
+
+    private String userMobile="xJNsNNf39VJ62aiETsiO";
+    private String userName ="Hussu";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
+        Intent intent = getIntent();
+        userMobile = intent.getStringExtra("userID");
+        userName = intent.getStringExtra("userName");
+        if(userMobile==null){
+            userMobile="12345";
+            userName="Hussu";
+        }
         fragmentManager = getSupportFragmentManager();
         listView = (ListView)findViewById(R.id.money_owed_listview);
-        openFragment(new MainFragment());
+        openFragment(MainFragment.newInstance(userMobile,userName));
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
@@ -46,9 +56,10 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.naviagation_friends:
-                    return openFragment(MainFragment.newInstance(userID));
+                    Log.d(TAG, "onNavigationItemSelected: "+userMobile+" "+userName);
+                    return openFragment(MainFragment.newInstance(userMobile,userName));
                 case R.id.navigation_dashboard:
-                    return openFragment(new DashboardFragment());
+                    return openFragment(DashboardFragment.newInstance(userMobile,userName));
                 case R.id.naviagtion_me:
                     return openFragment(new ProfileFragment());
                 case R.id.navigation_groups:
@@ -68,7 +79,6 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
         fragmentTransaction.commit();
         return true;
     }
-
 
     @Override
     public void onFragmentInteraction(Uri uri) {

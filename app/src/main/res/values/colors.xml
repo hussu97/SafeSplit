@@ -2,7 +2,8 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#000</color>
-    <color name="colorAccent">#ff4081</color>
+    <color name="colorAccent">#9ce5ff</color>
+    <color name="colorSecondary">#9ce5ff</color>
     <color name="titlebackgroundcolor">#3232CD</color>
     <color name="titletextcolor">#FFFF00</color>
     <color name="stage1">#000</color>

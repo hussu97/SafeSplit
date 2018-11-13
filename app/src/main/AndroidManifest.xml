@@ -13,8 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar">
-        <activity android:name=".SignInActivity"></activity>
-        <activity android:name=".SignOutActivity" />
+        <activity android:name=".SignInActivity">
+        </activity>
         <activity android:name=".SignUpActivity" />
         <activity
             android:name=".HomeScreenActivity"

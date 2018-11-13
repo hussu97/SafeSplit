@@ -1,33 +1,46 @@
 package com.example.b00063271.safesplit;
 
 import android.app.ProgressDialog;
-import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-import android.util.Log;
-
 import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.b00063271.safesplit.Database.UserDB;
 import com.example.b00063271.safesplit.Entities.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class SignInActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
+
+    private final String USERS_COLLECTION = "users";
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference rf_u = db.collection(USERS_COLLECTION);
 
     private EditText emailEditText;
     private EditText passwordEditText;
     private Button loginButton;
     private TextView signupLink;
     private FirebaseAuth mAuth;
-    private UserDB userDB;
+
+    private String userName;
+    private String userMobile;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,8 +51,6 @@ public class SignInActivity extends AppCompatActivity {
         loginButton = (Button)findViewById(R.id.btn_login);
         signupLink = (TextView)findViewById(R.id.link_signup);
         mAuth = FirebaseAuth.getInstance();
-
-        userDB = new UserDB(this);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -100,7 +111,7 @@ public class SignInActivity extends AppCompatActivity {
 //                            Log.d(TAG, "signInWithEmail:success");
 //                            FirebaseUser user = mAuth.getCurrentUser();
 //                            progressDialog.dismiss();
-//                            SignInActivity.this.onLoginSuccess(user.getUid());
+//                            getUserID(email);
 //
 //                        } else {
 //                            // If sign in fails, display a message to the user.
@@ -112,7 +123,6 @@ public class SignInActivity extends AppCompatActivity {
 //                        // ...
 //                    }
 //                });
-        onLoginSuccess("hi");
     }
     public void updateGetUser(User user){
         emailEditText.setText(user.getEmail());
@@ -123,10 +133,28 @@ public class SignInActivity extends AppCompatActivity {
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == RESULT_OK) {
                 Intent intent = getIntent();
-                String userID = intent.getStringExtra("user");
-                userDB.getUser(userID);
+                String userEmail = intent.getStringExtra("user");
+                getUserID(userEmail);
             }
         }
+    }
+
+    private void getUserID(String userEmail){
+        rf_u.whereEqualTo("email",userEmail).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    QuerySnapshot document = task.getResult();
+                    for(QueryDocumentSnapshot doc:document){
+                        userMobile = doc.getId();
+                        userName = doc.getString("name");
+                    }
+                    SignInActivity.this.onLoginSuccess(userMobile,userName);
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
     }
 
     @Override
@@ -135,10 +163,11 @@ public class SignInActivity extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
-    public void onLoginSuccess(String uID) {
+    public void onLoginSuccess(String userMobile, String userName) {
         loginButton.setEnabled(true);
         Intent intent = new Intent(this, HomeScreenActivity.class);
-        intent.putExtra("user",uID);
+        intent.putExtra("userID",userMobile);
+        intent.putExtra("userName",userName);
         startActivity(intent);
     }
 
