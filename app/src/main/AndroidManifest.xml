@@ -34,6 +34,10 @@
             android:name=".paidByActivity"
             android:theme="@android:style/Theme.DeviceDefault.Dialog" />
         <activity android:name=".SplitActivity"></activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
