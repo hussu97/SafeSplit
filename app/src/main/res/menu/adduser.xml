@@ -5,9 +5,11 @@
     <item
         android:id="@+id/userprevmenu"
         android:title="Prev"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        android:iconTint="@color/colorSecondary"/>
     <item
         android:id="@+id/usernextmenu"
         android:title="Next"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        android:iconTint="@color/colorSecondary"/>
 </menu>

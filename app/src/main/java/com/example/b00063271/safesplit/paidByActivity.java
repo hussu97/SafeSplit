@@ -39,7 +39,7 @@ public class paidByActivity extends Activity {
         }
 
 
-        int resource = R.layout.list_item;
+        int resource = R.layout.contacts_list;
         String[] from = {"name"};
         int[] to = {R.id.titleTextView};
 

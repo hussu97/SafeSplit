@@ -2,10 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/naviagation_friends"
+        android:id="@+id/navigation_friends"
         android:icon="@drawable/baseline_accessibility_black_18dp"
         android:title="@string/title_friends"
-        android:visible="true"/>
+        android:visible="true" />
 
     <item
         android:id="@+id/navigation_groups"

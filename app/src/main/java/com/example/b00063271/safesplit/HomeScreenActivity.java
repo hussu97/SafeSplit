@@ -59,7 +59,7 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
-                case R.id.naviagation_friends:
+                case R.id.navigation_friends:
                     Log.d(TAG, "onNavigationItemSelected: "+userMobile+" "+userName);
                     return openFragment(MainFragment.newInstance(userMobile,userName));
                 case R.id.navigation_dashboard:

@@ -73,7 +73,7 @@ public class AddUsers extends AppCompatActivity implements AdapterView.OnItemCli
         }
 
 
-        int resource = R.layout.list_item;
+        int resource = R.layout.contacts_list;
         String[] from = {"name"};
         int[] to = {R.id.titleTextView};
 
