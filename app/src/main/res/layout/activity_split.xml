@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="5dp"
+    android:background="@color/colorPrimaryDark"
     android:orientation="vertical"
     tools:context=".SplitActivity">
 
@@ -20,12 +20,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
             android:layout_weight="1"
             android:background="@drawable/radiobuttonbg"
+            android:backgroundTint="@color/stage3"
             android:button="@android:color/transparent"
             android:checked="true"
             android:gravity="center"
             android:text="="
+            android:textColor="@color/colorSecondary"
             android:textSize="20sp" />
 
         <RadioButton
@@ -33,11 +36,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
             android:layout_weight="1"
             android:background="@drawable/radiobuttonbg"
+            android:backgroundTint="@color/stage3"
             android:button="@android:color/transparent"
             android:gravity="center"
             android:text="1.23"
+            android:textColor="@color/colorSecondary"
             android:textSize="20sp" />
 
         <RadioButton
@@ -45,11 +51,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
             android:layout_weight="1"
             android:background="@drawable/radiobuttonbg"
+            android:backgroundTint="@color/stage3"
             android:button="@android:color/transparent"
             android:gravity="center"
             android:text="%"
+            android:textColor="@color/colorSecondary"
             android:textSize="20sp" />
     </RadioGroup>
 
@@ -59,11 +69,11 @@
         android:layout_height="34dp"
         android:layout_marginTop="10dp"
         android:layout_weight="0"
-        android:background="@color/stage6"
+        android:background="@color/stage3"
         android:gravity="center_vertical"
         android:paddingLeft="10dp"
         android:text="TextView"
-        android:textColor="@color/bluestage1"
+        android:textColor="@color/stage8"
         android:textSize="20sp" />
 
     <androidx.viewpager.widget.ViewPager

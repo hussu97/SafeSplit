@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/stage2"
     android:orientation="vertical"
+    android:background="@color/colorPrimaryDark"
     tools:context=".AddBill">
 
     <TableRow
@@ -32,11 +32,12 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="5dp"
             android:layout_weight="1"
-            android:backgroundTint="@color/bluestage1"
+            android:backgroundTint="@color/colorSecondary"
+            android:textColorHint="@color/stage3"
             android:ems="10"
             android:hint="0.00"
             android:inputType="numberDecimal"
-            android:textColor="#FFF"
+            android:textColor="@color/stage8"
             android:textSize="30sp" />
     </TableRow>
 
@@ -63,6 +64,7 @@
             android:layout_weight="1"
             android:background="@drawable/textviewborder"
             android:clickable="true"
+            android:textColor="@color/colorSecondary"
             android:padding="5dp"
             android:text="@string/paidbytv"
             android:textSize="12sp" />
@@ -85,6 +87,7 @@
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:background="@drawable/textviewborder"
+            android:textColor="@color/colorSecondary"
             android:clickable="true"
             android:padding="5dp"
             android:text="@string/splittv"

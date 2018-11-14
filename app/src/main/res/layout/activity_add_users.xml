@@ -20,6 +20,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
         android:orientation="horizontal">
 
         <MultiAutoCompleteTextView
@@ -31,6 +32,9 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
+            android:textColor="@color/stage8"
+            android:hint="Search contacts"
+            android:textColorHint="@color/stage3"
             android:imeOptions="actionDone"
             android:inputType="text" />
 
@@ -41,5 +45,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:background="@color/colorPrimaryDark"
         android:padding="5dp" />
 </LinearLayout>

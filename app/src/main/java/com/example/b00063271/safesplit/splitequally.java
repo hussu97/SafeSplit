@@ -93,7 +93,7 @@ public class splitequally extends Fragment {
 
         int resource = R.layout.equalpayerslist_item;
         String[] from = {"name"};
-        int[] to = {R.id.textView4};
+        int[] to = {R.id.equalpayerslist_item};
 
         SimpleAdapter adapter = new SimpleAdapter(getContext(), data, resource, from, to);
         equalpayers.setAdapter(adapter);

@@ -9,6 +9,13 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import static com.example.b00063271.safesplit.AddBill.users;
 
 
 /**
@@ -62,11 +69,35 @@ public class splitpercent extends Fragment {
         }
     }
 
+    static ListView percentpayers;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_splitpercent, container, false);
+        View view = inflater.inflate(R.layout.fragment_splitpercent, container, false);
+
+        //List View
+        //------------------------------------------------------------------------------------------
+        percentpayers = (ListView) view.findViewById(R.id.percentpayerslist);
+
+        ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+        for (String user:users){
+            HashMap<String, String> map = new HashMap<String, String>();
+            map.put("name", user);
+            data.add(map);
+        }
+
+
+        int resource = R.layout.percentpayerslist_item;
+        String[] from = {"name"};
+        int[] to = {R.id.percentpayerslist_item};
+
+        SimpleAdapter adapter = new SimpleAdapter(getContext(), data, resource, from, to);
+        percentpayers.setAdapter(adapter);
+        //equalpayers.setOnItemClickListener(this);
+        //------------------------------------------------------------------------------------------
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
