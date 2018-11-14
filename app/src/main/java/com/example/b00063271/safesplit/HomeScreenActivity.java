@@ -30,7 +30,6 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
     private ListView listView;
     private FloatingActionButton floatingActionButton;
     private final String TAG="HSActivity";
-
     private String userMobile="xJNsNNf39VJ62aiETsiO";
     private String userName ="Hussu";
 

@@ -5,12 +5,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.b00063271.safesplit.FriendsFragment.MainFragment;
 import com.example.b00063271.safesplit.FriendsFragment.MoneyOweFragment;
@@ -18,45 +26,105 @@ import com.example.b00063271.safesplit.FriendsFragment.MoneyOwedFragment;
 import com.example.b00063271.safesplit.FriendsFragment.TotalBalanceFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class SplitActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener,DashboardFragment.OnFragmentInteractionListener
-        ,ProfileFragment.OnFragmentInteractionListener,GroupsFragment.OnFragmentInteractionListener,MoneyOweFragment.OnFragmentInteractionListener, MoneyOwedFragment.OnFragmentInteractionListener,
-        TotalBalanceFragment.OnFragmentInteractionListener{
+import org.w3c.dom.Text;
+
+public class SplitActivity extends AppCompatActivity implements splitpercent.OnFragmentInteractionListener,splitexactamounts.OnFragmentInteractionListener,
+            splitequally.OnFragmentInteractionListener{
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     private String userID="xJNsNNf39VJ62aiETsiO";
+    private String username = "hussu";
+    private RadioGroup rg;
+    private RadioButton rbequal, rbexact, rbpercent;
+    private TextView fragment_title;
 
+    private ViewPager viewPager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_split);
+
+        rg = (RadioGroup) findViewById(R.id.rg_split);
+        rbequal = (RadioButton) findViewById(R.id.radio0);
+        rbexact = (RadioButton) findViewById(R.id.radio1);
+        rbpercent = (RadioButton) findViewById(R.id.radio2);
+        fragment_title = (TextView) findViewById(R.id.textView3);
+
         fragmentManager = getSupportFragmentManager();
-        openFragment(new MainFragment());
+        viewPager = (ViewPager)findViewById(R.id.splitOptionsViewPager);
+        setupViewPager();
+
+/*
+        fragment_title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewPager.setCurrentItem(2, true);
+                rbpercent.setChecked(true);
+            }
+        });
+*/
+
+
+        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId){
+                    case R.id.radio0:{
+                        viewPager.setCurrentItem(0, true);
+                        break;
+                    }
+                    case R.id.radio1:{
+                        viewPager.setCurrentItem(1, true);
+                        break;
+                    }
+                    case R.id.radio2:{
+                        viewPager.setCurrentItem(2, true);
+                        break;
+                    }
+                }
+            }
+        });
+
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position){
+                    case 0:{
+                        rbequal.setChecked(true);
+                        break;
+                    }
+                    case 1:{
+                        rbexact.setChecked(true);
+                        break;
+                    }
+                    case 2:{
+                        rbpercent.setChecked(true);
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
     }
 
-
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.naviagation_friends:
-                    //return openFragment(MainFragment.newInstance(userID));
-                case R.id.navigation_dashboard:
-                    return openFragment(new DashboardFragment());
-                case R.id.naviagtion_me:
-                    return openFragment(new ProfileFragment());
-                case R.id.navigation_groups:
-                    return openFragment(new GroupsFragment());
-//                case R.id.navigation_new_bill:
-//                    startActivity(new Intent(getApplicationContext(),AddUsers.class));
-//                    overridePendingTransition(R.anim.push_bottom_up,R.anim.remain_same_position);
-//                    return true;
-            }
-            return false;
-        }
-    };
+    private void setupViewPager(){
+        MainFragment.Adapter adapter = new MainFragment.Adapter(fragmentManager);
+        adapter.addFragment(splitequally.newInstance("",""), "Equal");
+        adapter.addFragment(splitexactamounts.newInstance("",""), "Exact");
+        adapter.addFragment(splitpercent.newInstance("",""), "Percent");
+        viewPager.setAdapter(adapter);
+    }
     private boolean openFragment(Fragment fragment){
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_container, fragment);

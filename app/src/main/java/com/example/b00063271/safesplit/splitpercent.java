@@ -9,17 +9,24 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import static com.example.b00063271.safesplit.AddBill.users;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link spliequally.OnFragmentInteractionListener} interface
+ * {@link splitpercent.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link spliequally#newInstance} factory method to
+ * Use the {@link splitpercent#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class spliequally extends Fragment {
+public class splitpercent extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -31,7 +38,7 @@ public class spliequally extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public spliequally() {
+    public splitpercent() {
         // Required empty public constructor
     }
 
@@ -41,11 +48,11 @@ public class spliequally extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment spliequally.
+     * @return A new instance of fragment splitpercent.
      */
     // TODO: Rename and change types and number of parameters
-    public static spliequally newInstance(String param1, String param2) {
-        spliequally fragment = new spliequally();
+    public static splitpercent newInstance(String param1, String param2) {
+        splitpercent fragment = new splitpercent();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -62,11 +69,34 @@ public class spliequally extends Fragment {
         }
     }
 
+    static ListView percentpayers;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_spliequally, container, false);
+        View view = inflater.inflate(R.layout.fragment_splitpercent, container, false);
+
+        //List View
+        //------------------------------------------------------------------------------------------
+        percentpayers = (ListView) view.findViewById(R.id.percentpayerslist);
+
+        ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+        for (String user:users){
+            HashMap<String, String> map = new HashMap<String, String>();
+            map.put("name", user);
+            data.add(map);
+        }
+
+
+        int resource = R.layout.percentpayerslist_item;
+        String[] from = {"name"};
+        int[] to = {R.id.percentpayerslist_item};
+
+        SimpleAdapter adapter = new SimpleAdapter(getContext(), data, resource, from, to);
+        percentpayers.setAdapter(adapter);
+        //equalpayers.setOnItemClickListener(this);
+        //------------------------------------------------------------------------------------------
         return view;
     }
 

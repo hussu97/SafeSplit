@@ -15,18 +15,19 @@ import android.widget.SimpleAdapter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.example.b00063271.safesplit.AddBill.payers;
 import static com.example.b00063271.safesplit.AddBill.users;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link splitexactamounts.OnFragmentInteractionListener} interface
+ * {@link splitequally.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link splitexactamounts#newInstance} factory method to
+ * Use the {@link splitequally#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class splitexactamounts extends Fragment {
+public class splitequally extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -38,7 +39,7 @@ public class splitexactamounts extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public splitexactamounts() {
+    public splitequally() {
         // Required empty public constructor
     }
 
@@ -48,11 +49,11 @@ public class splitexactamounts extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment splitexactamounts.
+     * @return A new instance of fragment splitequally.
      */
     // TODO: Rename and change types and number of parameters
-    public static splitexactamounts newInstance(String param1, String param2) {
-        splitexactamounts fragment = new splitexactamounts();
+    public static splitequally newInstance(String param1, String param2) {
+        splitequally fragment = new splitequally();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -69,17 +70,18 @@ public class splitexactamounts extends Fragment {
         }
     }
 
-    static ListView exactpayers;
+
+    static ListView equalpayers;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_splitexactamounts, container, false);
+        View view = inflater.inflate(R.layout.fragment_spliequally, container, false);
 
         //List View
         //------------------------------------------------------------------------------------------
-        exactpayers = (ListView) view.findViewById(R.id.exactpayerslist);
+        equalpayers = (ListView) view.findViewById(R.id.equalpayerslist);
 
         ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
         for (String user:users){
@@ -89,12 +91,12 @@ public class splitexactamounts extends Fragment {
         }
 
 
-        int resource = R.layout.exactpayerslist_item;
+        int resource = R.layout.equalpayerslist_item;
         String[] from = {"name"};
-        int[] to = {R.id.exactpayerslist_item};
+        int[] to = {R.id.equalpayerslist_item};
 
         SimpleAdapter adapter = new SimpleAdapter(getContext(), data, resource, from, to);
-        exactpayers.setAdapter(adapter);
+        equalpayers.setAdapter(adapter);
         //equalpayers.setOnItemClickListener(this);
         //------------------------------------------------------------------------------------------
         return view;

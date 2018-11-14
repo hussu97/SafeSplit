@@ -17,6 +17,7 @@
         android:layout_weight="1"
         android:gravity="bottom|left"
         android:text="TextView"
+        android:textColor="@color/stage8"
         android:textSize="18sp" />
 
     <EditText
@@ -32,6 +33,9 @@
         android:layout_weight="0"
         android:ems="10"
         android:hint="0.0"
+        android:textColorHint="@color/stage3"
+        android:textColor="@color/stage8"
+        android:backgroundTint="@color/colorSecondary"
         android:inputType="numberDecimal"
         android:textSize="18sp" />
 </LinearLayout>
