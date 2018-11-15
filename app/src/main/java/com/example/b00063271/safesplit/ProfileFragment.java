@@ -115,6 +115,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         mListener = null;
 
 
+
     }
 
     @Override
