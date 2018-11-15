@@ -114,6 +114,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         super.onDetach();
         mListener = null;
 
+
     }
 
     @Override
