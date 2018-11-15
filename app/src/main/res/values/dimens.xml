@@ -4,7 +4,20 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
+
+    <dimen name="profile_button_margin">15dp</dimen>
+    <dimen name="profile_text_margin_v">15dp</dimen>
+    <dimen name="profile_text_margin_h">20dp</dimen>
+
+    <dimen name="text_size_small">12sp</dimen>
     <dimen name="text_size">20sp</dimen>
-    <dimen name="settle_up_size">45sp</dimen>
+    <dimen name="text_size_large">30sp</dimen>
+
+    <dimen name="settle_up_size_h">45sp</dimen>
+    <dimen name="settle_up_size_w">55sp</dimen>
     <dimen name="settle_up_padding">10sp</dimen>
+
+    <dimen name="avatar_size_h">105sp</dimen>
+    <dimen name="avatar_size_w">65sp</dimen>
+    <dimen name="avatar_margin">10dp</dimen>
 </resources>

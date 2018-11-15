@@ -22,14 +22,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/frame_container"
         app:layout_constraintVertical_bias="0.965"
-        android:backgroundTint="@color/colorSecondary"
+        android:backgroundTint="@color/stage8"
         android:src="@drawable/plus"
-        android:tint="@color/stage8"/>
+        android:tint="@color/colorSecondary"/>
 
     <FrameLayout
         android:id="@+id/frame_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/navigation"
+        app:layout_constraintTop_toTopOf="parent">
 
     </FrameLayout>
 

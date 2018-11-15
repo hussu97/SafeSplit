@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".changeEmailDialog"
+    android:orientation="vertical"
+    android:background="@color/stage1">
+
+    <TextView
+        android:id="@+id/enterNewEmailDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Enter new email"
+        android:textColor="@color/colorSecondary"
+        android:textSize="@dimen/text_size"
+        android:fontFamily="@font/basic"
+        android:padding="@dimen/settle_up_padding" />
+
+        <EditText
+            android:id="@+id/changeEmailEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorSecondary"
+            android:fontFamily="@font/basic"
+            android:hint="Email Address"
+            android:inputType="textEmailAddress"
+            android:padding="@dimen/settle_up_padding"
+            android:layout_margin="@dimen/profile_button_margin"
+            android:textColor="@color/stage8"
+            android:textColorHint="@color/stage8"
+            android:textSize="@dimen/text_size" />
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <TextView
+            android:id="@+id/changeEmailCancelButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/basic"
+            android:padding="@dimen/settle_up_padding"
+            android:gravity="center"
+            android:text="Cancel"
+            android:layout_weight="1"
+            android:textColor="@color/colorSecondary"
+            android:textSize="@dimen/text_size" />
+
+        <TextView
+            android:id="@+id/changeEmailDoneButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/basic"
+            android:padding="@dimen/settle_up_padding"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:text="Done"
+            android:textColor="@color/colorSecondary"
+            android:textSize="@dimen/text_size" />
+    </TableRow>
+
+</LinearLayout>

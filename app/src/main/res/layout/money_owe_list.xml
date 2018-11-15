@@ -42,14 +42,14 @@
 
         <ImageButton
             android:id="@+id/moneyOweSettleUp"
-            android:layout_width="@dimen/settle_up_size"
-            android:layout_height="@dimen/settle_up_size"
+            android:layout_width="@dimen/settle_up_size_w"
+            android:layout_height="@dimen/settle_up_size_h"
             android:adjustViewBounds="true"
             android:padding="@dimen/settle_up_padding"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/settle_up"
-            android:tint="@color/stage8"
-            android:background="@drawable/button_rounded"/>
+            android:tint="@color/colorSecondary"
+            android:background="@drawable/textviewborder"/>
 
     </TableRow>
 </TableLayout>

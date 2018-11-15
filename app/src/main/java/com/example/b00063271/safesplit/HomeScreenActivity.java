@@ -34,6 +34,9 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
     private String userName ="Hussu";
 
     @Override
+    public void onBackPressed() { }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
@@ -59,13 +62,13 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
-                case R.id.naviagation_friends:
+                case R.id.navigation_friends:
                     Log.d(TAG, "onNavigationItemSelected: "+userMobile+" "+userName);
                     return openFragment(MainFragment.newInstance(userMobile,userName));
                 case R.id.navigation_dashboard:
                     return openFragment(DashboardFragment.newInstance(userMobile,userName));
                 case R.id.naviagtion_me:
-                    return openFragment(new ProfileFragment());
+                    return openFragment(ProfileFragment.newInstance(userMobile,userName));
                 case R.id.navigation_groups:
                     return openFragment(new GroupsFragment());
             }

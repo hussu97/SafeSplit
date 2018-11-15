@@ -35,4 +35,5 @@ public class C {
     public static final int ACTIVITY_TYPE_SETTLE_UP = 1030;
 
     public static final int CALLBACK_GET_TRANSACTIONS = 35;
+    public static final int CALLBACK_GET_USER_EMAIL = 36;
 }

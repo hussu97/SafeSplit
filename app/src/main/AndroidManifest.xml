@@ -12,18 +12,25 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar">
+        android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
         <activity android:name=".SignInActivity">
-        </activity>
-        <activity android:name=".SignUpActivity" />
-        <activity
-            android:name=".HomeScreenActivity"
-            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".SignUpActivity" />
+        <activity
+            android:name=".HomeScreenActivity"
+            android:label="@string/app_name">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity android:name=".AddUsers" />
         <activity android:name=".AddBill" />
@@ -33,11 +40,16 @@
         <activity
             android:name=".paidByActivity"
             android:theme="@android:style/Theme.DeviceDefault.Dialog" />
-        <activity android:name=".SplitActivity"></activity>
+        <activity android:name=".SplitActivity" />
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
+        <activity
+            android:name=".changeEmailDialog"
+            android:theme="@android:style/Theme.DeviceDefault.Dialog" />
+        <activity android:name=".changePasswordDialog"></activity>
     </application>
 
 </manifest>
