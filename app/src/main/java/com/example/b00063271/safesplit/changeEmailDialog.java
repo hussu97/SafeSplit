@@ -49,8 +49,8 @@ public class changeEmailDialog extends Activity implements View.OnClickListener 
                     emailEditText.setError("Enter a valid email address");
                 } else {
                     userDB.setUserEmail(userMobile,email);
+                    finish();
                 }
-                finish();
                 break;
         }
     }

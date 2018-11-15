@@ -22,6 +22,7 @@ public class C {
     public static final String USERS_HISTORY_ACTIVITY = "activityString";
     public static final String USERS_HISTORY_AMOUNT = "amount";
     public static final String USERS_HISTORY_TYPE = "activityType";
+    public static final String USERS_HISTORY_TIMESTAMP = "timeStamp";
     public static final String USERS_HISTORY_TOS = "to";
     public static final String USERS_HISTORY_GROUP = "group";
 
@@ -36,4 +37,6 @@ public class C {
 
     public static final int CALLBACK_GET_TRANSACTIONS = 35;
     public static final int CALLBACK_GET_USER_EMAIL = 36;
+    public static final int CALLBACK_SET_USER_EMAIL = 37;
+    public static final int CALLBACK_SET_USER_PASSWORD = 38;
 }

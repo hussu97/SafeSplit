@@ -18,6 +18,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.annotation.Nullable;
 
@@ -37,6 +38,7 @@ public class DashboardFragment extends Fragment {
 
     private ArrayList<String> activities;
     private ArrayList<Integer> activityType;
+    private ArrayList<Date> timeStamp;
     private ListView dashboardListView;
     private OnFragmentInteractionListener mListener;
 
@@ -58,6 +60,7 @@ public class DashboardFragment extends Fragment {
         super.onCreate(savedInstanceState);
         activities = new ArrayList<>();
         activityType = new ArrayList<>();
+        timeStamp = new ArrayList<>();
         if (getArguments() != null) {
             userMobile = getArguments().getString(ARG_PARAM1);
             userName = getArguments().getString(ARG_PARAM2);
@@ -81,8 +84,10 @@ public class DashboardFragment extends Fragment {
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 activities.clear();
                 activityType.clear();
+                timeStamp.clear();
                 for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
                     activities.add(doc.getString(C.USERS_HISTORY_ACTIVITY));
+                    timeStamp.add(doc.getDate(C.USERS_HISTORY_TIMESTAMP));
                     int type = (int)Math.round(doc.getDouble(C.USERS_HISTORY_TYPE));
                     switch(type){
                         case C.ACTIVITY_TYPE_SETTLE_UP:
@@ -98,7 +103,7 @@ public class DashboardFragment extends Fragment {
     }
 
     private void updateList() {
-        dashboardListView.setAdapter(new CustomAdapter(this, activities,activityType));
+        dashboardListView.setAdapter(new CustomAdapter(this, activities,activityType,timeStamp));
     }
 
     public void onButtonPressed(Uri uri) {

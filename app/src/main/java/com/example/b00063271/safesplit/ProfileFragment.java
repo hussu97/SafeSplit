@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.b00063271.safesplit.Database.C;
 import com.example.b00063271.safesplit.Database.UserDB;
@@ -21,22 +22,31 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private String mParam1;
-    private String mParam2;
-
     private TextView userNameTextView;
     private TextView userEmailTextView;
     private Button changeEmailButton;
     private Button changePasswordButton;
     private Button signOutButton;
 
+    private boolean emailFirst,passwordFirst;
+
     private UserDB userDB;
-    private String userEmail, userMobile, userName;
+    private String userMobile, userName;
     private UserDB.OnDatabaseInteractionListener mDBListener = new UserDB.OnDatabaseInteractionListener() {
         @Override
         public void onDatabaseInteration(int requestCode, String userEmail) {
-            if(requestCode== C.CALLBACK_GET_USER_EMAIL){
-                userEmailTextView.setText(userEmail);
+            switch (requestCode){
+                case C.CALLBACK_GET_USER_EMAIL:
+                    userEmailTextView.setText(userEmail);
+                    break;
+                case C.CALLBACK_SET_USER_EMAIL:
+                    if(emailFirst) emailFirst = false;
+                    else Toast.makeText(getActivity(),"Email Address has been changed successfully",Toast.LENGTH_LONG).show();
+                    break;
+                case C.CALLBACK_SET_USER_PASSWORD:
+                    if(passwordFirst) passwordFirst = false;
+                    else Toast.makeText(getActivity(),"Password has been changed successfully",Toast.LENGTH_LONG).show();
+                    break;
             }
         }
     };
@@ -89,6 +99,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         changeEmailButton.setOnClickListener(this);
         changePasswordButton.setOnClickListener(this);
         signOutButton.setOnClickListener(this);
+
+        emailFirst = true;
+        passwordFirst = true;
         return v;
     }
 
@@ -113,9 +126,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-
-
-
     }
 
     @Override
@@ -127,7 +137,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.changePasscodeButton:
-                Intent intent3 = new Intent(getActivity(),changeEmailDialog.class);
+                Intent intent3 = new Intent(getActivity(),changePasswordDialog.class);
                 intent3.putExtra(C.USERS_MOBILE,userMobile);
                 startActivity(intent3);
                 break;

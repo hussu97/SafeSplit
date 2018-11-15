@@ -8,6 +8,8 @@ import com.example.b00063271.safesplit.Entities.User;
 import com.example.b00063271.safesplit.SignInActivity;
 import com.example.b00063271.safesplit.SignUpActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -80,9 +82,31 @@ public class UserDB {
             }
         });
     }
-    public void setUserEmail(String userMobile, String userEmail){
-        mUser.updateEmail(userEmail);
-        rf_u.document(userMobile).update(C.USERS_EMAIL,userEmail);
+    public void setUserEmail(final String userMobile,final String userEmail){
+        mUser.updateEmail(userEmail).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                if(mListener!=null){
+                    rf_u.document(userMobile).update(C.USERS_EMAIL,userEmail);
+                    mListener.onDatabaseInteration(C.CALLBACK_SET_USER_PASSWORD,userEmail);
+                }
+            }
+        });
+    }
+    public void setUserPassword(final String userPassword){
+        mUser.updatePassword(userPassword).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                if(mListener!=null){
+                    mListener.onDatabaseInteration(C.CALLBACK_SET_USER_PASSWORD,userPassword);
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "onFailure: "+e.getMessage());
+            }
+        });
     }
     public void getUserListener(String userID){
     }
