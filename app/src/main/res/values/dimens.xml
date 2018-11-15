@@ -10,6 +10,7 @@
     <dimen name="profile_text_margin_h">20dp</dimen>
 
     <dimen name="text_size_small">12sp</dimen>
+    <dimen name="text_size_middle">16sp</dimen>
     <dimen name="text_size">20sp</dimen>
     <dimen name="text_size_large">30sp</dimen>
 

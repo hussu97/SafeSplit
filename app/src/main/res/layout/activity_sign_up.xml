@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:background="@color/stage2">
 
     <LinearLayout
         android:orientation="vertical"
@@ -17,19 +18,25 @@
             android:layout_width="wrap_content"
             android:layout_height="72dp"
             android:layout_marginBottom="24dp"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/logo"/>
 
         <!-- Name Label -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="8dp"
+            android:textColorHint="@color/stage8">
             <EditText android:id="@+id/input_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:hint="Name" />
+                android:hint="Name"
+                android:backgroundTint="@color/colorSecondary"
+                android:textColor="@color/stage8"
+                android:fontFamily="@font/basic"
+                android:textSize="@dimen/text_size"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Address Label -->
@@ -45,25 +52,31 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="15dp"
+                android:textSize="@dimen/text_size"
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="15dp"
-                android:paddingRight="10dp"
-                android:text="+971" />
+                android:paddingRight="5dp"
+                android:text="+971"
+                android:fontFamily="@font/basic"
+                android:textColor="@color/stage8" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:layout_weight="100">
-
+                android:layout_weight="100"
+                android:textColorHint="@color/stage8">
                 <EditText
                     android:id="@+id/input_mobile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Mobile"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:backgroundTint="@color/colorSecondary"
+                    android:textColor="@color/stage8"
+                    android:fontFamily="@font/basic"
+                    android:textSize="@dimen/text_size"/>
             </com.google.android.material.textfield.TextInputLayout>
         </TableRow>
 
@@ -71,12 +84,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="8dp"
+            android:textColorHint="@color/stage8">
             <EditText android:id="@+id/input_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
-                android:hint="Email" />
+                android:hint="Email"
+                android:backgroundTint="@color/colorSecondary"
+                android:textColor="@color/stage8"
+                android:fontFamily="@font/basic"
+                android:textSize="@dimen/text_size"/>
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -87,12 +105,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="8dp"
+            android:textColorHint="@color/stage8">
             <EditText android:id="@+id/input_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:hint="Password"/>
+                android:hint="Password"
+                android:backgroundTint="@color/colorSecondary"
+                android:textColor="@color/stage8"
+                android:fontFamily="@font/basic"
+                android:textSize="@dimen/text_size"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Password Re-enter Label -->
@@ -100,12 +123,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="8dp"
+            android:textColorHint="@color/stage8">
             <EditText android:id="@+id/input_reEnterPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:hint="Re-enter Password"/>
+                android:hint="Re-enter Password"
+                android:backgroundTint="@color/colorSecondary"
+                android:textColor="@color/stage8"
+                android:fontFamily="@font/basic"
+                android:textSize="@dimen/text_size"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Signup Button -->
@@ -116,7 +144,11 @@
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
             android:padding="12dp"
-            android:text="Create Account"/>
+            android:text="Create Account"
+            android:textColor="@color/colorSecondary"
+            android:fontFamily="@font/basic"
+            android:textSize="@dimen/text_size"
+            android:background="@drawable/textviewborder"/>
 
         <TextView android:id="@+id/link_login"
             android:layout_width="fill_parent"
@@ -124,7 +156,9 @@
             android:layout_marginBottom="24dp"
             android:text="Already a member? Login"
             android:gravity="center"
-            android:textSize="16dip"/>
+            android:textColor="@color/colorSecondary"
+            android:fontFamily="@font/basic"
+            android:textSize="@dimen/text_size_middle"/>
 
     </LinearLayout>
 </ScrollView>
