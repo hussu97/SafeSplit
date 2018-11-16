@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
     android:background="@color/stage1">
 
@@ -26,12 +27,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:textColorHint="@color/stage8">
+            android:textColorHint="@color/stage8"
+            android:foregroundTint="@color/colorSecondary">
             <EditText android:id="@+id/input_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
                 android:backgroundTint="@color/colorSecondary"
+                android:foregroundTint="@color/colorSecondary"
                 android:textColor="@color/stage8"
                 android:fontFamily="@font/basic"
                 android:textSize="@dimen/text_size"
@@ -44,12 +47,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:textColorHint="@color/stage8">
+            android:textColorHint="@color/stage8"
+            app:passwordToggleContentDescription="Enter a valid password"
+            app:passwordToggleTint="@color/colorSecondary"
+            android:foregroundTint="@color/colorSecondary">
             <EditText android:id="@+id/input_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:backgroundTint="@color/colorSecondary"
+                android:foregroundTint="@color/colorSecondary"
                 android:textSize="@dimen/text_size"
                 android:textColor="@color/stage8"
                 android:fontFamily="@font/basic"
