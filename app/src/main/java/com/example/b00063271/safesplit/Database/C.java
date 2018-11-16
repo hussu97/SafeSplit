@@ -10,6 +10,7 @@ public class C {
     public static final String TRANSACTION_TO_ID = "toID";
     public static final String TRANSACTION_TO = "to";
     public static final String TRANSACTION_AMOUNT = "amount";
+    public static final String TRANSACTION_GROUP_ID = "groupID";
 
     public static final String COLLECTION_USERS = "users";
     public static final String USERS_EMAIL = "email";
@@ -41,4 +42,6 @@ public class C {
     public static final int CALLBACK_SET_USER_EMAIL = 37;
     public static final int CALLBACK_SET_USER_PASSWORD = 38;
     public static final int CALLBACK_ADD_USER = 39;
+    public static final int CALLBACK_CREATE_TRANSACTION = 40;
+    public static final int CALLBACK_DELETE_TRANSACTION = 41;
 }

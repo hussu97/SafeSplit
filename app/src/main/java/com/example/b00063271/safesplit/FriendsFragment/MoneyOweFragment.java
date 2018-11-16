@@ -12,9 +12,11 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.b00063271.safesplit.Database.ActivityDB;
 import com.example.b00063271.safesplit.Database.C;
+import com.example.b00063271.safesplit.Database.TransactionDB;
 import com.example.b00063271.safesplit.Entities.Transactions;
 import com.example.b00063271.safesplit.R;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -43,26 +45,24 @@ public class MoneyOweFragment extends Fragment {
 
     private ActivityDB activityDB;
 
-    private final String TRANSACTION_COLLECTION = "transaction";
-    private final String USERS_COLLECTION = "users";
-
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference rf_t = db.collection(TRANSACTION_COLLECTION);
-    private CollectionReference rf_u = db.collection(USERS_COLLECTION);
+    private CollectionReference rf_t = db.collection(C.COLLECTION_TRANSACTION);
 
     private String userMobile;
     private String userName;
 
-    private OnFragmentInteractionListener mListener;
+    private TransactionDB transactionDB;
+    private MoneyOweFragment.OnFragmentInteractionListener mListener;
+    private TransactionDB.OnDatabaseInteractionListener mDBListener= new TransactionDB.OnDatabaseInteractionListener() {
+        @Override
+        public void onDatabaseInteration(int requestCode, ArrayList<Double> a, ArrayList<Double> b, ArrayList<Double> c) { }
+    };
 
-    private TabItem moneyOweTabItem;
     private ListView moneyOweListView;
-    private TextView moneyOweAmtTextView;
-    private TextView moneyOwePersonTextView;
-    private ImageButton moneyOweSettleUpButton;
     private SimpleAdapter simpleAdapter;
     private HashMap<String,Double> oweTransactions;
     private HashMap<String,String> oweTransactionsNames;
+    private HashMap<String,ArrayList<String>> oweTransactionsIDs;
     private ArrayList<HashMap<String,String>> data;
 
     public MoneyOweFragment() {
@@ -85,6 +85,9 @@ public class MoneyOweFragment extends Fragment {
         activityDB = new ActivityDB();
         oweTransactions = new HashMap<>();
         oweTransactionsNames = new HashMap<>();
+        oweTransactions = new HashMap<>();
+        oweTransactionsIDs = new HashMap<>();
+        transactionDB = new TransactionDB(mDBListener);
         data = new ArrayList<>();
         if (getArguments() != null) {
             userMobile = getArguments().getString(ARG_PARAM1);
@@ -99,11 +102,7 @@ public class MoneyOweFragment extends Fragment {
         // Inflate the layout for this fragment
         getOweTransactions(userMobile);
         View view =  inflater.inflate(R.layout.fragment_money_owe, container, false);
-        moneyOweTabItem = (TabItem) view.findViewById(R.id.owe_tab_item);
         moneyOweListView = (ListView) view.findViewById(R.id.money_owe_listview);
-        moneyOwePersonTextView = (TextView) view.findViewById(R.id.moneyOwePerson);
-        moneyOwePersonTextView = (TextView) view.findViewById(R.id.moneyOweAmt);
-        moneyOweSettleUpButton = (ImageButton) view.findViewById(R.id.moneyOweSettleUp);
         return view;
     }
 
@@ -121,15 +120,20 @@ public class MoneyOweFragment extends Fragment {
                     public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
                         oweTransactions.clear();
                         oweTransactionsNames.clear();
+                        oweTransactionsIDs.clear();
                         data.clear();
                         Log.d(TAG, "onEvent: in snapShot getOwedTrans "+queryDocumentSnapshots.size());
                         for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
+                            if(doc.getString(C.TRANSACTION_GROUP_ID)!=null)continue;
                             double amount = C.round(doc.getDouble("amount"));
                             String fromID = doc.getString("fromID");
                             String from = doc.getString("from");
                             double prev_amount = oweTransactions.containsKey(fromID) ? oweTransactions.get(fromID) : 0;
                             oweTransactions.put(fromID, C.round(prev_amount + amount));
                             oweTransactionsNames.put(fromID,from);
+                            ArrayList<String> prev_transactions = oweTransactionsIDs.containsKey(fromID) ? oweTransactionsIDs.get(fromID) : new ArrayList<String>();
+                            prev_transactions.add(doc.getId());
+                            oweTransactionsIDs.put(fromID,prev_transactions);
                         }
                         updateList();
                     }
@@ -165,7 +169,7 @@ public class MoneyOweFragment extends Fragment {
                                 .setMessage("Are you sure you want to create a transaction to send "+amt+" to "+from)
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
-                                        createTransaction(userName,userMobile,from,fromID,Double.valueOf(amt));
+                                        for(String transactionID: oweTransactionsIDs.get(fromID)){ transactionDB.deleteTransaction(userMobile,transactionID); }
                                         activityDB.createActivity(userMobile,"You settled your debt with "+from+" by paying -"+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP, new Date());
                                     }
                                 })
@@ -183,17 +187,6 @@ public class MoneyOweFragment extends Fragment {
         };
         moneyOweListView.setAdapter(simpleAdapter);
         simpleAdapter.notifyDataSetChanged();
-    }
-
-    private void createTransaction(String from, String fromID, String to, String toID, double amount){
-        final DocumentReference df = rf_t.document();
-        Transactions transaction = new Transactions(from,fromID,to,toID,amount);
-        df.set(transaction).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                rf_u.document(userMobile).update("transactionIds", FieldValue.arrayUnion(df.getId()));
-            }
-        });
     }
 
     @Override

@@ -15,6 +15,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -75,7 +76,7 @@ public class DashboardFragment extends Fragment {
     }
 
     private void getDashboardActivity(String userMobile){
-        rf_u.document(userMobile).collection(C.COLLECTION_USERS_HISTORY)
+        rf_u.document(userMobile).collection(C.COLLECTION_USERS_HISTORY).orderBy(C.USERS_HISTORY_TIMESTAMP,Query.Direction.DESCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {

@@ -24,7 +24,6 @@ public class CustomAdapter extends BaseAdapter{
     Context context;
     private static LayoutInflater inflater=null;
     public CustomAdapter(DashboardFragment mainActivity, ArrayList<Activities> activities) {
-        Collections.reverse(activities);
         result = activities;
         context=mainActivity.getContext();
         inflater = ( LayoutInflater )context.

@@ -54,6 +54,7 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
         floatingActionButton.setOnClickListener(this);
         openFragment(MainFragment.newInstance(userMobile,userName));
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setSelectedItemId(R.id.navigation_friends);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
