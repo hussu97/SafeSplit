@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -11,8 +12,11 @@ import com.example.b00063271.safesplit.Database.ActivityDB;
 import com.example.b00063271.safesplit.Database.C;
 import com.example.b00063271.safesplit.Database.UserDB;
 import com.example.b00063271.safesplit.R;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Date;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 public class changePasswordDialog extends Activity implements View.OnClickListener {
 

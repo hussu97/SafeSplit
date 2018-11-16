@@ -1,12 +1,15 @@
 package com.example.b00063271.safesplit;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +18,7 @@ import com.example.b00063271.safesplit.Database.UserDB;
 import com.example.b00063271.safesplit.Entities.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -58,9 +62,8 @@ public class SignUpActivity extends AppCompatActivity {
         signUpButton = (Button) findViewById(R.id.btn_signup);
         loginLink = (TextView) findViewById(R.id.link_login);
         mAuth = FirebaseAuth.getInstance();
-
+        hideKeyboard(this);
         userDB = new UserDB(mListener);
-
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,6 +80,17 @@ public class SignUpActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
             }
         });
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     public void signup() {
@@ -123,7 +137,10 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "SignUp failed", Toast.LENGTH_LONG).show();
+        Snackbar snackbar = Snackbar.make((ScrollView)findViewById(R.id.signUpLayout),"Sign up failed \uD83D\uDE14",Snackbar.LENGTH_SHORT);
+        Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout)snackbar.getView();
+        layout.setPadding(0, 0, 0, 0);
+        snackbar.show();
         signUpButton.setEnabled(true);
     }
 

@@ -22,7 +22,6 @@ public class TransactionDB {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference rf_t = db.collection(C.COLLECTION_TRANSACTION);
-    private CollectionReference rf_g = db.collection(C.COLLECTION_GROUPS);
     private CollectionReference rf_u = db.collection(C.COLLECTION_USERS);
 
     private double amount;
@@ -49,7 +48,6 @@ public class TransactionDB {
                     public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
                         moneyOweTransactions.clear();
                         for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
-                            if(doc.getString(C.TRANSACTION_GROUP_ID)!=null)continue;
                             double amount = C.round(doc.getDouble(C.TRANSACTION_AMOUNT));
                             moneyOweTransactions.add(amount);
                             totalBalanceTransactions.add(amount);
@@ -65,7 +63,6 @@ public class TransactionDB {
                     public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
                         moneyOwedTransactions.clear();
                         for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
-                            if(doc.getString(C.TRANSACTION_GROUP_ID)!=null)continue;
                             double amount = C.round(doc.getDouble(C.TRANSACTION_AMOUNT));
                             moneyOwedTransactions.add(amount);
                             totalBalanceTransactions.add(amount);
@@ -94,15 +91,6 @@ public class TransactionDB {
     public void deleteTransaction(final String userMobile,final String transactionID){
         rf_t.document(transactionID).delete();
         rf_u.document(userMobile).update(C.USERS_TRANSACTIONS,FieldValue.arrayRemove(transactionID));
-    }
-
-    public void getGroupTransactions(final String groupID){
-        rf_g.document(groupID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-
-            }
-        });
     }
 
     public interface OnDatabaseInteractionListener {

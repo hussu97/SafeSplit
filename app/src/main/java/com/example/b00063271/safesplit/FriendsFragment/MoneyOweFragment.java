@@ -124,7 +124,6 @@ public class MoneyOweFragment extends Fragment {
                         data.clear();
                         Log.d(TAG, "onEvent: in snapShot getOwedTrans "+queryDocumentSnapshots.size());
                         for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
-                            if(doc.getString(C.TRANSACTION_GROUP_ID)!=null)continue;
                             double amount = C.round(doc.getDouble("amount"));
                             String fromID = doc.getString("fromID");
                             String from = doc.getString("from");

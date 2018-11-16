@@ -44,7 +44,6 @@ public class UserDB {
         docData.put(C.USERS_MOBILE, user.getMobile());
         docData.put(C.USERS_TRANSACTIONS, user.getTransactionIds());
         docData.put(C.USERS_EMAIL, user.getEmail());
-        docData.put(C.USERS_GROUPS,user.getGroupIds());
         Log.d(TAG, "addUser: "+user.getMobile());
         rf_u.document(user.getMobile()).set(docData).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

@@ -149,7 +149,6 @@ public class TotalBalanceFragment extends Fragment {
                         oweTransactionsIDs.clear();
                         Log.d(TAG, "onEvent: in snapShot getOwedTrans "+queryDocumentSnapshots.size());
                         for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
-                            if(doc.getString(C.TRANSACTION_GROUP_ID)!=null)continue;
                             double amount = C.round(doc.getDouble("amount"));
                             String fromID = doc.getString("fromID");
                             String from = doc.getString("from");
@@ -176,7 +175,6 @@ public class TotalBalanceFragment extends Fragment {
                         owedTransactionsIDs.clear();
                         Log.d(TAG, "onEvent: in snapShot getOwedTrans "+queryDocumentSnapshots.size());
                         for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
-                            if(doc.getString(C.TRANSACTION_GROUP_ID)!=null)continue;
                             HashMap<String,String> map=new HashMap<>();
                             double amount = C.round(doc.getDouble("amount"));
                             String toID = doc.getString("toID");
