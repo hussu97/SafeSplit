@@ -196,6 +196,13 @@ public class TotalBalanceFragment extends Fragment {
         int resource = R.layout.total_bal_list;
         String[] from = {"person", "personID","amount"};
         int[] to = {R.id.totalBalPerson, R.id.totalBalPersonID,R.id.totalBalAmt};
+        try {
+            TextView empty = super.getView().findViewById(R.id.noTotalBalanceTextView);
+            if (data.size() == 0) {
+                empty.setVisibility(View.VISIBLE);
+                return;
+            } else empty.setVisibility(View.GONE);
+        } catch (NullPointerException e) { }
         // create and set the adapter
         simpleAdapter=new SimpleAdapter(getActivity(),data,resource,from,to) {
             @Override
@@ -203,7 +210,11 @@ public class TotalBalanceFragment extends Fragment {
                 View v = super.getView(position, convertView, parent);
                 ImageButton b = (ImageButton) v.findViewById(R.id.totalBalSettleUp);
                 final String person = ((TextView) v.findViewById(R.id.totalBalPerson)).getText().toString();
-                final String amt = ((TextView) v.findViewById(R.id.totalBalAmt)).getText().toString();
+                TextView amnt = (TextView)v.findViewById(R.id.totalBalAmt);
+                final String amt = amnt.getText().toString();
+                final double amount = Double.valueOf(amt);
+                if(amount >= 0) amnt.setTextColor(getResources().getColor(R.color.positiveValue));
+                else amnt.setTextColor(getResources().getColor(R.color.negativeValue));
                 final String personID = ((TextView) v.findViewById(R.id.totalBalPersonID)).getText().toString();
                 b.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -214,7 +225,6 @@ public class TotalBalanceFragment extends Fragment {
                                 .setMessage("Are you sure you want to create a transaction to settle "+amt+" with "+person)
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
-                                        double amount = Double.valueOf(amt);
                                         if(amount>0){
                                             try{
                                                 for(String transactionID: oweTransactionsIDs.get(personID)){ transactionDB.deleteTransaction(userMobile,transactionID); }
@@ -223,8 +233,10 @@ public class TotalBalanceFragment extends Fragment {
                                                 for(String transactionID: owedTransactionsIDs.get(personID)){ transactionDB.deleteTransaction(userMobile,transactionID); }
                                             } catch (NullPointerException e) {}
                                             activityDB.createActivity(userMobile,"You settled your debt with "+person+" by receiving -"+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP, new Date());
+                                            activityDB.createActivity(personID,"Your debt with "+userName+" has been settled by paying -"+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP, new Date());
                                         } else {
-                                            activityDB.createActivity(userMobile,"You settled your debt with "+person+" by paying -"+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP, new Date());
+                                            activityDB.createActivity(userMobile,"You settled your debt with "+person+" by paying "+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP, new Date());
+                                            activityDB.createActivity(personID,"Your debt with "+userName+" has been settled by receiving -"+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP, new Date());
                                         }
                                     }
                                 })

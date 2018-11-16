@@ -1,4 +1,4 @@
-package com.example.b00063271.safesplit;
+package com.example.b00063271.safesplit.ProfileFragment;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.example.b00063271.safesplit.Database.ActivityDB;
 import com.example.b00063271.safesplit.Database.C;
 import com.example.b00063271.safesplit.Database.UserDB;
+import com.example.b00063271.safesplit.R;
 
 import java.util.Date;
 

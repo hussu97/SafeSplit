@@ -1,4 +1,4 @@
-package com.example.b00063271.safesplit;
+package com.example.b00063271.safesplit.ProfileFragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,11 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.b00063271.safesplit.Database.C;
 import com.example.b00063271.safesplit.Database.UserDB;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.example.b00063271.safesplit.R;
+import com.example.b00063271.safesplit.SignInActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 

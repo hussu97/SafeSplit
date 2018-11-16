@@ -23,15 +23,12 @@
             android:id="@+id/owe_tab_item"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#FFA500"
-            android:text="@string/left_tab"
-            />
+            android:text="@string/left_tab" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/owed_tab_item"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#008000"
             android:text="@string/center_tab" />
 
         <com.google.android.material.tabs.TabItem

@@ -148,6 +148,13 @@ public class MoneyOweFragment extends Fragment {
             map.put("amount",String.valueOf(entry.getValue()));
             data.add(map);
         }
+        try {
+            TextView empty = super.getView().findViewById(R.id.noMoneyOweTextView);
+            if (data.size() == 0) {
+                empty.setVisibility(View.VISIBLE);
+                return;
+            } else empty.setVisibility(View.GONE);
+        } catch(NullPointerException e) { }
         int resource = R.layout.money_owe_list;
         String[] from = {"from","fromID", "amount"};
         int[] to = {R.id.moneyOwePerson,R.id.moneyOwePersonID, R.id.moneyOweAmt};
@@ -171,6 +178,7 @@ public class MoneyOweFragment extends Fragment {
                                     public void onClick(DialogInterface dialog, int which) {
                                         for(String transactionID: oweTransactionsIDs.get(fromID)){ transactionDB.deleteTransaction(userMobile,transactionID); }
                                         activityDB.createActivity(userMobile,"You settled your debt with "+from+" by paying -"+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP, new Date());
+                                        activityDB.createActivity(fromID,"Your debt with "+userName+" has been settled by receiving -"+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP, new Date());
                                     }
                                 })
                                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

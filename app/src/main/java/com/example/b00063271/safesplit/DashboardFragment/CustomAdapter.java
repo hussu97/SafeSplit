@@ -1,7 +1,6 @@
-package com.example.b00063271.safesplit;
+package com.example.b00063271.safesplit.DashboardFragment;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -13,10 +12,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.b00063271.safesplit.Entities.Activities;
+import com.example.b00063271.safesplit.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 
 public class CustomAdapter extends BaseAdapter{

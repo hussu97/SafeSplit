@@ -74,7 +74,6 @@ public class SignUpActivity extends AppCompatActivity {
                 // Finish the registration screen and return to the Login activity
                 Intent intent = new Intent(getApplicationContext(),SignInActivity.class);
                 startActivity(intent);
-                finish();
                 overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
             }
         });
@@ -97,7 +96,6 @@ public class SignUpActivity extends AppCompatActivity {
         final String email = emailEditText.getText().toString().trim();
         final String password = passwordEditText.getText().toString();
         final String mobile = mobileEditText.getText().toString().trim();
-        String reEnterPassword = rePasswordEditText.getText().toString();
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -132,39 +130,32 @@ public class SignUpActivity extends AppCompatActivity {
     public boolean validate() {
         boolean valid = true;
 
-        String name = nameEditText.getText().toString();
-        String email = emailEditText.getText().toString();
+        String name = nameEditText.getText().toString().trim();
+        String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString();
+        String mobile = mobileEditText.getText().toString().trim();
         String reEnterPassword = rePasswordEditText.getText().toString();
 
         if (name.isEmpty() || name.length() < 3) {
             nameEditText.setError("at least 3 characters");
             valid = false;
-        } else {
-            nameEditText.setError(null);
-        }
-
+        } else nameEditText.setError(null);
+        if (mobile.isEmpty() || mobile.length() > 8){
+            mobileEditText.setError("invalid mobile number format");
+            valid = false;
+        } else mobileEditText.setError(null);
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             emailEditText.setError("enter a valid email address");
             valid = false;
-        } else {
-            emailEditText.setError(null);
-        }
-
-        if (password.isEmpty() || password.length() < 6 || password.length() > 10) {
-            passwordEditText.setError("between 6 and 10 alphanumeric characters");
+        } else emailEditText.setError(null);
+        if (password.isEmpty() || password.length() < 6) {
+            passwordEditText.setError("password must be at least 6 characters");
             valid = false;
-        } else {
-            passwordEditText.setError(null);
-        }
-
-        if (reEnterPassword.isEmpty() || reEnterPassword.length() < 4 || reEnterPassword.length() > 10 || !(reEnterPassword.equals(password))) {
-            rePasswordEditText.setError("Password Do not match");
+        } else passwordEditText.setError(null);
+        if (reEnterPassword.isEmpty() || reEnterPassword.length() < 6 || !(reEnterPassword.equals(password))) {
+            rePasswordEditText.setError("passwords do not match");
             valid = false;
-        } else {
-            rePasswordEditText.setError(null);
-        }
-
+        } else rePasswordEditText.setError(null);
         return valid;
     }
 }

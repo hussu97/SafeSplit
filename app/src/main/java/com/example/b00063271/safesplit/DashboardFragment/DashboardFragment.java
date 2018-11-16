@@ -1,4 +1,4 @@
-package com.example.b00063271.safesplit;
+package com.example.b00063271.safesplit.DashboardFragment;
 
 import android.content.Context;
 import android.net.Uri;
@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 import com.example.b00063271.safesplit.Database.C;
 import com.example.b00063271.safesplit.Entities.Activities;
+import com.example.b00063271.safesplit.R;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -20,7 +21,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import javax.annotation.Nullable;
 

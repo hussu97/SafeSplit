@@ -31,6 +31,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -153,6 +155,13 @@ public class MoneyOwedFragment extends Fragment {
             map.put("amount",String.valueOf(entry.getValue()));
             data.add(map);
         }
+        try {
+            TextView empty = super.getView().findViewById(R.id.noMoneyOwedTextView);
+            if (data.size() == 0) {
+                empty.setVisibility(View.VISIBLE);
+                return;
+            } else empty.setVisibility(View.GONE);
+        } catch (NullPointerException e) { }
         Log.d(TAG, "updateList: "+data.size());
         int resource = R.layout.money_owed_list;
         String[] from = {"to","toID", "amount"};
@@ -177,6 +186,7 @@ public class MoneyOwedFragment extends Fragment {
                                     public void onClick(DialogInterface dialog, int which) {
                                         for(String transactionID: owedTransactionsIDs.get(toID)){ transactionDB.deleteTransaction(userMobile,transactionID); }
                                         activityDB.createActivity(userMobile,"You settled your debt with "+to+" by receiving -"+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP,new Date());
+                                        activityDB.createActivity(toID,"Your debt with "+userName+" has been settled by receiving -"+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP, new Date());
                                     }
                                 })
                                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

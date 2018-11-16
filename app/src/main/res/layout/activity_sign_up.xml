@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:textColorHint="@color/stage8">
+            android:textColorHint="@color/stage3">
             <EditText android:id="@+id/input_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -43,49 +43,50 @@
 
 
         <!--  Email Label -->
-        <TableRow
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="@dimen/text_size"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="15dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:fontFamily="@font/basic"
                 android:paddingRight="5dp"
                 android:text="+971"
-                android:fontFamily="@font/basic"
-                android:textColor="@color/stage8" />
+                android:textColor="@color/stage8"
+                android:textSize="@dimen/text_size" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:layout_weight="100"
-                android:textColorHint="@color/stage8">
+                android:layout_weight="8"
+                android:textColorHint="@color/stage3">
+
                 <EditText
                     android:id="@+id/input_mobile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Mobile"
-                    android:inputType="number"
                     android:backgroundTint="@color/colorSecondary"
-                    android:textColor="@color/stage8"
                     android:fontFamily="@font/basic"
-                    android:textSize="@dimen/text_size"/>
+                    android:hint="Mobile"
+                    android:paddingLeft="10dp"
+                    android:inputType="number"
+                    android:textColor="@color/stage8"
+                    android:textSize="@dimen/text_size" />
             </com.google.android.material.textfield.TextInputLayout>
-        </TableRow>
+
+        </LinearLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:textColorHint="@color/stage8">
+            android:textColorHint="@color/stage3">
             <EditText android:id="@+id/input_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -106,7 +107,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:textColorHint="@color/stage8">
+            android:textColorHint="@color/stage3">
             <EditText android:id="@+id/input_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -124,7 +125,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:textColorHint="@color/stage8">
+            android:textColorHint="@color/stage3">
             <EditText android:id="@+id/input_reEnterPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

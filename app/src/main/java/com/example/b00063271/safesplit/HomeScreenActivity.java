@@ -8,11 +8,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
+import com.example.b00063271.safesplit.DashboardFragment.DashboardFragment;
 import com.example.b00063271.safesplit.Database.C;
 import com.example.b00063271.safesplit.FriendsFragment.MainFragment;
 import com.example.b00063271.safesplit.FriendsFragment.MoneyOweFragment;
 import com.example.b00063271.safesplit.FriendsFragment.MoneyOwedFragment;
 import com.example.b00063271.safesplit.FriendsFragment.TotalBalanceFragment;
+import com.example.b00063271.safesplit.ProfileFragment.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 

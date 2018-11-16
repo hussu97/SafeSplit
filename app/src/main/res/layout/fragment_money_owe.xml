@@ -5,6 +5,19 @@
     android:layout_height="match_parent"
     tools:context=".FriendsFragment.MoneyOweFragment">
 
+    <TextView
+        android:id="@+id/noMoneyOweTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/basic"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/positiveValue"
+        android:textAlignment="center"
+        android:layout_marginTop="@dimen/money_top_margin"
+        android:padding="10dp"
+        android:text="@string/empty_list"
+        android:visibility="gone"/>
+
     <ListView
         android:id="@+id/money_owe_listview"
         android:layout_width="match_parent"

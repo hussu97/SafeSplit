@@ -13,17 +13,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
-        <activity android:name=".SignInActivity">
+        <activity
+            android:name=".SignInActivity"
+            android:screenOrientation="portrait">
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN" />-->
 
                 <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
         </activity>
-        <activity android:name=".SignUpActivity" />
+        <activity
+            android:name=".SignUpActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".HomeScreenActivity"
-            android:label="@string/app_name">
+            android:screenOrientation="portrait">
 
              <intent-filter>
              <action android:name="android.intent.action.MAIN" />
@@ -32,26 +36,34 @@
              <category android:name="android.intent.category.LAUNCHER" />
              </intent-filter>
         </activity>
-        <activity android:name=".AddUsers" />
-        <activity android:name=".AddBill" />
+        <activity
+            android:name=".AddUsers"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".AddBill"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".CustomPayment"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustNothing" />
         <activity
             android:name=".paidByActivity"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.DeviceDefault.Dialog" />
-        <activity android:name=".SplitActivity" />
-
+        <activity
+            android:name=".SplitActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ProfileFragment.changeEmailDialog"
+            android:theme="@android:style/Theme.DeviceDefault.Dialog"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ProfileFragment.changePasswordDialog"
+            android:theme="@android:style/Theme.DeviceDefault.Dialog"
+            android:screenOrientation="portrait"/>
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
-        <activity
-            android:name=".changeEmailDialog"
-            android:theme="@android:style/Theme.DeviceDefault.Dialog" />
-        <activity
-            android:name=".changePasswordDialog"
-            android:theme="@android:style/Theme.DeviceDefault.Dialog" />
     </application>
 
 </manifest>
