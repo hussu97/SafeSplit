@@ -6,16 +6,23 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.example.b00063271.safesplit.AddBill.current_amount;
 import static com.example.b00063271.safesplit.AddBill.users;
+import static com.example.b00063271.safesplit.AddBill.users_without_custom;
 
 
 /**
@@ -70,19 +77,29 @@ public class splitexactamounts extends Fragment {
     }
 
     static ListView exactpayers;
+    private Float amount_sum = 0f;
+    private ArrayList<Float> each_amount;
+    private TextView infoexact;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_splitexactamounts, container, false);
+        infoexact = view.findViewById(R.id.infoexact);
+        infoexact.setText("Amount remaining" + Float.toString(current_amount) + "AED");
+
+        each_amount = new ArrayList<>();
+        for(int i = 0; i < users_without_custom.size(); i++){
+            each_amount.add(0f);
+        }
 
         //List View
         //------------------------------------------------------------------------------------------
         exactpayers = (ListView) view.findViewById(R.id.exactpayerslist);
 
         ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
-        for (String user:users){
+        for (String user:users_without_custom){
             HashMap<String, String> map = new HashMap<String, String>();
             map.put("name", user);
             data.add(map);
@@ -93,7 +110,39 @@ public class splitexactamounts extends Fragment {
         String[] from = {"name"};
         int[] to = {R.id.exactpayerslist_item};
 
-        SimpleAdapter adapter = new SimpleAdapter(getContext(), data, resource, from, to);
+        SimpleAdapter adapter = new SimpleAdapter(getContext(), data, resource, from, to){
+            @Override
+            public View getView(final int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+                final EditText exactamount = (EditText) v.findViewById(R.id.exactamount);
+
+                exactamount.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (exactamount.getText().toString().equals(".")) each_amount.set(position, 0f);
+                        else if(!exactamount.getText().toString().isEmpty()){
+                            each_amount.set(position, Float.parseFloat(exactamount.getText().toString()));
+                        }
+                        else each_amount.set(position, 0f);
+                        amount_sum = 0f;
+                        for(Float am:each_amount)
+                            amount_sum+=am;
+                        infoexact.setText("Amount remaining: " + Float.toString(current_amount - amount_sum)  + "AED");
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
+                return v;
+            }
+        };
         exactpayers.setAdapter(adapter);
         //equalpayers.setOnItemClickListener(this);
         //------------------------------------------------------------------------------------------

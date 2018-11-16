@@ -6,16 +6,22 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.example.b00063271.safesplit.AddBill.current_amount;
 import static com.example.b00063271.safesplit.AddBill.users;
+import static com.example.b00063271.safesplit.AddBill.users_without_custom;
 
 
 /**
@@ -70,6 +76,9 @@ public class splitpercent extends Fragment {
     }
 
     static ListView percentpayers;
+    private Float amount_sum = 0f;
+    private ArrayList<Float> each_percent;
+    private TextView infopercent;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -77,12 +86,21 @@ public class splitpercent extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_splitpercent, container, false);
 
+        infopercent = view.findViewById(R.id.infopercent);
+        infopercent.setText("Percent remaining: 100%");
+
+        each_percent = new ArrayList<>();
+        for(int i = 0; i < users_without_custom.size(); i++){
+            each_percent.add(0f);
+        }
+
+
         //List View
         //------------------------------------------------------------------------------------------
         percentpayers = (ListView) view.findViewById(R.id.percentpayerslist);
 
         ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
-        for (String user:users){
+        for (String user:users_without_custom){
             HashMap<String, String> map = new HashMap<String, String>();
             map.put("name", user);
             data.add(map);
@@ -93,7 +111,40 @@ public class splitpercent extends Fragment {
         String[] from = {"name"};
         int[] to = {R.id.percentpayerslist_item};
 
-        SimpleAdapter adapter = new SimpleAdapter(getContext(), data, resource, from, to);
+        SimpleAdapter adapter = new SimpleAdapter(getContext(), data, resource, from, to){
+            @Override
+            public View getView(final int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+                final EditText percent = (EditText) v.findViewById(R.id.percentamount);
+
+                percent.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (percent.getText().toString().equals(".")) each_percent.set(position, 0f);
+                        else if(!percent.getText().toString().isEmpty()){
+                            each_percent.set(position, Float.parseFloat(percent.getText().toString()));
+                        }
+                        else each_percent.set(position, 0f);
+                        amount_sum = 0f;
+                        for(Float am:each_percent)
+                            amount_sum+=am;
+                        Float percentpayed = 100*((Float)amount_sum/(Float)current_amount);
+                        infopercent.setText("Percent remaining: " + Float.toString(100 - percentpayed) + "%.");
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
+                return v;
+            }
+        };
         percentpayers.setAdapter(adapter);
         //equalpayers.setOnItemClickListener(this);
         //------------------------------------------------------------------------------------------

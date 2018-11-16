@@ -14,17 +14,20 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:choiceMode="multipleChoiceModal">
+        android:choiceMode="multipleChoice">
 
     </ListView>
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/infoequal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:text="TextView"
-        android:textColor="@color/colorSecondary" />
+        android:paddingTop="30dp"
+        android:paddingBottom="5dp"
+        android:textColor="@color/stage8"
+        android:textSize="20sp"
+        android:gravity="center"/>
 
 </LinearLayout>

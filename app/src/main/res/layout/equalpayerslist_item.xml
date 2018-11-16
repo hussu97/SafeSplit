@@ -19,6 +19,20 @@
             android:textColor="@color/stage8"
             android:textSize="20sp" />
 
+        <CheckBox
+            android:id="@+id/splittingcb"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_span="1"
+            android:gravity="center"
+            android:scaleX="1.50"
+            android:scaleY="1.50"
+            android:text="@null"
+            android:textSize="24sp"
+            android:translationX="12dp"
+            android:buttonTint="@color/colorSecondary"
+            android:checked="true"/>
+
         <!--
         <EditText
             android:id="@+id/exactamount"

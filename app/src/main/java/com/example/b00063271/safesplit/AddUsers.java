@@ -22,6 +22,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -34,6 +36,8 @@ import static com.example.b00063271.safesplit.SafeSplitApp.contactData;
 public class AddUsers extends AppCompatActivity implements AdapterView.OnItemClickListener, MultiAutoCompleteTextView.OnEditorActionListener {
 
     static ArrayList<String> FRIENDS;
+    static ArrayList<HashMap<String, String>> Friend_IDs;
+    static ArrayList<HashMap<String, String>> users_IDs;
     private ListView friendslist;
     private MultiAutoCompleteTextView simpleMultiAutoCompleteTextView;
     private final String TAG = "add_users-";
@@ -48,6 +52,16 @@ public class AddUsers extends AppCompatActivity implements AdapterView.OnItemCli
         for(int i = 0; i < contactData.size(); i++){
             FRIENDS.add(contactData.get(i).get("name"));
         }
+
+        Friend_IDs = new ArrayList<>();
+        for(int i = 0; i < contactData.size(); i++){
+            HashMap<String, String> temp = new HashMap<>();
+            temp.put(contactData.get(i).get("name"), contactData.get(i).get("number"));
+            Friend_IDs.add(temp);
+        }
+
+        users_IDs = new ArrayList<HashMap<String, String>>();
+
   /*
         FRIENDS.add("Alex");
         FRIENDS.add("Bob");
@@ -98,7 +112,8 @@ public class AddUsers extends AppCompatActivity implements AdapterView.OnItemCli
         simpleMultiAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                simpleMultiAutoCompleteTextView.setText(check());
+                System.out.println(position + "position position position");
+//                simpleMultiAutoCompleteTextView.setText(check());
                 simpleMultiAutoCompleteTextView.setSelection(simpleMultiAutoCompleteTextView.getText().length());
             }
         });
@@ -113,7 +128,7 @@ public class AddUsers extends AppCompatActivity implements AdapterView.OnItemCli
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 int index = simpleMultiAutoCompleteTextView.getSelectionEnd();
                 if(index != 0 && s.charAt(index - 1) == ','){
-                    simpleMultiAutoCompleteTextView.setText(check());
+//                    simpleMultiAutoCompleteTextView.setText(check());
                     simpleMultiAutoCompleteTextView.setSelection(simpleMultiAutoCompleteTextView.getText().length());
                 }
 
@@ -157,7 +172,7 @@ public class AddUsers extends AppCompatActivity implements AdapterView.OnItemCli
             }
             case R.id.usernextmenu:{
                 Intent intent = new Intent(getApplicationContext(), AddBill.class);
-                simpleMultiAutoCompleteTextView.setText(check());
+//                simpleMultiAutoCompleteTextView.setText(check());
                 simpleMultiAutoCompleteTextView.setSelection(simpleMultiAutoCompleteTextView.getText().length());
                 String value = simpleMultiAutoCompleteTextView.getText().toString();
                 String[] data = value.split(", ");
@@ -184,7 +199,7 @@ public class AddUsers extends AppCompatActivity implements AdapterView.OnItemCli
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         switch (v.getId()){
             case R.id.multiAutoCompleteTextView:{
-                simpleMultiAutoCompleteTextView.setText(check());
+//                simpleMultiAutoCompleteTextView.setText(check());
                 simpleMultiAutoCompleteTextView.setSelection(simpleMultiAutoCompleteTextView.getText().length());
                 hideKeyboard(AddUsers.this);
                 return true;
@@ -204,18 +219,25 @@ public class AddUsers extends AppCompatActivity implements AdapterView.OnItemCli
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public String check(){
+    public String check(HashMap<String, String> input){
         String result = "";
         String value = simpleMultiAutoCompleteTextView.getText().toString();
         System.out.println(value + " --> value");
         String[] data = value.split(", ");
         ArrayList<String> edited = new ArrayList<String>();
-        for (int i = 0; i < data.length; i++){
-            if (!edited.contains(data[i]) && FRIENDS.contains(data[i])){
+/*        for (int i = 0; i < data.length; i++){
+            System.out.println(data[i]);
+            System.out.println(users_IDs.contains(input));
+            System.out.println(FRIENDS.contains(data[i]));
+            if (FRIENDS.contains(data[i])){
                 System.out.println(data[i] + " entered\n----------------------\n");
                 edited.add(data[i]);
                 result += data[i] + ", ";
             }
+        }*/
+        for (int i = 0; i < users_IDs.size(); i++){
+            result += getname(users_IDs.get(i).keySet()) + ", ";
+            System.out.println("Result: " + result);
         }
         //result = result.substring(0, result.length() - 2);
         return result;
@@ -223,26 +245,38 @@ public class AddUsers extends AppCompatActivity implements AdapterView.OnItemCli
 
     @Override
     public void onItemClick(AdapterView<?> parent, View v,int position, long id){
-        simpleMultiAutoCompleteTextView.setText(check());
+//        simpleMultiAutoCompleteTextView.setText(check());
         String entered = simpleMultiAutoCompleteTextView.getText().toString();
         System.out.println(entered + "11111111111111111111111111111");
+        HashMap<String, String> temp = new HashMap<>();
 
         if (entered != null) {
-            System.out.println("case 1");
-            System.out.println(entered + "22222222222222222222222222222");
+/*            System.out.println("case 1");
+            System.out.println(entered + "22222222222222222222222222222");*/
             simpleMultiAutoCompleteTextView.setText(entered + FRIENDS.get(position) + ", ");
-            System.out.println("Position: " + position);
-            System.out.println(entered + "33333333333333333333333333333");
+            temp.put(FRIENDS.get(position), Friend_IDs.get(position).get("number"));
+            if (!users_IDs.contains(temp)) users_IDs.add(temp);
+/*            System.out.println("Position: " + position);
+            System.out.println(entered + "33333333333333333333333333333");*/
+            System.out.println(FRIENDS.get(position) + Friend_IDs.get(position).get("number"));
         }
         else {
-            System.out.println("case 2");
+//            System.out.println("case 2");
             simpleMultiAutoCompleteTextView.setText(FRIENDS.get(position) + ", ");
+            temp.put(FRIENDS.get(position), Friend_IDs.get(position).get("number"));
+            if (!users_IDs.contains(temp)) users_IDs.add(temp);
+            System.out.println(FRIENDS.get(position) + Friend_IDs.get(position).get("number"));
         }
 
         System.out.println(entered + "444444444444444444444444444444");
         System.out.println(simpleMultiAutoCompleteTextView.getText().toString() + "==============================");
-        simpleMultiAutoCompleteTextView.setText(check());
+        simpleMultiAutoCompleteTextView.setText(check(temp));
         simpleMultiAutoCompleteTextView.setSelection(simpleMultiAutoCompleteTextView.getText().length());
+    }
+
+    static public String getname(Set<String> input){
+        Iterator iter = input.iterator();
+        return (String)iter.next();
     }
 
 }

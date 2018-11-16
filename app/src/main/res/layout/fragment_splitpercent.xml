@@ -15,11 +15,16 @@
         android:layout_marginRight="5dp" />
 
     <TextView
+        android:id="@+id/infopercent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
+        android:gravity="center"
+        android:paddingTop="30dp"
+        android:paddingBottom="5dp"
         android:text="Percent remaining: "
-        android:textColor="@color/colorSecondary" />
+        android:textColor="@color/stage8"
+        android:textSize="20sp" />
 
 </LinearLayout>

@@ -3,10 +3,14 @@ package com.example.b00063271.safesplit;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -27,9 +31,10 @@ public class AddBill extends AppCompatActivity {
     static EditText amount;
     private Boolean First = true;
 
-
+    static float current_amount;
 
     static ArrayList<String> users;
+    static ArrayList<String> users_without_custom;
     static HashMap<String, Float> payers;
 
     @Override
@@ -90,6 +95,32 @@ public class AddBill extends AppCompatActivity {
                 }
             }
         });
+
+        amount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (amount.getText().toString().equals(".")) current_amount = 0;
+                else if(!amount.getText().toString().isEmpty()){
+                    current_amount = Float.parseFloat(amount.getText().toString());
+                }
+                else current_amount = 0;
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        users_without_custom = new ArrayList<String>();
+        for (int i = 1; i < users.size(); i++){
+            users_without_custom.add(users.get(i));
+        }
 
     }
 
