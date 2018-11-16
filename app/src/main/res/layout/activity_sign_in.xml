@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/signInLayout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:fitsSystemWindows="true"
-    android:background="@color/stage1">
+    android:background="@color/stage1"
+    android:fitsSystemWindows="true">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="56dp"
+        android:orientation="vertical"
         android:paddingLeft="24dp"
+        android:paddingTop="56dp"
         android:paddingRight="24dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="72dp"
-            android:layout_marginBottom="24dp"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/logo"/>
+            android:layout_marginBottom="24dp"
+            android:src="@drawable/logo" />
 
         <!--  Email Label -->
         <com.google.android.material.textfield.TextInputLayout
@@ -27,18 +28,20 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:textColorHint="@color/stage8"
-            android:foregroundTint="@color/colorSecondary">
-            <EditText android:id="@+id/input_email"
+            android:foregroundTint="@color/colorSecondary"
+            android:textColorHint="@color/stage8">
+
+            <EditText
+                android:id="@+id/input_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
                 android:backgroundTint="@color/colorSecondary"
-                android:foregroundTint="@color/colorSecondary"
-                android:textColor="@color/stage8"
                 android:fontFamily="@font/basic"
-                android:textSize="@dimen/text_size"
-                android:hint="Email" />
+                android:foregroundTint="@color/colorSecondary"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/stage8"
+                android:textSize="@dimen/text_size" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!--  Password Label -->
@@ -47,20 +50,22 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:foregroundTint="@color/colorSecondary"
             android:textColorHint="@color/stage8"
             app:passwordToggleContentDescription="Enter a valid password"
-            app:passwordToggleTint="@color/colorSecondary"
-            android:foregroundTint="@color/colorSecondary">
-            <EditText android:id="@+id/input_password"
+            app:passwordToggleTint="@color/colorSecondary">
+
+            <EditText
+                android:id="@+id/input_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
                 android:backgroundTint="@color/colorSecondary"
-                android:foregroundTint="@color/colorSecondary"
-                android:textSize="@dimen/text_size"
-                android:textColor="@color/stage8"
                 android:fontFamily="@font/basic"
-                android:hint="Password"/>
+                android:foregroundTint="@color/colorSecondary"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:textColor="@color/stage8"
+                android:textSize="@dimen/text_size" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatButton
@@ -69,22 +74,23 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
-            android:padding="12dp"
-            android:textColor="@color/colorSecondary"
-            android:fontFamily="@font/basic"
-            android:textSize="@dimen/text_size"
             android:background="@drawable/textviewborder"
-            android:text="Login"/>
+            android:fontFamily="@font/basic"
+            android:padding="12dp"
+            android:text="Login"
+            android:textColor="@color/colorSecondary"
+            android:textSize="@dimen/text_size" />
 
-        <TextView android:id="@+id/link_signup"
+        <TextView
+            android:id="@+id/link_signup"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
-            android:textColor="@color/colorSecondary"
-            android:text="No account yet? Create one"
-            android:gravity="center"
             android:fontFamily="@font/basic"
-            android:textSize="@dimen/text_size_middle"/>
+            android:gravity="center"
+            android:text="No account yet? Create one"
+            android:textColor="@color/colorSecondary"
+            android:textSize="@dimen/text_size_middle" />
 
     </LinearLayout>
 </ScrollView>

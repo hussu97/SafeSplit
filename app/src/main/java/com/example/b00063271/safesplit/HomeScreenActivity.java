@@ -1,6 +1,7 @@
 package com.example.b00063271.safesplit;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,12 +9,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
+import com.example.b00063271.safesplit.DashboardFragment.DashboardFragment;
+import com.example.b00063271.safesplit.Database.C;
 import com.example.b00063271.safesplit.FriendsFragment.MainFragment;
 import com.example.b00063271.safesplit.FriendsFragment.MoneyOweFragment;
 import com.example.b00063271.safesplit.FriendsFragment.MoneyOwedFragment;
 import com.example.b00063271.safesplit.FriendsFragment.TotalBalanceFragment;
+import com.example.b00063271.safesplit.ProfileFragment.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.prefs.Preferences;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,8 +36,9 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
     private ListView listView;
     private FloatingActionButton floatingActionButton;
     private final String TAG="HSActivity";
-    private String userMobile="xJNsNNf39VJ62aiETsiO";
-    private String userName ="Hussu";
+    private String userMobile;
+    private String userName;
+    private SharedPreferences sharedPreferences;
 
     @Override
     public void onBackPressed() { }
@@ -41,19 +48,26 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
         Intent intent = getIntent();
-        userMobile = intent.getStringExtra("userID");
-        userName = intent.getStringExtra("userName");
-        if(userMobile==null){
-            userMobile="12345";
-            userName="Hussu";
-        }
+        userMobile = intent.getStringExtra(C.USERS_MOBILE);
+        userName = intent.getStringExtra(C.USERS_NAME);
         fragmentManager = getSupportFragmentManager();
         listView = (ListView)findViewById(R.id.money_owed_listview);
         floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
         floatingActionButton.setOnClickListener(this);
         openFragment(MainFragment.newInstance(userMobile,userName));
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setSelectedItemId(R.id.navigation_friends);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        sharedPreferences = getSharedPreferences(C.LOCAL_FILE_NAME,MODE_PRIVATE);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(C.USERS_MOBILE,userMobile);
+        editor.putString(C.USERS_NAME,userName);
+        editor.commit();
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener

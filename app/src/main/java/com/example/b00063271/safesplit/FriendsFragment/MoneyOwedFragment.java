@@ -13,9 +13,11 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.b00063271.safesplit.Database.ActivityDB;
 import com.example.b00063271.safesplit.Database.C;
+import com.example.b00063271.safesplit.Database.TransactionDB;
 import com.example.b00063271.safesplit.Entities.Transactions;
 import com.example.b00063271.safesplit.R;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -29,6 +31,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,7 +41,7 @@ import java.util.Map;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
-public class MoneyOwedFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class MoneyOwedFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private final String TAG = "MoneyOwedFrag";
@@ -54,16 +58,19 @@ public class MoneyOwedFragment extends Fragment implements AdapterView.OnItemCli
     private String userMobile;
     private String userName;
 
+    private TransactionDB transactionDB;
     private OnFragmentInteractionListener mListener;
+    private TransactionDB.OnDatabaseInteractionListener mDBListener= new TransactionDB.OnDatabaseInteractionListener() {
+        @Override
+        public void onDatabaseInteration(int requestCode, ArrayList<Double> a, ArrayList<Double> b, ArrayList<Double> c) { }
+    };
 
     private TabItem moneyOwedTabItem;
     private ListView moneyOwedListView;
-    private TextView moneyOwedAmtTextView;
-    private TextView moneyOwedPersonTextView;
-    private ImageButton moneyOwedSettleUpButton;
     private SimpleAdapter simpleAdapter;
     private HashMap<String,Double> owedTransactions;
     private HashMap<String,String> owedTransactionsNames;
+    private HashMap<String,ArrayList<String>> owedTransactionsIDs;
     private ArrayList<HashMap<String,String>>data;
 
     public MoneyOwedFragment() {
@@ -85,6 +92,8 @@ public class MoneyOwedFragment extends Fragment implements AdapterView.OnItemCli
         activityDB = new ActivityDB();
         owedTransactions = new HashMap<>();
         owedTransactionsNames = new HashMap<>();
+        owedTransactionsIDs = new HashMap<>();
+        transactionDB = new TransactionDB(mDBListener);
         data = new ArrayList<>();
         Log.d(TAG, "onCreate: ");
         if (getArguments() != null) {
@@ -101,10 +110,6 @@ public class MoneyOwedFragment extends Fragment implements AdapterView.OnItemCli
         View view =  inflater.inflate(R.layout.fragment_money_owed, container, false);
         moneyOwedTabItem = (TabItem) view.findViewById(R.id.owed_tab_item);
         moneyOwedListView = (ListView) view.findViewById(R.id.money_owed_listview);
-        moneyOwedPersonTextView = (TextView) view.findViewById(R.id.moneyOwedPerson);
-        moneyOwedPersonTextView = (TextView) view.findViewById(R.id.moneyOwedAmt);
-        moneyOwedSettleUpButton = (ImageButton) view.findViewById(R.id.moneyOwedSettleUp);
-        moneyOwedListView.setOnItemClickListener(this);
         return view;
     }
 
@@ -122,6 +127,7 @@ public class MoneyOwedFragment extends Fragment implements AdapterView.OnItemCli
                     public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
                         owedTransactions.clear();
                         owedTransactionsNames.clear();
+                        owedTransactionsIDs.clear();
                         data.clear();
                         Log.d(TAG, "onEvent: in snapShot getOwedTrans "+queryDocumentSnapshots.size());
                         for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
@@ -131,6 +137,9 @@ public class MoneyOwedFragment extends Fragment implements AdapterView.OnItemCli
                             double prev_amount = owedTransactions.containsKey(toID) ? owedTransactions.get(toID) : 0;
                             owedTransactions.put(toID, C.round(prev_amount + amount));
                             owedTransactionsNames.put(toID,to);
+                            ArrayList<String> prev_transactions = owedTransactionsIDs.containsKey(toID) ? owedTransactionsIDs.get(toID) : new ArrayList<String>();
+                            prev_transactions.add(doc.getId());
+                            owedTransactionsIDs.put(toID,prev_transactions);
                         }
                         updateList();
                     }
@@ -145,6 +154,13 @@ public class MoneyOwedFragment extends Fragment implements AdapterView.OnItemCli
             map.put("amount",String.valueOf(entry.getValue()));
             data.add(map);
         }
+        try {
+            TextView empty = super.getView().findViewById(R.id.noMoneyOwedTextView);
+            if (data.size() == 0) {
+                empty.setVisibility(View.VISIBLE);
+                return;
+            } else empty.setVisibility(View.GONE);
+        } catch (NullPointerException e) { }
         Log.d(TAG, "updateList: "+data.size());
         int resource = R.layout.money_owed_list;
         String[] from = {"to","toID", "amount"};
@@ -167,8 +183,9 @@ public class MoneyOwedFragment extends Fragment implements AdapterView.OnItemCli
                                 .setMessage("Are you sure you want to create a transaction to receive "+amt+" from "+to)
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
-                                        createTransaction(to,toID,userName,userMobile,Double.valueOf(amt));
+                                        for(String transactionID: owedTransactionsIDs.get(toID)){ transactionDB.deleteTransaction(userMobile,transactionID); }
                                         activityDB.createActivity(userMobile,"You settled your debt with "+to+" by receiving -"+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP,new Date());
+                                        activityDB.createActivity(toID,"Your debt with "+userName+" has been settled by receiving -"+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP, new Date());
                                     }
                                 })
                                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -187,18 +204,6 @@ public class MoneyOwedFragment extends Fragment implements AdapterView.OnItemCli
         simpleAdapter.notifyDataSetChanged();
     }
 
-    private void createTransaction(String from, String fromID, String to, String toID, double amount){
-        final DocumentReference df = rf_t.document();
-        Transactions transaction = new Transactions(from,fromID,to,toID,amount);
-        df.set(transaction).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                rf_u.document(userMobile).update(C.USERS_TRANSACTIONS, FieldValue.arrayUnion(df.getId()));
-            }
-        });
-    }
-
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -214,13 +219,6 @@ public class MoneyOwedFragment extends Fragment implements AdapterView.OnItemCli
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        SimpleAdapter adapter = (SimpleAdapter) parent.getAdapter();
-        ListView currentLv = (ListView) view;
-        Object item = adapter.getItem(position);
     }
 
     public interface OnFragmentInteractionListener {

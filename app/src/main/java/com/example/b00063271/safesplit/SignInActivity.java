@@ -1,18 +1,25 @@
 package com.example.b00063271.safesplit;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.b00063271.safesplit.Database.C;
 import com.example.b00063271.safesplit.Entities.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -38,9 +45,12 @@ public class SignInActivity extends AppCompatActivity {
     private Button loginButton;
     private TextView signupLink;
     private FirebaseAuth mAuth;
+    private SharedPreferences sharedPreferences;
 
     private String userName;
     private String userMobile;
+
+    private ProgressDialog dialog;
 
 
     @Override
@@ -60,17 +70,16 @@ public class SignInActivity extends AppCompatActivity {
                 login();
             }
         });
-
+        hideKeyboard(this);
         signupLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Start the Signup activity
-                Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
-                startActivityForResult(intent, REQUEST_SIGNUP);
-                finish();
+                startActivity(new Intent(getApplicationContext(), SignUpActivity.class));
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             }
         });
+        sharedPreferences = getSharedPreferences(C.LOCAL_FILE_NAME,MODE_PRIVATE);
     }
 
     @Override
@@ -78,12 +87,27 @@ public class SignInActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-//        if(currentUser!=null){
-//            Intent intent = new Intent(this,SignOutActivity.class);
-//            intent.putExtra("user",currentUser.getUid());
-//            startActivity(intent);
-//        }
+        if(currentUser!=null){
+            userMobile = sharedPreferences.getString(C.USERS_MOBILE,"");
+            userName = sharedPreferences.getString(C.USERS_NAME,"");
+            Intent intent = new Intent(this,HomeScreenActivity.class);
+            intent.putExtra(C.USERS_MOBILE,userMobile);
+            intent.putExtra(C.USERS_NAME,userName);
+            startActivity(intent);
+        }
     }
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
     public void login() {
         Log.d(TAG, "Login");
 
@@ -94,11 +118,11 @@ public class SignInActivity extends AppCompatActivity {
 
         loginButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(SignInActivity.this,
-                R.style.AppTheme);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
-        progressDialog.show();
+        dialog=new ProgressDialog(this);
+        dialog.setMessage("Logging In");
+        dialog.setCancelable(false);
+        dialog.setInverseBackgroundForced(true);
+        dialog.show();
 
         final String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
@@ -110,33 +134,17 @@ public class SignInActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            progressDialog.dismiss();
                             getUserID(email);
-
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             SignInActivity.this.onLoginFailed();
-                            progressDialog.dismiss();
+                            dialog.dismiss();
                         }
 
                         // ...
                     }
                 });
-    }
-    public void updateGetUser(User user){
-        emailEditText.setText(user.getEmail());
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_SIGNUP) {
-            if (resultCode == RESULT_OK) {
-                Intent intent = getIntent();
-                String userEmail = intent.getStringExtra("user");
-                getUserID(userEmail);
-            }
-        }
     }
 
     private void getUserID(String userEmail){
@@ -166,13 +174,16 @@ public class SignInActivity extends AppCompatActivity {
     public void onLoginSuccess(String userMobile, String userName) {
         loginButton.setEnabled(true);
         Intent intent = new Intent(this, HomeScreenActivity.class);
-        intent.putExtra("userID",userMobile);
-        intent.putExtra("userName",userName);
+        intent.putExtra(C.USERS_MOBILE,userMobile);
+        intent.putExtra(C.USERS_NAME,userName);
         startActivity(intent);
     }
 
     public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        Snackbar snackbar = Snackbar.make((ScrollView)findViewById(R.id.signInLayout),"Login failed \uD83D\uDE14",Snackbar.LENGTH_SHORT);
+        Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout)snackbar.getView();
+        layout.setPadding(0, 0, 0, 0);
+        snackbar.show();
         loginButton.setEnabled(true);
     }
 

@@ -1,4 +1,4 @@
-package com.example.b00063271.safesplit;
+package com.example.b00063271.safesplit.DashboardFragment;
 
 import android.content.Context;
 import android.net.Uri;
@@ -10,15 +10,17 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.example.b00063271.safesplit.Database.C;
+import com.example.b00063271.safesplit.Entities.Activities;
+import com.example.b00063271.safesplit.R;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import javax.annotation.Nullable;
 
@@ -36,9 +38,7 @@ public class DashboardFragment extends Fragment {
     private String userMobile;
     private String userName;
 
-    private ArrayList<String> activities;
-    private ArrayList<Integer> activityType;
-    private ArrayList<Date> timeStamp;
+    private ArrayList<Activities> activities;
     private ListView dashboardListView;
     private OnFragmentInteractionListener mListener;
 
@@ -59,8 +59,6 @@ public class DashboardFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activities = new ArrayList<>();
-        activityType = new ArrayList<>();
-        timeStamp = new ArrayList<>();
         if (getArguments() != null) {
             userMobile = getArguments().getString(ARG_PARAM1);
             userName = getArguments().getString(ARG_PARAM2);
@@ -78,24 +76,27 @@ public class DashboardFragment extends Fragment {
     }
 
     private void getDashboardActivity(String userMobile){
-        rf_u.document(userMobile).collection(C.COLLECTION_USERS_HISTORY)
+        rf_u.document(userMobile).collection(C.COLLECTION_USERS_HISTORY).orderBy(C.USERS_HISTORY_TIMESTAMP,Query.Direction.DESCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 activities.clear();
-                activityType.clear();
-                timeStamp.clear();
                 for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
-                    activities.add(doc.getString(C.USERS_HISTORY_ACTIVITY));
-                    timeStamp.add(doc.getDate(C.USERS_HISTORY_TIMESTAMP));
+                    Activities a = new Activities();
+                    a.setActivityString(doc.getString(C.USERS_HISTORY_ACTIVITY));
+                    a.setTimeStamp(doc.getDate(C.USERS_HISTORY_TIMESTAMP));
                     int type = (int)Math.round(doc.getDouble(C.USERS_HISTORY_TYPE));
                     switch(type){
                         case C.ACTIVITY_TYPE_SETTLE_UP:
-                            activityType.add(R.drawable.baseline_accessibility_black_18dp);
+                            a.setActivityType(R.drawable.settle_up);
+                            break;
+                        case C.ACTIVITY_TYPE_UPDATE_PROFILE:
+                            a.setActivityType(R.drawable.update);
                             break;
                             default:
                                 Log.d(TAG, "onEvent: Type not found");
                     }
+                    activities.add(a);
                 }
                 updateList();
             }
@@ -103,7 +104,7 @@ public class DashboardFragment extends Fragment {
     }
 
     private void updateList() {
-        dashboardListView.setAdapter(new CustomAdapter(this, activities,activityType,timeStamp));
+        if(activities.size()!=0) dashboardListView.setAdapter(new CustomAdapter(this, activities));
     }
 
     public void onButtonPressed(Uri uri) {

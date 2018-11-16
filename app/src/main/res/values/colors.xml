@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#000</color>
     <color name="colorAccent">#9ce5ff</color>
     <color name="colorSecondary">#22c5ff</color>
+    <color name="negativeValue">#dd9023</color>
+    <color name="positiveValue">#23dd73</color>
     <color name="titlebackgroundcolor">#3232CD</color>
     <color name="titletextcolor">#FFFF00</color>
     <color name="stage1">#000</color>
