@@ -3,6 +3,7 @@ package com.example.b00063271.safesplit;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -44,6 +45,7 @@ public class SignInActivity extends AppCompatActivity {
     private Button loginButton;
     private TextView signupLink;
     private FirebaseAuth mAuth;
+    private SharedPreferences sharedPreferences;
 
     private String userName;
     private String userMobile;
@@ -77,6 +79,7 @@ public class SignInActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             }
         });
+        sharedPreferences = getSharedPreferences(C.LOCAL_FILE_NAME,MODE_PRIVATE);
     }
 
     @Override
@@ -85,9 +88,11 @@ public class SignInActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser!=null){
+            userMobile = sharedPreferences.getString(C.USERS_MOBILE,"");
+            userName = sharedPreferences.getString(C.USERS_NAME,"");
             Intent intent = new Intent(this,HomeScreenActivity.class);
-            intent.putExtra(C.USERS_MOBILE,currentUser.getUid());
-            intent.putExtra(C.USERS_NAME,currentUser.getUid());
+            intent.putExtra(C.USERS_MOBILE,userMobile);
+            intent.putExtra(C.USERS_NAME,userName);
             startActivity(intent);
         }
     }

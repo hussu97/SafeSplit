@@ -62,15 +62,6 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
     }
 
     @Override
-    protected void onResume() {
-        if(userMobile==null){
-            userMobile = sharedPreferences.getString(C.USERS_MOBILE,"");
-            userName = sharedPreferences.getString(C.USERS_NAME,"");
-        }
-        super.onResume();
-    }
-
-    @Override
     protected void onPause() {
         super.onPause();
         SharedPreferences.Editor editor = sharedPreferences.edit();
