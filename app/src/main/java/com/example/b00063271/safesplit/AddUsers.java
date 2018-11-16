@@ -2,6 +2,8 @@ package com.example.b00063271.safesplit;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -73,7 +75,7 @@ public class AddUsers extends AppCompatActivity implements AdapterView.OnItemCli
         }
 
 
-        int resource = R.layout.list_item;
+        int resource = R.layout.contacts_list;
         String[] from = {"name"};
         int[] to = {R.id.titleTextView};
 
@@ -135,6 +137,14 @@ public class AddUsers extends AppCompatActivity implements AdapterView.OnItemCli
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.adduser, menu);
+
+        for(int i = 0; i < menu.size(); i++){
+            Drawable drawable = menu.getItem(i).getIcon();
+            if(drawable != null) {
+                drawable.mutate();
+                drawable.setColorFilter(getResources().getColor(R.color.colorSecondary), PorterDuff.Mode.SRC_ATOP);
+            }
+        }
         return true;
     }
 

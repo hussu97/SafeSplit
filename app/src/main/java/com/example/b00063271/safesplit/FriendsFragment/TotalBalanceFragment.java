@@ -29,6 +29,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -208,10 +209,10 @@ public class TotalBalanceFragment extends Fragment {
                                         double amount = Double.valueOf(amt);
                                         if(amount>0){
                                             createTransaction(person,personID,userName,userMobile,amount);
-                                            activityDB.createActivity(userMobile,"You settled your debt with "+person+" by receiving -"+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP);
+                                            activityDB.createActivity(userMobile,"You settled your debt with "+person+" by receiving -"+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP, new Date());
                                         } else {
                                             createTransaction(userName,userMobile,person,personID,-1*amount);
-                                            activityDB.createActivity(userMobile,"You settled your debt with "+person+" by paying -"+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP);
+                                            activityDB.createActivity(userMobile,"You settled your debt with "+person+" by paying -"+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP, new Date());
                                         }
                                     }
                                 })
