@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.b00063271.safesplit.Database.C;
 import com.example.b00063271.safesplit.Entities.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -42,6 +43,8 @@ public class SignInActivity extends AppCompatActivity {
     private String userName;
     private String userMobile;
 
+    private ProgressDialog dialog;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,9 +68,7 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Start the Signup activity
-                Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
-                startActivityForResult(intent, REQUEST_SIGNUP);
-                finish();
+                startActivity(new Intent(getApplicationContext(), SignUpActivity.class));
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             }
         });
@@ -94,11 +95,11 @@ public class SignInActivity extends AppCompatActivity {
 
         loginButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(SignInActivity.this,
-                R.style.AppTheme);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
-        progressDialog.show();
+        dialog=new ProgressDialog(this);
+        dialog.setMessage("Logging In");
+        dialog.setCancelable(false);
+        dialog.setInverseBackgroundForced(true);
+        dialog.show();
 
         final String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
@@ -110,33 +111,17 @@ public class SignInActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            progressDialog.dismiss();
                             getUserID(email);
-
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             SignInActivity.this.onLoginFailed();
-                            progressDialog.dismiss();
+                            dialog.dismiss();
                         }
 
                         // ...
                     }
                 });
-    }
-    public void updateGetUser(User user){
-        emailEditText.setText(user.getEmail());
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_SIGNUP) {
-            if (resultCode == RESULT_OK) {
-                Intent intent = getIntent();
-                String userEmail = intent.getStringExtra("user");
-                getUserID(userEmail);
-            }
-        }
     }
 
     private void getUserID(String userEmail){
@@ -166,8 +151,8 @@ public class SignInActivity extends AppCompatActivity {
     public void onLoginSuccess(String userMobile, String userName) {
         loginButton.setEnabled(true);
         Intent intent = new Intent(this, HomeScreenActivity.class);
-        intent.putExtra("userID",userMobile);
-        intent.putExtra("userName",userName);
+        intent.putExtra(C.USERS_MOBILE,userMobile);
+        intent.putExtra(C.USERS_NAME,userName);
         startActivity(intent);
     }
 

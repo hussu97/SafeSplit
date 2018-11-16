@@ -6,9 +6,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.b00063271.safesplit.Database.ActivityDB;
 import com.example.b00063271.safesplit.Database.C;
 import com.example.b00063271.safesplit.Database.UserDB;
+
+import java.util.Date;
 
 public class changeEmailDialog extends Activity implements View.OnClickListener {
 
@@ -17,9 +21,17 @@ public class changeEmailDialog extends Activity implements View.OnClickListener 
 
     private String userMobile;
     private UserDB userDB;
+    private ActivityDB activityDB;
     private UserDB.OnDatabaseInteractionListener mListener = new UserDB.OnDatabaseInteractionListener() {
         @Override
-        public void onDatabaseInteration(int requestCode, String userEmail) {}
+        public void onDatabaseInteration(int requestCode, String userEmail, String param2) {
+            switch(requestCode){
+                case C.CALLBACK_SET_USER_EMAIL:
+                    Toast.makeText(getApplicationContext(),"Email Address has been changed successfully",Toast.LENGTH_LONG).show();
+                    activityDB.createActivity(userMobile,"Your -email address- was changed",C.ACTIVITY_TYPE_UPDATE_PROFILE,new Date());
+                    break;
+            }
+        }
     };
 
     @Override
@@ -35,6 +47,7 @@ public class changeEmailDialog extends Activity implements View.OnClickListener 
 
         userMobile = getIntent().getStringExtra(C.USERS_MOBILE);
         userDB = new UserDB(mListener);
+        activityDB = new ActivityDB();
     }
 
     @Override

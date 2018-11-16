@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
+import com.example.b00063271.safesplit.Database.C;
 import com.example.b00063271.safesplit.FriendsFragment.MainFragment;
 import com.example.b00063271.safesplit.FriendsFragment.MoneyOweFragment;
 import com.example.b00063271.safesplit.FriendsFragment.MoneyOwedFragment;
@@ -41,8 +42,8 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
         Intent intent = getIntent();
-        userMobile = intent.getStringExtra("userID");
-        userName = intent.getStringExtra("userName");
+        userMobile = intent.getStringExtra(C.USERS_MOBILE);
+        userName = intent.getStringExtra(C.USERS_NAME);
         if(userMobile==null){
             userMobile="12345";
             userName="Hussu";

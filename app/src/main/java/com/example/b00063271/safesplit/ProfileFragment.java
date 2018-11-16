@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.b00063271.safesplit.Database.C;
 import com.example.b00063271.safesplit.Database.UserDB;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -34,18 +35,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private String userMobile, userName;
     private UserDB.OnDatabaseInteractionListener mDBListener = new UserDB.OnDatabaseInteractionListener() {
         @Override
-        public void onDatabaseInteration(int requestCode, String userEmail) {
+        public void onDatabaseInteration(int requestCode, String userEmail, String param2) {
             switch (requestCode){
                 case C.CALLBACK_GET_USER_EMAIL:
                     userEmailTextView.setText(userEmail);
-                    break;
-                case C.CALLBACK_SET_USER_EMAIL:
-                    if(emailFirst) emailFirst = false;
-                    else Toast.makeText(getActivity(),"Email Address has been changed successfully",Toast.LENGTH_LONG).show();
-                    break;
-                case C.CALLBACK_SET_USER_PASSWORD:
-                    if(passwordFirst) passwordFirst = false;
-                    else Toast.makeText(getActivity(),"Password has been changed successfully",Toast.LENGTH_LONG).show();
                     break;
             }
         }

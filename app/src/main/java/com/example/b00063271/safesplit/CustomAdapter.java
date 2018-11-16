@@ -12,21 +12,21 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.b00063271.safesplit.Entities.Activities;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 public class CustomAdapter extends BaseAdapter{
-    ArrayList<String> result;
+    ArrayList<Activities> result;
     Context context;
-    ArrayList<Integer> imageId;
-    ArrayList<Date> timeStamps;
     private static LayoutInflater inflater=null;
-    public CustomAdapter(DashboardFragment mainActivity, ArrayList<String> prgmNameList, ArrayList<Integer> prgmImages, ArrayList<Date> timeStamp) {
-        result=prgmNameList;
+    public CustomAdapter(DashboardFragment mainActivity, ArrayList<Activities> activities) {
+        Collections.reverse(activities);
+        result = activities;
         context=mainActivity.getContext();
-        imageId=prgmImages;
-        timeStamps = timeStamp;
         inflater = ( LayoutInflater )context.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -49,19 +49,19 @@ public class CustomAdapter extends BaseAdapter{
         holder.tv=(TextView) rowView.findViewById(R.id.dashboardItemTextView);
         holder.img=(ImageView) rowView.findViewById(R.id.dashboardItemImage);
         holder.ts=(TextView) rowView.findViewById(R.id.dashboardTimeStampTextView);
-        String activityStart = result.get(position).split("-")[0];
-        String activityAmt = result.get(position).split("-")[1];
-        String activityEnd = result.get(position).split("-")[2];
-        String descriptionFinal = activityStart + activityAmt + activityEnd;
+        String activityStart = result.get(position).getActivityString().split("-")[0];
+        String activityMiddle = result.get(position).getActivityString().split("-")[1];
+        String activityEnd = result.get(position).getActivityString().split("-")[2];
+        String descriptionFinal = activityStart + activityMiddle + activityEnd;
         Spannable spannable = new SpannableString(descriptionFinal);
-        spannable.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.colorSecondary)), activityStart.length(), (activityStart + activityAmt).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannable.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.colorSecondary)), activityStart.length(), (activityStart + activityMiddle).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         holder.tv.setText(spannable, TextView.BufferType.SPANNABLE);
-        Date date = timeStamps.get(position);
+        Date date = result.get(position).getTimeStamp();
         String pattern = "dd-MM-yyyy HH:mm";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String newDate = simpleDateFormat.format(date);
         holder.ts.setText(newDate);
-        holder.img.setImageResource(imageId.get(position));
+        holder.img.setImageResource((int)result.get(position).getActivityType());
         return rowView;
     }
 

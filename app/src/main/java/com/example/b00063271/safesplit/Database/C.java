@@ -34,9 +34,11 @@ public class C {
     public static final String SETTLE_UP = "Settle Up";
 
     public static final int ACTIVITY_TYPE_SETTLE_UP = 1030;
+    public static final int ACTIVITY_TYPE_UPDATE_PROFILE = 1031;
 
     public static final int CALLBACK_GET_TRANSACTIONS = 35;
     public static final int CALLBACK_GET_USER_EMAIL = 36;
     public static final int CALLBACK_SET_USER_EMAIL = 37;
     public static final int CALLBACK_SET_USER_PASSWORD = 38;
+    public static final int CALLBACK_ADD_USER = 39;
 }

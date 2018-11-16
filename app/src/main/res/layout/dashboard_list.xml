@@ -10,14 +10,13 @@
 
         <ImageView
             android:id="@+id/dashboardItemImage"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
-            android:tint="@color/colorSecondary"
-            app:srcCompat="@drawable/settle_up" />
+            android:tint="@color/colorSecondary"/>
 
         <TextView
             android:id="@+id/dashboardItemTextView"
@@ -28,7 +27,7 @@
             android:fontFamily="@font/basic"
             android:padding="5dp"
             android:textColor="@color/stage8"
-            android:textSize="@dimen/text_size"
+            android:textSize="@dimen/text_size_middle"
             android:layout_weight="2"/>
 
         <TextView
@@ -39,7 +38,7 @@
             android:fontFamily="@font/basic"
             android:padding="5dp"
             android:textColor="@color/colorSecondary"
-            android:textSize="@dimen/text_size"
+            android:textSize="@dimen/text_size_small"
             android:layout_weight="1" />
     </TableRow>
 
