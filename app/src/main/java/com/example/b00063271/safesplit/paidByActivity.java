@@ -63,7 +63,7 @@ public class paidByActivity extends Activity {
                 else if (position == 1){
                     //paidby.setText("You");
                     payers.clear();
-                    payers.put("You", Float.parseFloat(amount.getText().toString()));
+                    payers.put(users.get(position),Float.parseFloat(amount.getText().toString()));
                     UpdateView();
                     finish();
                 }

@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.example.b00063271.safesplit.AddBill.current_amount;
+import static com.example.b00063271.safesplit.AddBill.splittersexact;
+import static com.example.b00063271.safesplit.AddBill.splitterspercent;
 import static com.example.b00063271.safesplit.AddBill.users;
 import static com.example.b00063271.safesplit.AddBill.users_without_custom;
 
@@ -125,11 +127,18 @@ public class splitpercent extends Fragment {
 
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if (percent.getText().toString().equals(".")) each_percent.set(position, 0f);
+                        if (percent.getText().toString().equals(".")) {
+                            splittersexact.get(position).put("amount", Float.toString(0f));
+                            each_percent.set(position, 0f);
+                        }
                         else if(!percent.getText().toString().isEmpty()){
+                            splittersexact.get(position).put("amount", percent.getText().toString());
                             each_percent.set(position, Float.parseFloat(percent.getText().toString()));
                         }
-                        else each_percent.set(position, 0f);
+                        else {
+                            splittersexact.get(position).put("amount", Float.toString(0f));
+                            each_percent.set(position, 0f);
+                        }
                         amount_sum = 0f;
                         for(Float am:each_percent)
                             amount_sum+=am;
@@ -189,4 +198,11 @@ public class splitpercent extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    public void submit(){
+        for(int i = 0; i < splitterspercent.size(); i++){
+            System.out.println(splitterspercent.get(i).get("name") + " " + splitterspercent.get(i).get("amount"));
+        }
+    }
+
 }

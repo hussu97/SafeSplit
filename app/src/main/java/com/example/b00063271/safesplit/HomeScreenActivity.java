@@ -40,6 +40,9 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
     private String userName;
     private SharedPreferences sharedPreferences;
 
+    static String currentuserid = "12345";
+    static String username = "Hussu";
+
     @Override
     public void onBackPressed() { }
 

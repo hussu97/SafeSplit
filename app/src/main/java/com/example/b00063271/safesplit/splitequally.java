@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.b00063271.safesplit.Database.C;
 
@@ -24,6 +25,8 @@ import java.util.HashMap;
 
 import static com.example.b00063271.safesplit.AddBill.current_amount;
 import static com.example.b00063271.safesplit.AddBill.payers;
+import static com.example.b00063271.safesplit.AddBill.split;
+import static com.example.b00063271.safesplit.AddBill.splittersequal;
 import static com.example.b00063271.safesplit.AddBill.users;
 import static com.example.b00063271.safesplit.AddBill.users_without_custom;
 
@@ -86,6 +89,7 @@ public class splitequally extends Fragment {
     private int no_of_users;
     //private CheckBox cb_temp;
     private SimpleAdapter adapter;
+    static int prevpos;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -122,17 +126,51 @@ public class splitequally extends Fragment {
                 View v = super.getView(position, convertView, parent);
                 final CheckBox cb_temp = (CheckBox) v.findViewById(R.id.splittingcb);
 
+                final HashMap<String, String> splitter = new HashMap<>();
+                final int pos = position;
                 cb_temp.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (cb_temp.isChecked()) no_of_users++;
-                        else no_of_users--;
-                        amount_per_person = (Float)current_amount/no_of_users;
+                        if (cb_temp.isChecked()) {
+                            no_of_users++;
+
+                            Toast.makeText(getContext(), users_without_custom.get(pos) + " Selected!", Toast.LENGTH_SHORT).show();
+
+                            amount_per_person = (Float)current_amount/no_of_users;
+                            splitter.put("name", users_without_custom.get(pos));
+                            splitter.put("amount", Float.toString(amount_per_person));
+                            splittersequal.set(pos, splitter);
+                            for(int i = 0; i < splittersequal.size(); i++){
+                                if(!splittersequal.get(i).get("amount").equals("0")){
+                                    splittersequal.get(i).put("amount", Float.toString(amount_per_person));
+                                }
+                            }
+                        }
+                        else {
+                            no_of_users--;
+                            Toast.makeText(getContext(), users_without_custom.get(pos) + " Deselected!", Toast.LENGTH_SHORT).show();
+                            amount_per_person = (Float)current_amount/no_of_users;
+
+
+                            for(int i = 0; i < splittersequal.size(); i++){
+                                if (splittersequal.get(i).get("name").equals(users_without_custom.get(pos)) || splittersequal.get(i).get("amount").equals("0")){
+                                    splittersequal.get(i).put("amount", "0");
+                                }
+                                else {
+                                    splittersequal.get(i).put("amount", Float.toString(amount_per_person));
+                                }
+                            }
+                            prevpos = pos;
+                        }
                         info.setText("AED" + Float.toString(amount_per_person) + "/person.");
                     }
                 });
+
+
+
                 return v;
             }
+
         };
         equalpayers.setAdapter(adapter);
         equalpayers.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
@@ -155,6 +193,9 @@ public class splitequally extends Fragment {
 
         amount_per_person = (Float)current_amount/no_of_users;
         info.setText("AED" + Float.toString(amount_per_person) + "/person.");
+        for(int i = 0; i < users_without_custom.size(); i++){
+            splittersequal.get(i).put("amount", Float.toString(amount_per_person));
+        }
 
 
         return view;
@@ -198,4 +239,12 @@ public class splitequally extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+
+    public void submit(){
+        for(int i = 0; i < splittersequal.size(); i++){
+            System.out.println(splittersequal.get(i).get("name") + " " + splittersequal.get(i).get("amount"));
+        }
+    }
+
 }

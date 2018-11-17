@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.example.b00063271.safesplit.AddBill.current_amount;
+import static com.example.b00063271.safesplit.AddBill.splittersequal;
+import static com.example.b00063271.safesplit.AddBill.splittersexact;
 import static com.example.b00063271.safesplit.AddBill.users;
 import static com.example.b00063271.safesplit.AddBill.users_without_custom;
 
@@ -124,20 +126,26 @@ public class splitexactamounts extends Fragment {
 
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if (exactamount.getText().toString().equals(".")) each_amount.set(position, 0f);
+                        if (exactamount.getText().toString().equals(".")) {
+                            splittersexact.get(position).put("amount", Float.toString(0f));
+                            each_amount.set(position, 0f);
+                        }
                         else if(!exactamount.getText().toString().isEmpty()){
+                            splittersexact.get(position).put("amount", exactamount.getText().toString());
                             each_amount.set(position, Float.parseFloat(exactamount.getText().toString()));
                         }
-                        else each_amount.set(position, 0f);
-                        amount_sum = 0f;
-                        for(Float am:each_amount)
-                            amount_sum+=am;
-                        infoexact.setText("Amount remaining: " + Float.toString(current_amount - amount_sum)  + "AED");
+                        else {
+                            splittersexact.get(position).put("amount", Float.toString(0f));
+                            each_amount.set(position, 0f);
+                        }
                     }
 
                     @Override
                     public void afterTextChanged(Editable s) {
-
+                        amount_sum = 0f;
+                        for(Float am:each_amount)
+                            amount_sum+=am;
+                        infoexact.setText("Amount remaining: " + Float.toString(current_amount - amount_sum)  + "AED");
                     }
                 });
                 return v;
@@ -187,4 +195,12 @@ public class splitexactamounts extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+
+    public void submit(){
+        for(int i = 0; i < splittersexact.size(); i++){
+            System.out.println(splittersexact.get(i).get("name") + " " + splittersexact.get(i).get("amount"));
+        }
+    }
+
 }

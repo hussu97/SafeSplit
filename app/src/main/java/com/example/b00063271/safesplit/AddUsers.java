@@ -29,6 +29,7 @@ import java.util.Set;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import static com.example.b00063271.safesplit.HomeScreenActivity.currentuserid;
 import static com.example.b00063271.safesplit.SafeSplitApp.contactData;
 
 // Contacts------------------------------------
@@ -287,6 +288,10 @@ public class AddUsers extends AppCompatActivity implements AdapterView.OnItemCli
                     simpleMultiAutoCompleteTextView.setText(check());
                     simpleMultiAutoCompleteTextView.setSelection(simpleMultiAutoCompleteTextView.getText().length());
                     startingchange = false;
+                    HashMap<String, String> temp = new HashMap<>();
+                    temp.put("name", "You");
+                    temp.put("number", currentuserid);
+                    users_IDs.add(0, temp);
                     intent.putExtra("users", users_IDs);
                     intent.putExtra("payer", "You");
                     startActivity(intent);
