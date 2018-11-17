@@ -12,6 +12,7 @@ import android.util.Log;
 import com.example.b00063271.safesplit.Database.ActivityDB;
 import com.example.b00063271.safesplit.Database.C;
 import com.example.b00063271.safesplit.Entities.Activities;
+import com.example.b00063271.safesplit.Entities.NotificationText;
 
 import java.util.ArrayList;
 
@@ -25,7 +26,7 @@ public class NotificationService extends Service {
     private final String TAG = "NotifService";
     private ActivityDB.OnDatabaseInteractionListener mListener = new ActivityDB.OnDatabaseInteractionListener() {
         @Override
-        public void onDatabaseInteration(int requestCode, boolean isConnected, ArrayList<Activities> a,Activities b) {
+        public void onDatabaseInteration(int requestCode, boolean isConnected, ArrayList<Activities> a,NotificationText b) {
             switch (requestCode){
                 case C.CALLBACK_GET_NEW_ACTIVITY:
                     createNotification(b);
@@ -39,7 +40,7 @@ public class NotificationService extends Service {
         super.onCreate();
         mListener = new ActivityDB.OnDatabaseInteractionListener() {
             @Override
-            public void onDatabaseInteration(int requestCode, boolean isConnected, ArrayList<Activities> a,Activities b) {
+            public void onDatabaseInteration(int requestCode, boolean isConnected, ArrayList<Activities> a,NotificationText b) {
                 switch (requestCode){
                     case C.CALLBACK_GET_NEW_ACTIVITY:
                         createNotification(b);
@@ -58,7 +59,7 @@ public class NotificationService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    private void createNotification(Activities a){
+    private void createNotification(NotificationText a){
         Intent intent = new Intent(this, HomeScreenActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
@@ -66,7 +67,7 @@ public class NotificationService extends Service {
         NotificationCompat.Builder mBuilder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "SafeSplit";
-            String description = a.getActivityString();
+            String description = a.getNotificationText();
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
@@ -78,12 +79,12 @@ public class NotificationService extends Service {
             mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
                     .setSmallIcon(R.drawable.logo)
                     .setTicker("SafeSplit activity occurred")
-                    .setContentTitle(a.getActivityString())
+                    .setContentTitle(a.getNotificationText())
                     .setContentText("SafeSplit")
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                     .setContentIntent(pendingIntent)
                     .setAutoCancel(true);
-            int notificationId = 1;
+            int notificationId = a.hashCode();
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
             notificationManager.notify(notificationId, mBuilder.build());
         }

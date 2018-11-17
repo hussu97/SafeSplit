@@ -15,15 +15,20 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.b00063271.safesplit.Database.ActivityDB;
 import com.example.b00063271.safesplit.Database.C;
+import com.example.b00063271.safesplit.Database.TransactionDB;
 
+import java.nio.DoubleBuffer;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import static com.example.b00063271.safesplit.AddUsers.users_IDs;
 import static com.example.b00063271.safesplit.HomeScreenActivity.currentuserid;
+import static com.example.b00063271.safesplit.HomeScreenActivity.username;
 
 import java.lang.Math.*;
 
@@ -59,6 +64,11 @@ public class AddBill extends AppCompatActivity {
     static ArrayList<HashMap<String, String>> finaluserarray;
     static ArrayList<HashMap<String, String>> transactions;
 
+    private TransactionDB transactionDB;
+    private ActivityDB activityDB;
+    private ActivityDB.OnDatabaseInteractionListener mListener2 = null;
+    private TransactionDB.OnDatabaseInteractionListener mListener = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +77,9 @@ public class AddBill extends AppCompatActivity {
         paidby = (Button) findViewById(R.id.paidbybutton);
         split = (Button) findViewById(R.id.splitbutton);
         amount = (EditText) findViewById(R.id.amount);
+
+        transactionDB = new TransactionDB(mListener);
+        activityDB = new ActivityDB(mListener2);
 
         // Get Users
         users = new ArrayList<String>();
@@ -456,6 +469,20 @@ public class AddBill extends AppCompatActivity {
 //                finish();
             }
         }
+        for(HashMap<String,String> i: transactions){
+            if(i.get(C.TRANSACTION_TO)=="You")
+                transactionDB.createTransaction(i.get(C.TRANSACTION_TO),C.formatNumber(i.get(C.TRANSACTION_TO_ID)),username,C.formatNumber(i.get(C.TRANSACTION_FROM_ID)),C.round(Double.valueOf(i.get(C.TRANSACTION_AMOUNT))));
+            else if(i.get(C.TRANSACTION_FROM)=="You")
+                transactionDB.createTransaction(username,C.formatNumber(i.get(C.TRANSACTION_TO_ID)),username,C.formatNumber(i.get(C.TRANSACTION_FROM_ID)),C.round(Double.valueOf(i.get(C.TRANSACTION_AMOUNT))));
+            else
+                transactionDB.createTransaction(i.get(C.TRANSACTION_TO),C.formatNumber(i.get(C.TRANSACTION_TO_ID)),i.get(C.TRANSACTION_FROM),C.formatNumber(i.get(C.TRANSACTION_FROM_ID)),C.round(Double.valueOf(i.get(C.TRANSACTION_AMOUNT))));
+            activityDB.createActivity(C.formatNumber(i.get(C.TRANSACTION_TO_ID)),"You are owed -"+C.TRANSACTION_AMOUNT+"- from "+i.get(C.TRANSACTION_FROM),C.ACTIVITY_TYPE_NEW_TRANSACTION,new Date());
+            activityDB.createActivity(C.formatNumber(i.get(C.TRANSACTION_TO_ID)),"You owe -"+C.TRANSACTION_AMOUNT+"- to "+i.get(C.TRANSACTION_FROM),C.ACTIVITY_TYPE_NEW_TRANSACTION,new Date());
+        }
+        Intent intent = new Intent(this, HomeScreenActivity.class);
+        intent.putExtra(C.USERS_MOBILE,currentuserid);
+        intent.putExtra(C.USERS_NAME,username);
+        startActivity(intent);
         return true;
     }
 

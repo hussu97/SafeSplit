@@ -46,8 +46,8 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
     private SharedPreferences sharedPreferences;
     private Snackbar internetSnackbar;
 
-    static String currentuserid = "12345";
-    static String username = "Hussu";
+    static String currentuserid;
+    static String username;
 
     @Override
     public void onBackPressed() { }
@@ -59,6 +59,8 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
         Intent intent = getIntent();
         userMobile = intent.getStringExtra(C.USERS_MOBILE);
         userName = intent.getStringExtra(C.USERS_NAME);
+        currentuserid = userMobile;
+        username = userName;
         fragmentManager = getSupportFragmentManager();
         floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
         floatingActionButton.setOnClickListener(this);

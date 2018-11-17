@@ -2,6 +2,7 @@ package com.example.b00063271.safesplit.Database;
 import android.util.Log;
 
 import com.example.b00063271.safesplit.Entities.Activities;
+import com.example.b00063271.safesplit.Entities.NotificationText;
 import com.example.b00063271.safesplit.R;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
@@ -78,25 +79,7 @@ public class ActivityDB {
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                      for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
                          if(mListener!=null){
-                             Activities a = new Activities();
-                             a.setActivityString(doc.getString(C.USERS_HISTORY_ACTIVITY));
-                             a.setTimeStamp(doc.getDate(C.USERS_HISTORY_TIMESTAMP));
-                             int type = (int)Math.round(doc.getDouble(C.USERS_HISTORY_TYPE));
-                             switch(type){
-                                 case C.ACTIVITY_TYPE_SETTLE_UP:
-                                     a.setActivityType(R.drawable.settle_up);
-                                     break;
-                                 case C.ACTIVITY_TYPE_UPDATE_PROFILE:
-                                     a.setActivityType(R.drawable.update);
-                                     break;
-                                 case C.ACTIVITY_TYPE_NEW_BILL:
-                                     a.setActivityType(R.drawable.add_bill_dashboard);
-                                     break;
-                                 case C.ACTIVITY_TYPE_NEW_TRANSACTION:
-                                     a.setActivityType(R.drawable.owe_dashboard);
-                                 default:
-                                     Log.d(TAG, "onEvent: Type not found");
-                             }
+                             NotificationText a = new NotificationText(doc.getString(C.USERS_HISTORY_ACTIVITY),doc.getId());
                              mListener.onDatabaseInteration(C.CALLBACK_GET_NEW_ACTIVITY,isConnected,null,a);
                          }
                      }
@@ -105,6 +88,6 @@ public class ActivityDB {
     }
 
     public interface OnDatabaseInteractionListener {
-        void onDatabaseInteration(int requestCode, boolean isConnected,ArrayList<Activities> a, Activities b);
+        void onDatabaseInteration(int requestCode, boolean isConnected,ArrayList<Activities> a, NotificationText b);
     }
 }

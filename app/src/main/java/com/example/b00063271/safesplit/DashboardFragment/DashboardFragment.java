@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.example.b00063271.safesplit.Database.ActivityDB;
 import com.example.b00063271.safesplit.Database.C;
 import com.example.b00063271.safesplit.Entities.Activities;
+import com.example.b00063271.safesplit.Entities.NotificationText;
 import com.example.b00063271.safesplit.R;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
@@ -43,7 +44,7 @@ public class DashboardFragment extends Fragment {
     private ActivityDB activityDB;
     private final ActivityDB.OnDatabaseInteractionListener mDBListener=new ActivityDB.OnDatabaseInteractionListener() {
         @Override
-        public void onDatabaseInteration(int requestCode, boolean isConnected, ArrayList<Activities> a, Activities b) {
+        public void onDatabaseInteration(int requestCode, boolean isConnected, ArrayList<Activities> a, NotificationText b) {
             switch (requestCode){
                 case C.CALLBACK_GET_ACTIVITIES:
                     updateList(a);
@@ -51,7 +52,6 @@ public class DashboardFragment extends Fragment {
         }
     };
 
-    private ArrayList<Activities> activities;
     private ListView dashboardListView;
     private OnFragmentInteractionListener mListener;
 
@@ -71,7 +71,6 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activities = new ArrayList<>();
         if (getArguments() != null) {
             userMobile = getArguments().getString(ARG_PARAM1);
             userName = getArguments().getString(ARG_PARAM2);
@@ -91,9 +90,9 @@ public class DashboardFragment extends Fragment {
     }
 
     private void updateList(ArrayList<Activities> a) {
-        if(activities.size()!=0) {
+        if(a.size()!=0) {
             noDashboard.setVisibility(View.GONE);
-            dashboardListView.setAdapter(new CustomAdapter(this, activities));
+            dashboardListView.setAdapter(new CustomAdapter(this, a));
         }
         else noDashboard.setVisibility(View.VISIBLE);
     }
