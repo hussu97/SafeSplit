@@ -68,6 +68,7 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
         sharedPreferences = getSharedPreferences(C.LOCAL_FILE_NAME,MODE_PRIVATE);
         registerReceiver(broadcastReceiver, new IntentFilter(C.NO_INTERNET_BROADCAST));
         registerReceiver(broadcastReceiver2, new IntentFilter(C.INTERNET_BROADCAST));
+        startService(new Intent(this,NotificationService.class));
         internetSnackbar = null;
     }
 

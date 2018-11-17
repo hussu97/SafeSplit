@@ -21,7 +21,7 @@ public class NotificationService extends Service {
 
     private String userMobile;
     private ActivityDB activityDB;
-    private ActivityDB.OnDatabaseInteractionListener mListener; = new ActivityDB.OnDatabaseInteractionListener() {
+    private ActivityDB.OnDatabaseInteractionListener mListener = new ActivityDB.OnDatabaseInteractionListener() {
         @Override
         public void onDatabaseInteration(int requestCode, boolean isConnected, ArrayList<Activities> a,Activities b) {
             switch (requestCode){
@@ -55,6 +55,7 @@ public class NotificationService extends Service {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
         String CHANNEL_ID = "PI";
+        NotificationCompat.Builder mBuilder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "SafeSplit";
             String description = a.getActivityString();
@@ -66,7 +67,7 @@ public class NotificationService extends Service {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         } else{
-            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
+            mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
                     .setSmallIcon(R.drawable.logo)
                     .setTicker("SafeSplit activity occurred")
                     .setContentTitle(a.getActivityString())
@@ -74,11 +75,11 @@ public class NotificationService extends Service {
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                     .setContentIntent(pendingIntent)
                     .setAutoCancel(true);
+            int notificationId = 1;
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+            notificationManager.notify(notificationId, mBuilder.build());
         }
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 
-// notificationId is a unique int for each notification that you must define
-        notificationManager.notify(notificationId, mBuilder.build());
 
     }
 
