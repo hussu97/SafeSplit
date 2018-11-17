@@ -133,8 +133,8 @@ public class splitpercent extends Fragment {
                         amount_sum = 0f;
                         for(Float am:each_percent)
                             amount_sum+=am;
-                        Float percentpayed = 100*((Float)amount_sum/(Float)current_amount);
-                        infopercent.setText("Percent remaining: " + Float.toString(100 - percentpayed) + "%.");
+//                        Float percentpayed = 100*((Float)amount_sum/(Float)current_amount);
+                        infopercent.setText("Percent remaining: " + Float.toString(100 - amount_sum) + "%.");
                     }
 
                     @Override

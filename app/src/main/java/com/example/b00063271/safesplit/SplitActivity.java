@@ -12,9 +12,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -28,6 +30,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.w3c.dom.Text;
 
+import java.util.Iterator;
+
+import static com.example.b00063271.safesplit.AddBill.UpdateView;
+import static com.example.b00063271.safesplit.AddBill.amount;
+import static com.example.b00063271.safesplit.AddBill.payers;
+
 public class SplitActivity extends AppCompatActivity implements splitpercent.OnFragmentInteractionListener,splitexactamounts.OnFragmentInteractionListener,
             splitequally.OnFragmentInteractionListener{
 
@@ -38,6 +46,10 @@ public class SplitActivity extends AppCompatActivity implements splitpercent.OnF
     private RadioGroup rg;
     private RadioButton rbequal, rbexact, rbpercent;
     private TextView fragment_title;
+    private MainFragment.Adapter adapter;
+    private splitequally equal;
+    private splitexactamounts exact;
+    private splitpercent percent;
 
     private ViewPager viewPager;
     @Override
@@ -52,6 +64,9 @@ public class SplitActivity extends AppCompatActivity implements splitpercent.OnF
         fragment_title = (TextView) findViewById(R.id.textView3);
 
         fragmentManager = getSupportFragmentManager();
+        percent = new splitpercent();
+        exact = new splitexactamounts();
+        equal = new splitequally();
         viewPager = (ViewPager)findViewById(R.id.splitOptionsViewPager);
         setupViewPager();
 
@@ -119,10 +134,10 @@ public class SplitActivity extends AppCompatActivity implements splitpercent.OnF
     }
 
     private void setupViewPager(){
-        MainFragment.Adapter adapter = new MainFragment.Adapter(fragmentManager);
-        adapter.addFragment(splitequally.newInstance("",""), "Equal");
-        adapter.addFragment(splitexactamounts.newInstance("",""), "Exact");
-        adapter.addFragment(splitpercent.newInstance("",""), "Percent");
+        adapter = new MainFragment.Adapter(fragmentManager);
+        adapter.addFragment(equal, "Equal");
+        adapter.addFragment(exact, "Exact");
+        adapter.addFragment(percent, "Percent");
         viewPager.setAdapter(adapter);
     }
     private boolean openFragment(Fragment fragment){
@@ -136,6 +151,96 @@ public class SplitActivity extends AppCompatActivity implements splitpercent.OnF
     @Override
     public void onFragmentInteraction(Uri uri) {
         Log.d("abcd", "onFragmentInteraction: "+uri);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.split, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch(item.getItemId()){
+            case R.id.donesplit:{
+
+                int pageid = viewPager.getCurrentItem();
+                switch (pageid){
+                    case 0:{
+                        equal.submit();
+                        break;
+                    }
+                    case 1:{
+                        exact.submit();
+                        break;
+                    }
+                    case 2:{
+                        percent.submit();
+                        break;
+                    }
+                }
+
+                /*
+                Float sum = 0f;
+                payers.clear();
+                for (int i = 0; i < users.size(); i++){
+                    View wantedView = participants.getChildAt(i);
+                    EditText individual_ED = (EditText) wantedView.findViewById(R.id.payed_amount);
+                    Float individual_amount;
+                    if (individual_ED.getText() != null && !individual_ED.getText().toString().equals("") && Float.parseFloat(individual_ED.getText().toString()) != 0f){
+                        individual_amount = Float.parseFloat(individual_ED.getText().toString());
+                        sum += individual_amount;
+                        payers.put(users.get(i), individual_amount);
+                        System.out.println(users.get(i) + " added to the list --------------------");
+                    }
+                }
+                if (sum < Float.parseFloat(amount.getText().toString())){
+                    Toast.makeText(getApplicationContext(), "Insufficient amount entered!", Toast.LENGTH_SHORT).show();
+                }
+                else if (sum > Float.parseFloat(amount.getText().toString())){
+                    Toast.makeText(getApplicationContext(), "Excess amount entered!", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Iterator itt = payers.keySet().iterator();
+                    System.out.println(payers.size() + "===========================================");
+                    for (int i = 0; i < payers.size(); i++){
+                        String key = (String)itt.next();
+                        System.out.print(key);
+                        System.out.print(" ==> ");
+                        System.out.println(payers.get(key));
+                    }
+                    System.out.println("===========================================");
+                    UpdateView();
+                    finish();
+                }
+                */
+            }
+
+
+        }
+        return true;
     }
 
 

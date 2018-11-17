@@ -18,6 +18,8 @@ import java.util.HashMap;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import static com.example.b00063271.safesplit.AddUsers.users_IDs;
+
 
 public class AddBill extends AppCompatActivity {
 
@@ -64,9 +66,9 @@ public class AddBill extends AppCompatActivity {
 
         }
 
-        ArrayList<String> fromprev = getIntent().getStringArrayListExtra("users");
-        for(int i = 0; i < fromprev.size(); i++)
-            users.add(fromprev.get(i));
+        //ArrayList<String> fromprev = getIntent().getStringArrayListExtra("users");
+        for(int i = 0; i < users_IDs.size(); i++)
+            users.add(users_IDs.get(i).get("name"));
 
         paidby.setOnClickListener(new View.OnClickListener() {
             @Override

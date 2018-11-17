@@ -27,7 +27,7 @@
             android:textSize="@dimen/text_size"
             android:backgroundTint="@color/colorSecondary"
             android:textColorHint="@color/stage8"
-            android:imeOptions="actionDone"
+            android:imeOptions="actionUnspecified"
             android:inputType="text" />
 
     </LinearLayout>
