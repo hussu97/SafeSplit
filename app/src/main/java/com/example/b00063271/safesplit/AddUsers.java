@@ -56,6 +56,9 @@ public class AddUsers extends AppCompatActivity implements AdapterView.OnItemCli
     static boolean startingchange = false;
     static boolean checkafterchange = false;
 
+    // For You
+    static Boolean First_You = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +82,15 @@ public class AddUsers extends AppCompatActivity implements AdapterView.OnItemCli
         }
 
         users_IDs = new ArrayList<HashMap<String, String>>();
+
+        if(First_You){
+            HashMap<String, String> temp = new HashMap<>();
+            temp.put("name", "You");
+            temp.put("number", currentuserid);
+            users_IDs.add(0, temp);
+            First_You = false;
+        }
+
 
   /*
         FRIENDS.add("Alex");
@@ -288,10 +300,6 @@ public class AddUsers extends AppCompatActivity implements AdapterView.OnItemCli
                     simpleMultiAutoCompleteTextView.setText(check());
                     simpleMultiAutoCompleteTextView.setSelection(simpleMultiAutoCompleteTextView.getText().length());
                     startingchange = false;
-                    HashMap<String, String> temp = new HashMap<>();
-                    temp.put("name", "You");
-                    temp.put("number", currentuserid);
-                    users_IDs.add(0, temp);
                     intent.putExtra("users", users_IDs);
                     intent.putExtra("payer", "You");
                     startActivity(intent);
@@ -332,7 +340,7 @@ public class AddUsers extends AppCompatActivity implements AdapterView.OnItemCli
 
     public String check(){
         String result = "";
-        for (int i = 0; i < users_IDs.size(); i++){
+        for (int i = 1; i < users_IDs.size(); i++){
             System.out.println("ADDING " + users_IDs.get(i).get("name"));
             result += users_IDs.get(i).get("name") + ", ";
         }

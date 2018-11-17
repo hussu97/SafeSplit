@@ -27,6 +27,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import static com.example.b00063271.safesplit.AddUsers.First_You;
+
 public class HomeScreenActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener,DashboardFragment.OnFragmentInteractionListener
                 ,ProfileFragment.OnFragmentInteractionListener,GroupsFragment.OnFragmentInteractionListener,MoneyOwedFragment.OnFragmentInteractionListener,
         MoneyOweFragment.OnFragmentInteractionListener,TotalBalanceFragment.OnFragmentInteractionListener,View.OnClickListener {
@@ -109,6 +111,7 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.floatingActionButton:
+                First_You = true;
                 startActivity(new Intent(getApplicationContext(),AddUsers.class));
                 overridePendingTransition(R.anim.push_bottom_up,R.anim.remain_same_position);
                 break;

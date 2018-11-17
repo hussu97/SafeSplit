@@ -126,22 +126,26 @@ public class splitexactamounts extends Fragment {
 
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if (exactamount.getText().toString().equals(".")) {
-                            splittersexact.get(position).put("amount", Float.toString(0f));
-                            each_amount.set(position, 0f);
-                        }
-                        else if(!exactamount.getText().toString().isEmpty()){
-                            splittersexact.get(position).put("amount", exactamount.getText().toString());
-                            each_amount.set(position, Float.parseFloat(exactamount.getText().toString()));
-                        }
-                        else {
-                            splittersexact.get(position).put("amount", Float.toString(0f));
-                            each_amount.set(position, 0f);
-                        }
                     }
 
                     @Override
                     public void afterTextChanged(Editable s) {
+                        System.out.println("---------------------------------------");
+                        if (exactamount.getText().toString().equals(".")) {
+                            System.out.println("111111111---------------------------------------");
+                            splittersexact.get(position).put("amount", Float.toString(0f));
+                            each_amount.set(position, 0f);
+                        }
+                        else if(!exactamount.getText().toString().isEmpty()){
+                            System.out.println("2222222222222---------------------------------------");
+                            splittersexact.get(position).put("amount", exactamount.getText().toString());
+                            each_amount.set(position, Float.parseFloat(exactamount.getText().toString()));
+                        }
+                        else {
+                            System.out.println("3333333333333---------------------------------------");
+                            splittersexact.get(position).put("amount", Float.toString(0f));
+                            each_amount.set(position, 0f);
+                        }
                         amount_sum = 0f;
                         for(Float am:each_amount)
                             amount_sum+=am;
