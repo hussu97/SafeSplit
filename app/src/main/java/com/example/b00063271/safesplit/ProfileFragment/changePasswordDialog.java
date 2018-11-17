@@ -26,6 +26,16 @@ public class changePasswordDialog extends Activity implements View.OnClickListen
     private String userMobile;
     private UserDB userDB;
     private ActivityDB activityDB;
+    private final ActivityDB.OnDatabaseInteractionListener mListener2=new ActivityDB.OnDatabaseInteractionListener() {
+        @Override
+        public void onDatabaseInteration(int requestCode, boolean isConnected) {
+            switch (requestCode){
+                case C.CALLBACK_CHANGED_CONNECTION:
+                    if(isConnected) doneButton.setEnabled(true);
+                    else doneButton.setEnabled(false);
+            }
+        }
+    };
     private UserDB.OnDatabaseInteractionListener mListener = new UserDB.OnDatabaseInteractionListener() {
         @Override
         public void onDatabaseInteration(int requestCode, String param1, String param2) {
@@ -51,7 +61,7 @@ public class changePasswordDialog extends Activity implements View.OnClickListen
 
         userMobile = getIntent().getStringExtra(C.USERS_MOBILE);
         userDB = new UserDB(mListener);
-        activityDB = new ActivityDB();
+        activityDB = new ActivityDB(mListener2);
     }
 
     @Override

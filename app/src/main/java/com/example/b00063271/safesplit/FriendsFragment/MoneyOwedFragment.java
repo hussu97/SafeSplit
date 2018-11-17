@@ -47,6 +47,7 @@ public class MoneyOwedFragment extends Fragment {
     private final String TAG = "MoneyOwedFrag";
 
     private ActivityDB activityDB;
+    private final ActivityDB.OnDatabaseInteractionListener mListener2=null;
 
     private final String TRANSACTION_COLLECTION = "transaction";
     private final String USERS_COLLECTION = "users";
@@ -89,7 +90,7 @@ public class MoneyOwedFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activityDB = new ActivityDB();
+        activityDB = new ActivityDB(mListener2);
         owedTransactions = new HashMap<>();
         owedTransactionsNames = new HashMap<>();
         owedTransactionsIDs = new HashMap<>();

@@ -25,6 +25,8 @@ public class C {
     public static final String USERS_HISTORY_TOS = "to";
 
     public static final String LOCAL_FILE_NAME = "userStuff";
+    public static final String NO_INTERNET_BROADCAST = "noInternet";
+    public static final String INTERNET_BROADCAST = "internet";
 
     public static final String SETTLE_UP = "Settle Up";
 
@@ -37,5 +39,6 @@ public class C {
     public static final int CALLBACK_SET_USER_PASSWORD = 38;
     public static final int CALLBACK_ADD_USER = 39;
     public static final int CALLBACK_CREATE_TRANSACTION = 40;
+    public static final int CALLBACK_CHANGED_CONNECTION = 42;
     public static final int CALLBACK_DELETE_TRANSACTION = 41;
 }

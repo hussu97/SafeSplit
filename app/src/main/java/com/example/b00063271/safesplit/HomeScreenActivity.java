@@ -1,7 +1,11 @@
 package com.example.b00063271.safesplit;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,17 +22,19 @@ import com.example.b00063271.safesplit.FriendsFragment.TotalBalanceFragment;
 import com.example.b00063271.safesplit.ProfileFragment.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.prefs.Preferences;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 public class HomeScreenActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener,DashboardFragment.OnFragmentInteractionListener
-                ,ProfileFragment.OnFragmentInteractionListener,GroupsFragment.OnFragmentInteractionListener,MoneyOwedFragment.OnFragmentInteractionListener,
+                ,ProfileFragment.OnFragmentInteractionListener,MoneyOwedFragment.OnFragmentInteractionListener,
         MoneyOweFragment.OnFragmentInteractionListener,TotalBalanceFragment.OnFragmentInteractionListener,View.OnClickListener {
 
     private FragmentManager fragmentManager;
@@ -39,6 +45,7 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
     private String userMobile;
     private String userName;
     private SharedPreferences sharedPreferences;
+    private Snackbar internetSnackbar;
 
     @Override
     public void onBackPressed() { }
@@ -59,7 +66,32 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
         navigation.setSelectedItemId(R.id.navigation_friends);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         sharedPreferences = getSharedPreferences(C.LOCAL_FILE_NAME,MODE_PRIVATE);
+        registerReceiver(broadcastReceiver, new IntentFilter(C.NO_INTERNET_BROADCAST));
+        registerReceiver(broadcastReceiver2, new IntentFilter(C.INTERNET_BROADCAST));
+        internetSnackbar = null;
     }
+
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(internetSnackbar==null){
+                internetSnackbar = Snackbar.make((ConstraintLayout)findViewById(R.id.homeScreenContainer),"No internet connection "+ new String(Character.toChars(0x1F62D)),Snackbar.LENGTH_INDEFINITE);
+                internetSnackbar.show();
+                floatingActionButton.setClickable(false);
+
+            }
+        }
+    };
+    BroadcastReceiver broadcastReceiver2 = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(internetSnackbar!=null){
+                internetSnackbar.dismiss();
+                floatingActionButton.setClickable(true);
+                internetSnackbar = null;
+            }
+        }
+    };
 
     @Override
     protected void onPause() {
@@ -83,8 +115,6 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
                     return openFragment(DashboardFragment.newInstance(userMobile,userName));
                 case R.id.naviagtion_me:
                     return openFragment(ProfileFragment.newInstance(userMobile,userName));
-                case R.id.navigation_groups:
-                    return openFragment(new GroupsFragment());
             }
             return false;
         }

@@ -141,6 +141,7 @@ public class SignUpActivity extends AppCompatActivity {
         Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout)snackbar.getView();
         layout.setPadding(0, 0, 0, 0);
         snackbar.show();
+        dialog.dismiss();
         signUpButton.setEnabled(true);
     }
 
