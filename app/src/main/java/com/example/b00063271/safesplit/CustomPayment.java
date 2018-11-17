@@ -83,7 +83,7 @@ public class CustomPayment extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
-            case R.id.done:{
+            case R.id.donecustompayment:{
                 Float sum = 0f;
                 payers.clear();
                 for (int i = 0; i < users.size(); i++){

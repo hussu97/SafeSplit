@@ -3,10 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/donecustompayment"
+        android:id="@+id/doneaddbill"
         android:title="Done"
-        app:showAsAction="always"
-        android:icon="@drawable/done"
-        android:iconTint="@color/colorSecondary"/>
+        app:showAsAction="always"></item>
 
 </menu>

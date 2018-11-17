@@ -34,7 +34,9 @@ import java.util.Iterator;
 
 import static com.example.b00063271.safesplit.AddBill.UpdateView;
 import static com.example.b00063271.safesplit.AddBill.amount;
+import static com.example.b00063271.safesplit.AddBill.chosen;
 import static com.example.b00063271.safesplit.AddBill.payers;
+import static com.example.b00063271.safesplit.AddBill.split;
 
 public class SplitActivity extends AppCompatActivity implements splitpercent.OnFragmentInteractionListener,splitexactamounts.OnFragmentInteractionListener,
             splitequally.OnFragmentInteractionListener{
@@ -189,56 +191,26 @@ public class SplitActivity extends AppCompatActivity implements splitpercent.OnF
                 int pageid = viewPager.getCurrentItem();
                 switch (pageid){
                     case 0:{
-                        //equal.submit();
+                        equal.submit();
+                        split.setText("Equally");
+                        chosen = 0;
                         break;
                     }
                     case 1:{
-                        //exact.submit();
+                        exact.submit();
+                        split.setText("Exact Amount");
+                        chosen = 1;
                         break;
                     }
                     case 2:{
-                        //percent.submit();
+                        percent.submit();
+                        split.setText("By Percent");
+                        chosen = 2;
                         break;
                     }
                 }
-
-                /*
-                Float sum = 0f;
-                payers.clear();
-                for (int i = 0; i < users.size(); i++){
-                    View wantedView = participants.getChildAt(i);
-                    EditText individual_ED = (EditText) wantedView.findViewById(R.id.payed_amount);
-                    Float individual_amount;
-                    if (individual_ED.getText() != null && !individual_ED.getText().toString().equals("") && Float.parseFloat(individual_ED.getText().toString()) != 0f){
-                        individual_amount = Float.parseFloat(individual_ED.getText().toString());
-                        sum += individual_amount;
-                        payers.put(users.get(i), individual_amount);
-                        System.out.println(users.get(i) + " added to the list --------------------");
-                    }
-                }
-                if (sum < Float.parseFloat(amount.getText().toString())){
-                    Toast.makeText(getApplicationContext(), "Insufficient amount entered!", Toast.LENGTH_SHORT).show();
-                }
-                else if (sum > Float.parseFloat(amount.getText().toString())){
-                    Toast.makeText(getApplicationContext(), "Excess amount entered!", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    Iterator itt = payers.keySet().iterator();
-                    System.out.println(payers.size() + "===========================================");
-                    for (int i = 0; i < payers.size(); i++){
-                        String key = (String)itt.next();
-                        System.out.print(key);
-                        System.out.print(" ==> ");
-                        System.out.println(payers.get(key));
-                    }
-                    System.out.println("===========================================");
-                    UpdateView();
-                    finish();
-                }
-                */
+                finish();
             }
-
-
         }
         return true;
     }

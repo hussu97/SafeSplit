@@ -46,6 +46,9 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
     private SharedPreferences sharedPreferences;
     private Snackbar internetSnackbar;
 
+    static String currentuserid = "12345";
+    static String username = "Hussu";
+
     @Override
     public void onBackPressed() { }
 

@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,13 +15,17 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.b00063271.safesplit.Database.C;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import static com.example.b00063271.safesplit.AddUsers.users_IDs;
+import static com.example.b00063271.safesplit.HomeScreenActivity.currentuserid;
 
+import java.lang.Math.*;
 
 public class AddBill extends AppCompatActivity {
 
@@ -33,11 +39,25 @@ public class AddBill extends AppCompatActivity {
     static EditText amount;
     private Boolean First = true;
 
+    // Current Sum Total
     static float current_amount;
 
+    // For recording users who are involved in the bill
     static ArrayList<String> users;
     static ArrayList<String> users_without_custom;
+
+    // For paying
     static HashMap<String, Float> payers;
+
+    // For splitting
+    static ArrayList<HashMap<String, String>> splittersequal;
+    static ArrayList<HashMap<String, String>> splittersexact;
+    static ArrayList<HashMap<String, String>> splitterspercent;
+    static int chosen = 0;
+
+    // For recording final transactions required
+    static ArrayList<HashMap<String, String>> finaluserarray;
+    static ArrayList<HashMap<String, String>> transactions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,16 +71,25 @@ public class AddBill extends AppCompatActivity {
         // Get Users
         users = new ArrayList<String>();
 
-        // Get Payers
+        // Get Payers and Splitters
         payers = new HashMap<>();
+        splittersequal = new ArrayList<>();
+        splittersexact = new ArrayList<>();
+        splitterspercent = new ArrayList<>();
+
+        // Get Transactions
+        finaluserarray = new ArrayList<>();
+        transactions = new ArrayList<>();
+
+
 
         if(First){
-            payers.put("You", 0f);
+//            payers.put("You", 0f);
             First = false;
             paidby.setText("You");
 
             users.add("Custom");
-            users.add("You");
+//            users.add("You");
         }
         else{
 
@@ -123,6 +152,15 @@ public class AddBill extends AppCompatActivity {
         for (int i = 1; i < users.size(); i++){
             users_without_custom.add(users.get(i));
         }
+        for(int i = 0; i < users_without_custom.size(); i++){
+            HashMap<String, String> splitter = new HashMap<>();
+            splitter.put("name", users_without_custom.get(i));
+            splitter.put("amount", Float.toString(0f));
+            splittersequal.add(splitter);
+            splittersexact.add(splitter);
+            splitterspercent.add(splitter);
+        }
+
 
     }
 
@@ -134,6 +172,291 @@ public class AddBill extends AppCompatActivity {
             paidby.setText("Custom");
 
         }
+    }
+
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.addbill, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch(item.getItemId()){
+            case R.id.doneaddbill:{
+                transactions.clear();
+                switch (chosen){
+                    case 0:{
+                        System.out.println("SIZE0: " + (users_without_custom.size() == splittersequal.size()));
+
+                        // Create the tables
+                        ArrayList<Float> payed = new ArrayList<>();
+                        ArrayList<Float> expense = new ArrayList<>();
+                        for(int i = 0; i < users_without_custom.size(); i++){
+                            payed.add(payers.get(users_without_custom.get(i)));                 // Get the list of payed amounts
+                            expense.add(Float.parseFloat(splittersequal.get(i).get("amount")) - payers.get(users_without_custom.get(i))); // Get the list of expenses
+                        }
+
+                        // Find the transactions
+                        while(true){
+
+                            // Vars to store positions:
+                            int positivepos = 0, negativepos = 0;
+
+                            // Find the most positive number:
+                            Float maxpositive = 0f;
+                            for(int i = 0; i < expense.size(); i++){
+                                if(expense.get(i) > 0 && Math.abs(expense.get(i)) > Math.abs(maxpositive)){
+                                    positivepos = i;
+                                    maxpositive = expense.get(i);
+                                }
+                            }
+                            if (maxpositive == 0f) break;        // All transactions evaluated !
+
+
+                            // Find the most negative number:
+                            Float maxnegitive = 0f;
+                            for(int i = 0; i < expense.size(); i++){
+                                if(expense.get(i) < 0 && Math.abs(expense.get(i)) > Math.abs(maxnegitive)){
+                                    negativepos = i;
+                                    maxnegitive = expense.get(i);
+                                }
+                            }
+                            if (maxnegitive == 0f) break;        // All transactions evaluated !
+
+                            // Find if pos greater or neg:
+                            if (Math.abs(maxpositive) == Math.abs(maxnegitive)){
+                                HashMap<String, String> temp = new HashMap<>();
+                                temp.put(C.TRANSACTION_FROM_ID, users_IDs.get(positivepos).get("number"));
+                                temp.put(C.TRANSACTION_FROM, users_IDs.get(positivepos).get("name"));
+                                temp.put(C.TRANSACTION_TO_ID, users_IDs.get(negativepos).get("number"));
+                                temp.put(C.TRANSACTION_TO, users_IDs.get(negativepos).get("name"));
+                                temp.put(C.TRANSACTION_AMOUNT, Float.toString(Math.abs(maxnegitive)));
+                                transactions.add(temp);
+                                expense.set(positivepos, 0f);
+                                expense.set(negativepos, 0f);
+                            }
+                            else if (Math.abs(maxpositive) > Math.abs(maxnegitive)){
+                                HashMap<String, String> temp = new HashMap<>();
+                                temp.put(C.TRANSACTION_FROM_ID, users_IDs.get(positivepos).get("number"));
+                                temp.put(C.TRANSACTION_FROM, users_IDs.get(positivepos).get("name"));
+                                temp.put(C.TRANSACTION_TO_ID, users_IDs.get(negativepos).get("number"));
+                                temp.put(C.TRANSACTION_TO, users_IDs.get(negativepos).get("name"));
+                                Float amount = Math.abs(maxnegitive);
+                                temp.put(C.TRANSACTION_AMOUNT, Float.toString(amount));
+                                transactions.add(temp);
+                                expense.set(positivepos, maxnegitive + maxpositive);
+                                expense.set(negativepos, 0f);
+                            }
+                            else {
+                                HashMap<String, String> temp = new HashMap<>();
+                                temp.put(C.TRANSACTION_FROM_ID, users_IDs.get(positivepos).get("number"));
+                                temp.put(C.TRANSACTION_FROM, users_IDs.get(positivepos).get("name"));
+                                temp.put(C.TRANSACTION_TO_ID, users_IDs.get(negativepos).get("number"));
+                                temp.put(C.TRANSACTION_TO, users_IDs.get(negativepos).get("name"));
+                                Float amount = Math.abs(maxpositive);
+                                temp.put(C.TRANSACTION_AMOUNT, Float.toString(amount));
+                                transactions.add(temp);
+                                expense.set(positivepos, 0f);
+                                expense.set(negativepos, maxnegitive + maxpositive);
+                            }
+
+                        }
+
+                        // Get the name/id set:
+                        for(int i = 1; i < users_without_custom.size(); i++){
+                            HashMap<String, String> temp = new HashMap<>();
+                            temp.put("name", users_without_custom.get(i));
+                            temp.put("number", users_IDs.get(i-1).get("number"));
+                        }
+                        break;
+                    }
+                    case 1:{
+                        System.out.println("SIZE1: " + (users_without_custom.size() == splittersexact.size()));
+
+                        // Create the tables
+                        ArrayList<Float> payed = new ArrayList<>();
+                        ArrayList<Float> expense = new ArrayList<>();
+                        for(int i = 0; i < users_without_custom.size(); i++){
+                            payed.add(payers.get(users_without_custom.get(i)));                 // Get the list of payed amounts
+                            expense.add(Float.parseFloat(splittersexact.get(i).get("amount")) - payers.get(users_without_custom.get(i))); // Get the list of expenses
+                        }
+
+                        // Find the transactions
+                        while(true){
+
+                            // Vars to store positions:
+                            int positivepos = 0, negativepos = 0;
+
+                            // Find the most positive number:
+                            Float maxpositive = 0f;
+                            for(int i = 0; i < expense.size(); i++){
+                                if(expense.get(i) > 0 && Math.abs(expense.get(i)) > Math.abs(maxpositive)){
+                                    positivepos = i;
+                                    maxpositive = expense.get(i);
+                                }
+                            }
+                            if (maxpositive == 0f) break;        // All transactions evaluated !
+
+
+                            // Find the most negative number:
+                            Float maxnegitive = 0f;
+                            for(int i = 0; i < expense.size(); i++){
+                                if(expense.get(i) < 0 && Math.abs(expense.get(i)) > Math.abs(maxnegitive)){
+                                    negativepos = i;
+                                    maxnegitive = expense.get(i);
+                                }
+                            }
+                            if (maxnegitive == 0f) break;        // All transactions evaluated !
+
+                            // Find if pos greater or neg:
+                            if (Math.abs(maxpositive) == Math.abs(maxnegitive)){
+                                HashMap<String, String> temp = new HashMap<>();
+                                temp.put(C.TRANSACTION_FROM_ID, users_IDs.get(positivepos).get("number"));
+                                temp.put(C.TRANSACTION_FROM, users_IDs.get(positivepos).get("name"));
+                                temp.put(C.TRANSACTION_TO_ID, users_IDs.get(negativepos).get("number"));
+                                temp.put(C.TRANSACTION_TO, users_IDs.get(negativepos).get("name"));
+                                temp.put(C.TRANSACTION_AMOUNT, Float.toString(Math.abs(maxnegitive)));
+                                transactions.add(temp);
+                                expense.set(positivepos, 0f);
+                                expense.set(negativepos, 0f);
+                            }
+                            else if (Math.abs(maxpositive) > Math.abs(maxnegitive)){
+                                HashMap<String, String> temp = new HashMap<>();
+                                temp.put(C.TRANSACTION_FROM_ID, users_IDs.get(positivepos).get("number"));
+                                temp.put(C.TRANSACTION_FROM, users_IDs.get(positivepos).get("name"));
+                                temp.put(C.TRANSACTION_TO_ID, users_IDs.get(negativepos).get("number"));
+                                temp.put(C.TRANSACTION_TO, users_IDs.get(negativepos).get("name"));
+                                Float amount = Math.abs(maxnegitive);
+                                temp.put(C.TRANSACTION_AMOUNT, Float.toString(amount));
+                                transactions.add(temp);
+                                expense.set(positivepos, maxnegitive + maxpositive);
+                                expense.set(negativepos, 0f);
+                            }
+                            else {
+                                HashMap<String, String> temp = new HashMap<>();
+                                temp.put(C.TRANSACTION_FROM_ID, users_IDs.get(positivepos).get("number"));
+                                temp.put(C.TRANSACTION_FROM, users_IDs.get(positivepos).get("name"));
+                                temp.put(C.TRANSACTION_TO_ID, users_IDs.get(negativepos).get("number"));
+                                temp.put(C.TRANSACTION_TO, users_IDs.get(negativepos).get("name"));
+                                Float amount = Math.abs(maxpositive);
+                                temp.put(C.TRANSACTION_AMOUNT, Float.toString(amount));
+                                transactions.add(temp);
+                                expense.set(positivepos, 0f);
+                                expense.set(negativepos, maxnegitive + maxpositive);
+                            }
+
+                        }
+
+                        // Get the name/id set:
+                        for(int i = 1; i < users_without_custom.size(); i++){
+                            HashMap<String, String> temp = new HashMap<>();
+                            temp.put("name", users_without_custom.get(i));
+                            temp.put("number", users_IDs.get(i-1).get("number"));
+                        }
+                        break;
+                    }
+                    case 2:{
+                        System.out.println("SIZE2: " + (users_without_custom.size() == splitterspercent.size()));
+
+                        // Create the tables
+                        ArrayList<Float> payed = new ArrayList<>();
+                        ArrayList<Float> expense = new ArrayList<>();
+                        for(int i = 0; i < users_without_custom.size(); i++){
+                            payed.add(payers.get(users_without_custom.get(i)));                 // Get the list of payed amounts
+                            expense.add(Float.parseFloat(splitterspercent.get(i).get("amount")) - payers.get(users_without_custom.get(i))); // Get the list of expenses
+                        }
+
+                        // Find the transactions
+                        while(true){
+
+                            // Vars to store positions:
+                            int positivepos = 0, negativepos = 0;
+
+                            // Find the most positive number:
+                            Float maxpositive = 0f;
+                            for(int i = 0; i < expense.size(); i++){
+                                if(expense.get(i) > 0 && Math.abs(expense.get(i)) > Math.abs(maxpositive)){
+                                    positivepos = i;
+                                    maxpositive = expense.get(i);
+                                }
+                            }
+                            if (maxpositive == 0f) break;        // All transactions evaluated !
+
+
+                            // Find the most negative number:
+                            Float maxnegitive = 0f;
+                            for(int i = 0; i < expense.size(); i++){
+                                if(expense.get(i) < 0 && Math.abs(expense.get(i)) > Math.abs(maxnegitive)){
+                                    negativepos = i;
+                                    maxnegitive = expense.get(i);
+                                }
+                            }
+                            if (maxnegitive == 0f) break;        // All transactions evaluated !
+
+                            // Find if pos greater or neg:
+                            if (Math.abs(maxpositive) == Math.abs(maxnegitive)){
+                                HashMap<String, String> temp = new HashMap<>();
+                                temp.put(C.TRANSACTION_FROM_ID, users_IDs.get(positivepos).get("number"));
+                                temp.put(C.TRANSACTION_FROM, users_IDs.get(positivepos).get("name"));
+                                temp.put(C.TRANSACTION_TO_ID, users_IDs.get(negativepos).get("number"));
+                                temp.put(C.TRANSACTION_TO, users_IDs.get(negativepos).get("name"));
+                                temp.put(C.TRANSACTION_AMOUNT, Float.toString(Math.abs(maxnegitive)));
+                                transactions.add(temp);
+                                expense.set(positivepos, 0f);
+                                expense.set(negativepos, 0f);
+                            }
+                            else if (Math.abs(maxpositive) > Math.abs(maxnegitive)){
+                                HashMap<String, String> temp = new HashMap<>();
+                                temp.put(C.TRANSACTION_FROM_ID, users_IDs.get(positivepos).get("number"));
+                                temp.put(C.TRANSACTION_FROM, users_IDs.get(positivepos).get("name"));
+                                temp.put(C.TRANSACTION_TO_ID, users_IDs.get(negativepos).get("number"));
+                                temp.put(C.TRANSACTION_TO, users_IDs.get(negativepos).get("name"));
+                                Float amount = Math.abs(maxnegitive);
+                                temp.put(C.TRANSACTION_AMOUNT, Float.toString(amount));
+                                transactions.add(temp);
+                                expense.set(positivepos, maxnegitive + maxpositive);
+                                expense.set(negativepos, 0f);
+                            }
+                            else {
+                                HashMap<String, String> temp = new HashMap<>();
+                                temp.put(C.TRANSACTION_FROM_ID, users_IDs.get(positivepos).get("number"));
+                                temp.put(C.TRANSACTION_FROM, users_IDs.get(positivepos).get("name"));
+                                temp.put(C.TRANSACTION_TO_ID, users_IDs.get(negativepos).get("number"));
+                                temp.put(C.TRANSACTION_TO, users_IDs.get(negativepos).get("name"));
+                                Float amount = Math.abs(maxpositive);
+                                temp.put(C.TRANSACTION_AMOUNT, Float.toString(amount));
+                                transactions.add(temp);
+                                expense.set(positivepos, 0f);
+                                expense.set(negativepos, maxnegitive + maxpositive);
+                            }
+
+                        }
+
+                        // Get the name/id set:
+                        for(int i = 1; i < users_without_custom.size(); i++){
+                            HashMap<String, String> temp = new HashMap<>();
+                            temp.put("name", users_without_custom.get(i));
+                            temp.put("number", users_IDs.get(i-1).get("number"));
+                        }
+                        break;
+                    }
+                }
+
+                for(int i = 0;i < transactions.size(); i++){
+                    HashMap<String, String> temp = transactions.get(i);
+                    System.out.println("from: " + temp.get(C.TRANSACTION_FROM_ID));
+                    System.out.println("to: " + temp.get(C.TRANSACTION_TO_ID));
+                    System.out.println("amount: " + temp.get(C.TRANSACTION_AMOUNT));
+                    System.out.println("---------------------------------------------------");
+                }
+//                finish();
+            }
+        }
+        return true;
     }
 
 }
