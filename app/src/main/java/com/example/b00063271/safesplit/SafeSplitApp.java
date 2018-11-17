@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class SafeSplitApp extends Application {
@@ -52,6 +53,10 @@ public class SafeSplitApp extends Application {
         @Override
         protected void onPostExecute(String result){
             Collections.sort(contactData, new MapComparator("name"));
+            for(int i = 0; i < contactData.size(); i++){
+                System.out.print("Name: " + contactData.get(i).get("name"));
+                System.out.println("Phone: " + contactData.get(i).get("number"));
+            }
         }
     }
 

@@ -136,6 +136,9 @@ public class MainFragment extends Fragment {
         public Fragment getItem(int position) {
             return mFragmentList.get(position);
         }
+        public Fragment getFragItem(int position) {
+            return mFragmentList.get(position);
+        }
         @Override
         public int getCount() {
             return mFragmentList.size();

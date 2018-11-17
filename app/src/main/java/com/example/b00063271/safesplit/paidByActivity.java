@@ -3,13 +3,18 @@ package com.example.b00063271.safesplit;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import static com.example.b00063271.safesplit.AddBill.UpdateView;
 import static com.example.b00063271.safesplit.AddBill.amount;
