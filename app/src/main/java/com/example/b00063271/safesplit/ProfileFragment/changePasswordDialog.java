@@ -11,9 +11,11 @@ import android.widget.Toast;
 import com.example.b00063271.safesplit.Database.ActivityDB;
 import com.example.b00063271.safesplit.Database.C;
 import com.example.b00063271.safesplit.Database.UserDB;
+import com.example.b00063271.safesplit.Entities.Activities;
 import com.example.b00063271.safesplit.R;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -28,7 +30,7 @@ public class changePasswordDialog extends Activity implements View.OnClickListen
     private ActivityDB activityDB;
     private final ActivityDB.OnDatabaseInteractionListener mListener2=new ActivityDB.OnDatabaseInteractionListener() {
         @Override
-        public void onDatabaseInteration(int requestCode, boolean isConnected) {
+        public void onDatabaseInteration(int requestCode, boolean isConnected, ArrayList<Activities> a) {
             switch (requestCode){
                 case C.CALLBACK_CHANGED_CONNECTION:
                     if(isConnected) doneButton.setEnabled(true);

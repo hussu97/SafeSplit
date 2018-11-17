@@ -189,15 +189,15 @@ public class SplitActivity extends AppCompatActivity implements splitpercent.OnF
                 int pageid = viewPager.getCurrentItem();
                 switch (pageid){
                     case 0:{
-                        equal.submit();
+                        //equal.submit();
                         break;
                     }
                     case 1:{
-                        exact.submit();
+                        //exact.submit();
                         break;
                     }
                     case 2:{
-                        percent.submit();
+                        //percent.submit();
                         break;
                     }
                 }

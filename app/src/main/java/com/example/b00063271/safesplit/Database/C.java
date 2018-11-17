@@ -41,4 +41,5 @@ public class C {
     public static final int CALLBACK_CREATE_TRANSACTION = 40;
     public static final int CALLBACK_CHANGED_CONNECTION = 42;
     public static final int CALLBACK_DELETE_TRANSACTION = 41;
+    public static final int CALLBACK_GET_ACTIVITIES = 43;
 }

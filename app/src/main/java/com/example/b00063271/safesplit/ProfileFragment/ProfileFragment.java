@@ -15,10 +15,14 @@ import android.widget.TextView;
 import com.example.b00063271.safesplit.Database.ActivityDB;
 import com.example.b00063271.safesplit.Database.C;
 import com.example.b00063271.safesplit.Database.UserDB;
+import com.example.b00063271.safesplit.Entities.Activities;
 import com.example.b00063271.safesplit.R;
 import com.example.b00063271.safesplit.SignInActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.ArrayList;
+
 import androidx.fragment.app.Fragment;
 
 public class ProfileFragment extends Fragment implements View.OnClickListener {
@@ -37,7 +41,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private ActivityDB activityDB;
     private ActivityDB.OnDatabaseInteractionListener mDBListener2 = new ActivityDB.OnDatabaseInteractionListener() {
         @Override
-        public void onDatabaseInteration(int requestCode, boolean isConnected) {
+        public void onDatabaseInteration(int requestCode, boolean isConnected, ArrayList<Activities> a) {
             switch (requestCode){
                 case C.CALLBACK_CHANGED_CONNECTION:
                     if(isConnected){
