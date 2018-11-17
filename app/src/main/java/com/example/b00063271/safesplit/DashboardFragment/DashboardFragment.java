@@ -43,7 +43,7 @@ public class DashboardFragment extends Fragment {
     private ActivityDB activityDB;
     private final ActivityDB.OnDatabaseInteractionListener mDBListener=new ActivityDB.OnDatabaseInteractionListener() {
         @Override
-        public void onDatabaseInteration(int requestCode, boolean isConnected, ArrayList<Activities> a) {
+        public void onDatabaseInteration(int requestCode, boolean isConnected, ArrayList<Activities> a, Activities b) {
             switch (requestCode){
                 case C.CALLBACK_GET_ACTIVITIES:
                     updateList(a);

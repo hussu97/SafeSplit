@@ -16,6 +16,7 @@ import com.example.b00063271.safesplit.Database.ActivityDB;
 import com.example.b00063271.safesplit.Database.C;
 import com.example.b00063271.safesplit.Database.UserDB;
 import com.example.b00063271.safesplit.Entities.Activities;
+import com.example.b00063271.safesplit.NotificationService;
 import com.example.b00063271.safesplit.R;
 import com.example.b00063271.safesplit.SignInActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,7 +42,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private ActivityDB activityDB;
     private ActivityDB.OnDatabaseInteractionListener mDBListener2 = new ActivityDB.OnDatabaseInteractionListener() {
         @Override
-        public void onDatabaseInteration(int requestCode, boolean isConnected, ArrayList<Activities> a) {
+        public void onDatabaseInteration(int requestCode, boolean isConnected, ArrayList<Activities> param1, Activities param2) {
             switch (requestCode){
                 case C.CALLBACK_CHANGED_CONNECTION:
                     if(isConnected){
@@ -156,6 +157,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 mAuth.signOut();
                 Intent intent2 = new Intent(getActivity(),SignInActivity.class);
                 intent2.putExtra(C.USERS_MOBILE,userMobile);
+                getActivity().stopService(new Intent(getContext(),NotificationService.class));
                 startActivity(intent2);
                 break;
 

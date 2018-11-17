@@ -1,5 +1,6 @@
 package com.example.b00063271.safesplit;
 
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +12,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 
 import com.example.b00063271.safesplit.DashboardFragment.DashboardFragment;
 import com.example.b00063271.safesplit.Database.C;
@@ -39,7 +39,6 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
-    private ListView listView;
     private FloatingActionButton floatingActionButton;
     private final String TAG="HSActivity";
     private String userMobile;
@@ -58,7 +57,6 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
         userMobile = intent.getStringExtra(C.USERS_MOBILE);
         userName = intent.getStringExtra(C.USERS_NAME);
         fragmentManager = getSupportFragmentManager();
-        listView = (ListView)findViewById(R.id.money_owed_listview);
         floatingActionButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
         floatingActionButton.setOnClickListener(this);
         openFragment(MainFragment.newInstance(userMobile,userName));
@@ -68,10 +66,25 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
         sharedPreferences = getSharedPreferences(C.LOCAL_FILE_NAME,MODE_PRIVATE);
         registerReceiver(broadcastReceiver, new IntentFilter(C.NO_INTERNET_BROADCAST));
         registerReceiver(broadcastReceiver2, new IntentFilter(C.INTERNET_BROADCAST));
-        startService(new Intent(this,NotificationService.class));
+        if(!isMyServiceRunning(NotificationService.class)){
+            Intent serviceIntent = new Intent(this,NotificationService.class);
+            serviceIntent.putExtra(C.USERS_MOBILE,userMobile);
+            startService(serviceIntent);
+        } else Log.d(TAG, "onCreate: Service running");
+        
         internetSnackbar = null;
     }
 
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -105,7 +118,6 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {

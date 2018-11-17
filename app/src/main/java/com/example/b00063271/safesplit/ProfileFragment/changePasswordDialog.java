@@ -30,7 +30,7 @@ public class changePasswordDialog extends Activity implements View.OnClickListen
     private ActivityDB activityDB;
     private final ActivityDB.OnDatabaseInteractionListener mListener2=new ActivityDB.OnDatabaseInteractionListener() {
         @Override
-        public void onDatabaseInteration(int requestCode, boolean isConnected, ArrayList<Activities> a) {
+        public void onDatabaseInteration(int requestCode, boolean isConnected, ArrayList<Activities> a, Activities b) {
             switch (requestCode){
                 case C.CALLBACK_CHANGED_CONNECTION:
                     if(isConnected) doneButton.setEnabled(true);

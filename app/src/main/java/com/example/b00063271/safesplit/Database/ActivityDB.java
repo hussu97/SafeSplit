@@ -1,6 +1,4 @@
 package com.example.b00063271.safesplit.Database;
-
-import android.media.MediaDrm;
 import android.util.Log;
 
 import com.example.b00063271.safesplit.Entities.Activities;
@@ -59,6 +57,11 @@ public class ActivityDB {
                                 case C.ACTIVITY_TYPE_UPDATE_PROFILE:
                                     a.setActivityType(R.drawable.update);
                                     break;
+                                case C.ACTIVITY_TYPE_NEW_BILL:
+                                    a.setActivityType(R.drawable.add_bill_dashboard);
+                                    break;
+                                case C.ACTIVITY_TYPE_NEW_TRANSACTION:
+                                    a.setActivityType(R.drawable.owe_dashboard);
                                 default:
                                     Log.d(TAG, "onEvent: Type not found");
                             }
@@ -86,6 +89,11 @@ public class ActivityDB {
                                  case C.ACTIVITY_TYPE_UPDATE_PROFILE:
                                      a.setActivityType(R.drawable.update);
                                      break;
+                                 case C.ACTIVITY_TYPE_NEW_BILL:
+                                     a.setActivityType(R.drawable.add_bill_dashboard);
+                                     break;
+                                 case C.ACTIVITY_TYPE_NEW_TRANSACTION:
+                                     a.setActivityType(R.drawable.owe_dashboard);
                                  default:
                                      Log.d(TAG, "onEvent: Type not found");
                              }

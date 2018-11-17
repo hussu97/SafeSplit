@@ -3,6 +3,14 @@ package com.example.b00063271.safesplit.Database;
 public class C {
 
     public static final double round(double value){ return Math.round(value * 100.0) / 100.0; }
+    public static final String formatNumber(String number){
+        number = number.replaceAll("[^0-9]", "");
+        number = number.startsWith("971") ? number.substring(3) : number;
+        number = number.replaceFirst("^5","05");
+        number = number.replaceFirst("^6","06");
+        number = number.replaceFirst("^4","04");
+        return number;
+    }
 
     public static final String COLLECTION_TRANSACTION = "transaction";
     public static final String TRANSACTION_FROM_ID = "fromID";
@@ -19,10 +27,8 @@ public class C {
 
     public static final String COLLECTION_USERS_HISTORY = "history";
     public static final String USERS_HISTORY_ACTIVITY = "activityString";
-    public static final String USERS_HISTORY_AMOUNT = "amount";
     public static final String USERS_HISTORY_TYPE = "activityType";
     public static final String USERS_HISTORY_TIMESTAMP = "timeStamp";
-    public static final String USERS_HISTORY_TOS = "to";
 
     public static final String LOCAL_FILE_NAME = "userStuff";
     public static final String NO_INTERNET_BROADCAST = "noInternet";
@@ -32,6 +38,8 @@ public class C {
 
     public static final int ACTIVITY_TYPE_SETTLE_UP = 1030;
     public static final int ACTIVITY_TYPE_UPDATE_PROFILE = 1031;
+    public static final int ACTIVITY_TYPE_NEW_BILL = 1032;
+    public static final int ACTIVITY_TYPE_NEW_TRANSACTION= 1033;
 
     public static final int CALLBACK_GET_TRANSACTIONS = 35;
     public static final int CALLBACK_GET_USER_EMAIL = 36;

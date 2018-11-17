@@ -7,6 +7,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
+import android.util.Log;
 
 import com.example.b00063271.safesplit.Database.ActivityDB;
 import com.example.b00063271.safesplit.Database.C;
@@ -21,6 +22,7 @@ public class NotificationService extends Service {
 
     private String userMobile;
     private ActivityDB activityDB;
+    private final String TAG = "NotifService";
     private ActivityDB.OnDatabaseInteractionListener mListener = new ActivityDB.OnDatabaseInteractionListener() {
         @Override
         public void onDatabaseInteration(int requestCode, boolean isConnected, ArrayList<Activities> a,Activities b) {
@@ -30,9 +32,7 @@ public class NotificationService extends Service {
             }
         }
     };
-    public NotificationService(String userMobile) {
-        this.userMobile = userMobile;
-    }
+    public NotificationService() {    }
 
     @Override
     public void onCreate() {
@@ -46,8 +46,16 @@ public class NotificationService extends Service {
                 }
             }
         };
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        userMobile = intent.getStringExtra(C.USERS_MOBILE);
+        if(userMobile == ""|| userMobile ==null)
+            Log.d(TAG, "onStartCommand error");
         activityDB = new ActivityDB(mListener);
         activityDB.getNewActivity(userMobile);
+        return super.onStartCommand(intent, flags, startId);
     }
 
     private void createNotification(Activities a){
@@ -79,8 +87,6 @@ public class NotificationService extends Service {
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
             notificationManager.notify(notificationId, mBuilder.build());
         }
-
-
     }
 
     @Override

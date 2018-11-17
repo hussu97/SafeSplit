@@ -118,7 +118,7 @@ public class SignUpActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
-                            User user = new User(name,email,mobile,null,null);
+                            User user = new User(name,email,C.formatNumber(mobile),null,null);
                             userDB.addUser(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -158,7 +158,7 @@ public class SignUpActivity extends AppCompatActivity {
             nameEditText.setError("at least 3 characters");
             valid = false;
         } else nameEditText.setError(null);
-        if (mobile.isEmpty() || mobile.length() > 8){
+        if (mobile.isEmpty() || mobile.length() > 9 || mobile.length() < 8){
             mobileEditText.setError("invalid mobile number format");
             valid = false;
         } else mobileEditText.setError(null);

@@ -27,7 +27,7 @@ public class changeEmailDialog extends Activity implements View.OnClickListener 
     private ActivityDB activityDB;
     private final ActivityDB.OnDatabaseInteractionListener mListener2=new ActivityDB.OnDatabaseInteractionListener() {
         @Override
-        public void onDatabaseInteration(int requestCode, boolean isConnected, ArrayList<Activities> a) {
+        public void onDatabaseInteration(int requestCode, boolean isConnected, ArrayList<Activities> param1, Activities param2) {
             switch (requestCode){
                 case C.CALLBACK_CHANGED_CONNECTION:
                     if(isConnected) doneButton.setEnabled(true);
