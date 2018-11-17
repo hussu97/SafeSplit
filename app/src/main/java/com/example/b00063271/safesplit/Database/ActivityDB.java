@@ -1,5 +1,6 @@
 package com.example.b00063271.safesplit.Database;
 
+import android.media.MediaDrm;
 import android.util.Log;
 
 import com.example.b00063271.safesplit.Entities.Activities;
@@ -27,7 +28,7 @@ public class ActivityDB {
     public ActivityDB(OnDatabaseInteractionListener mListener){
         this.mListener = mListener;
         activities = new ArrayList<>();
-        if(mListener!=null) mListener.onDatabaseInteration(C.CALLBACK_CHANGED_CONNECTION,isConnected,activities);
+        if(mListener!=null) mListener.onDatabaseInteration(C.CALLBACK_CHANGED_CONNECTION,isConnected,null,null);
     }
 
     public void createActivity(String userMobile, String description, double type, Date timeStamp){
@@ -36,7 +37,7 @@ public class ActivityDB {
     public void setIsConnected(boolean value){
         isConnected = value;
         if(mListener!=null){
-            mListener.onDatabaseInteration(C.CALLBACK_CHANGED_CONNECTION,isConnected,activities);
+            mListener.onDatabaseInteration(C.CALLBACK_CHANGED_CONNECTION,isConnected,null,null);
         }
     }
 
@@ -63,12 +64,39 @@ public class ActivityDB {
                             }
                             activities.add(a);
                         }
-                        if(mListener!= null) mListener.onDatabaseInteration(C.CALLBACK_GET_ACTIVITIES,isConnected,activities);
+                        if(mListener!= null) mListener.onDatabaseInteration(C.CALLBACK_GET_ACTIVITIES,isConnected,activities, null);
                     }
                 });
     }
 
+    public void getNewActivity(String userMobile){
+        rf_u.document(userMobile).collection(C.COLLECTION_USERS_HISTORY).orderBy(C.USERS_HISTORY_TIMESTAMP,Query.Direction.DESCENDING).limit(1).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                     for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
+                         if(mListener!=null){
+                             Activities a = new Activities();
+                             a.setActivityString(doc.getString(C.USERS_HISTORY_ACTIVITY));
+                             a.setTimeStamp(doc.getDate(C.USERS_HISTORY_TIMESTAMP));
+                             int type = (int)Math.round(doc.getDouble(C.USERS_HISTORY_TYPE));
+                             switch(type){
+                                 case C.ACTIVITY_TYPE_SETTLE_UP:
+                                     a.setActivityType(R.drawable.settle_up);
+                                     break;
+                                 case C.ACTIVITY_TYPE_UPDATE_PROFILE:
+                                     a.setActivityType(R.drawable.update);
+                                     break;
+                                 default:
+                                     Log.d(TAG, "onEvent: Type not found");
+                             }
+                             mListener.onDatabaseInteration(C.CALLBACK_GET_NEW_ACTIVITY,isConnected,null,a);
+                         }
+                     }
+            }
+        });
+    }
+
     public interface OnDatabaseInteractionListener {
-        void onDatabaseInteration(int requestCode, boolean isConnected,ArrayList<Activities> a);
+        void onDatabaseInteration(int requestCode, boolean isConnected,ArrayList<Activities> a, Activities b);
     }
 }
