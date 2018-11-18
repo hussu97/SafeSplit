@@ -17,26 +17,21 @@
         <activity
             android:name=".SignInActivity"
             android:screenOrientation="portrait">
-             -->
+            -->
         </activity>
         <activity
             android:name=".SignUpActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".HomeScreenActivity"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".AddUsers"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".AddBill"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".CustomPayment"
             android:screenOrientation="portrait"
@@ -47,18 +42,27 @@
             android:theme="@android:style/Theme.DeviceDefault.Dialog" />
         <activity
             android:name=".SplitActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ProfileFragment.changeEmailDialog"
-            android:theme="@android:style/Theme.DeviceDefault.Dialog"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.DeviceDefault.Dialog" />
         <activity
             android:name=".ProfileFragment.changePasswordDialog"
-            android:theme="@android:style/Theme.DeviceDefault.Dialog"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.DeviceDefault.Dialog" />
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
+        <activity android:name=".Loading">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

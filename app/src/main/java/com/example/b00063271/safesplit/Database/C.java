@@ -3,6 +3,14 @@ package com.example.b00063271.safesplit.Database;
 public class C {
 
     public static final double round(double value){ return Math.round(value * 100.0) / 100.0; }
+    public static final String formatNumber(String number){
+        number = number.replaceAll("[^0-9]", "");
+        number = number.startsWith("971") ? number.substring(3) : number;
+        number = number.replaceFirst("^5","05");
+        number = number.replaceFirst("^6","06");
+        number = number.replaceFirst("^4","04");
+        return number;
+    }
 
     public static final String COLLECTION_TRANSACTION = "transaction";
     public static final String TRANSACTION_FROM_ID = "fromID";

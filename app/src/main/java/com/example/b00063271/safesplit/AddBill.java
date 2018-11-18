@@ -37,10 +37,12 @@ public class AddBill extends AppCompatActivity {
     static Button paidby;
     static Button split;
     static EditText amount;
+    static EditText description;
     private Boolean First = true;
 
-    // Current Sum Total
+    // Current Sum Total and Description
     static float current_amount;
+    private String description_text;
 
     // For recording users who are involved in the bill
     static ArrayList<String> users;
@@ -67,6 +69,7 @@ public class AddBill extends AppCompatActivity {
         paidby = (Button) findViewById(R.id.paidbybutton);
         split = (Button) findViewById(R.id.splitbutton);
         amount = (EditText) findViewById(R.id.amount);
+        description = (EditText) findViewById(R.id.description);
 
         // Get Users
         users = new ArrayList<String>();
@@ -96,8 +99,10 @@ public class AddBill extends AppCompatActivity {
         }
 
         //ArrayList<String> fromprev = getIntent().getStringArrayListExtra("users");
-        for(int i = 0; i < users_IDs.size(); i++)
+        for(int i = 0; i < users_IDs.size(); i++){
             users.add(users_IDs.get(i).get("name"));
+            payers.put(users_IDs.get(i).get("name"), 0f);
+        }
 
         paidby.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,6 +129,24 @@ public class AddBill extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), SplitActivity.class);
                     startActivity(intent);
                 }
+            }
+        });
+
+        description.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(description.getText().toString().isEmpty()) description_text = "";
+                else description_text = description.getText().toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
 
