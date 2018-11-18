@@ -47,7 +47,7 @@ public class AddBill extends AppCompatActivity {
 
     // Current Sum Total and Description
     static float current_amount;
-    private String description_text;
+    private String description_text = "";
 
     // For recording users who are involved in the bill
     static ArrayList<String> users;
@@ -335,12 +335,6 @@ public class AddBill extends AppCompatActivity {
 
                 }
 
-                // Get the name/id set:
-                for (int i = 1; i < users_without_custom.size(); i++) {
-                    HashMap<String, String> temp = new HashMap<>();
-                    temp.put("name", users_without_custom.get(i));
-                    temp.put("number", users_IDs.get(i - 1).get("number"));
-                }
                 break;
             }
             case 1: {
@@ -418,12 +412,6 @@ public class AddBill extends AppCompatActivity {
 
                 }
 
-                // Get the name/id set:
-                for (int i = 1; i < users_without_custom.size(); i++) {
-                    HashMap<String, String> temp = new HashMap<>();
-                    temp.put("name", users_without_custom.get(i));
-                    temp.put("number", users_IDs.get(i - 1).get("number"));
-                }
                 break;
             }
             case 2: {
@@ -501,12 +489,6 @@ public class AddBill extends AppCompatActivity {
 
                 }
 
-                // Get the name/id set:
-                for (int i = 1; i < users_without_custom.size(); i++) {
-                    HashMap<String, String> temp = new HashMap<>();
-                    temp.put("name", users_without_custom.get(i));
-                    temp.put("number", users_IDs.get(i - 1).get("number"));
-                }
                 break;
             }
         }
@@ -514,7 +496,9 @@ public class AddBill extends AppCompatActivity {
         for (int i = 0; i < transactions.size(); i++) {
             HashMap<String, String> temp = transactions.get(i);
             System.out.println("from: " + temp.get(C.TRANSACTION_FROM_ID));
+            System.out.println("from: " + temp.get(C.TRANSACTION_FROM));
             System.out.println("to: " + temp.get(C.TRANSACTION_TO_ID));
+            System.out.println("to: " + temp.get(C.TRANSACTION_TO));
             System.out.println("amount: " + temp.get(C.TRANSACTION_AMOUNT));
             System.out.println("---------------------------------------------------");
         }

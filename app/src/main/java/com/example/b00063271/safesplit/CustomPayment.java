@@ -46,12 +46,10 @@ public class CustomPayment extends AppCompatActivity {
         for (int i = 0; i < users.size(); i++){
             HashMap<String, Object> map = new HashMap<String, Object>();
             map.put("name", users.get(i));
-            if (payers.containsKey(users.get(i)) && payers.size() == 1)
+            if (payers.get(users.get(i)) == 0f)
                 map.put("amount", "");
-            else if (payers.containsKey(users.get(i)))
-                map.put("amount", payers.get(users.get(i)));
             else
-                map.put("amount", "");
+                map.put("amount", payers.get(users.get(i)));
             namedata.add(map);
             System.out.println(users.get(i) + " was added");
         }
@@ -81,7 +79,7 @@ public class CustomPayment extends AppCompatActivity {
         switch(item.getItemId()){
             case R.id.donecustompayment:{
                 Float sum = 0f;
-                payers.clear();
+                //payers.clear();
                 for (int i = 0; i < users.size(); i++){
                     View wantedView = participants.getChildAt(i);
                     EditText individual_ED = (EditText) wantedView.findViewById(R.id.payed_amount);
@@ -92,6 +90,7 @@ public class CustomPayment extends AppCompatActivity {
                         payers.put(users.get(i), individual_amount);
                         System.out.println(users.get(i) + " added to the list --------------------");
                     }
+                    else payers.put(users.get(i), 0f);
                 }
                 Float currAmount = Float.parseFloat(amount.getText().toString());
                 if (sum < currAmount){
@@ -111,7 +110,19 @@ public class CustomPayment extends AppCompatActivity {
                     }
                     System.out.println("===========================================");
                     Default_payer = false;
-                    UpdateView("Custom");
+                    int checkcustom = 0;
+                    Boolean check_custom = false;
+                    String ifnotcustom = "";
+                    for(int k = 0; k < payers.size(); k++){
+                        if(payers.get(users.get(k)) != 0f) {
+                            ifnotcustom = users.get(k);
+                            checkcustom++;
+                        }
+                        if(checkcustom>1)check_custom = true;
+                        //UpdateView("Custom");
+                    }
+                    if(check_custom) UpdateView("Custom");
+                    else UpdateView(ifnotcustom);
                     finish();
                 }
             }

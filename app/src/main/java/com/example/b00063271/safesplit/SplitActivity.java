@@ -210,7 +210,7 @@ public class SplitActivity extends AppCompatActivity implements splitpercent.OnF
                             break;
                     }
                     case 2:{
-                        if(exacttotal != 0){
+                        if(percenttotal != 0){
                             C.buildDialog(this,"Percentage not equal to 0%");
                         }
                         else{
