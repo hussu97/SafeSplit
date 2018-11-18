@@ -169,13 +169,18 @@ public class splitpercent extends Fragment {
                             each_percent_tv.set(position - 1, 0f);
                         }
                         amount_sum_value = 0f;
+
                         for(Float am:each_percent_value)
                             amount_sum_value+=am;
                         amount_sum_tv = 0f;
+
+                        amount_sum_tv = 0f;
+
                         for(Float am:each_percent_tv)
                             amount_sum_tv+=am;
                         percenttotal = 100 - amount_sum_tv;
 //                        Float percentpayed = 100*((Float)amount_sum/(Float)current_amount);
+
                         String startStr = "Percent remaining: ";
                         String mid = Double.toString(C.round(100 - amount_sum_tv));
                         String end = "%";

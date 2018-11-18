@@ -195,6 +195,7 @@ public class SplitActivity extends AppCompatActivity implements splitpercent.OnF
                         split.setText("Equally");
                         chosen = 0;
                         Default_split = false;
+                        finish();
                         break;
                     }
                     case 1:{
@@ -206,6 +207,7 @@ public class SplitActivity extends AppCompatActivity implements splitpercent.OnF
                             split.setText("Exact Amount");
                             chosen = 1;
                             Default_split = false;
+                            finish();
                         }
                             break;
                     }
@@ -218,11 +220,11 @@ public class SplitActivity extends AppCompatActivity implements splitpercent.OnF
                             split.setText("By Percent");
                             chosen = 2;
                             Default_split = false;
+                            finish();
                         }
                         break;
                     }
                 }
-                finish();
             }
         }
         return true;

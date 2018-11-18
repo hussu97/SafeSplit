@@ -28,6 +28,7 @@ import java.util.HashMap;
 import static com.example.b00063271.safesplit.AddBill.current_amount;
 import static com.example.b00063271.safesplit.AddBill.splittersequal;
 import static com.example.b00063271.safesplit.AddBill.splittersexact;
+import static com.example.b00063271.safesplit.AddBill.splitterspercent;
 import static com.example.b00063271.safesplit.SplitActivity.exacttotal;
 import static com.example.b00063271.safesplit.AddBill.users;
 import static com.example.b00063271.safesplit.AddBill.users_without_custom;
@@ -112,6 +113,11 @@ public class splitexactamounts extends Fragment {
         }
         edittexts = new ArrayList<>();
 
+        for(int i = 0; i < splittersexact.size(); i++){
+            splittersexact.get(i).put("amount", Float.toString(0f));
+        }
+
+
         //List View
         //------------------------------------------------------------------------------------------
         exactpayers = (ListView) view.findViewById(R.id.exactpayerslist);
@@ -164,8 +170,10 @@ public class splitexactamounts extends Fragment {
                             each_amount.set(position - 1, 0f);
                         }
                         amount_sum = 0f;
+
                         for(Float am:each_amount)
                             amount_sum+=am;
+
                         String start = "Amount remaining: ";
                         exacttotal = current_amount - amount_sum;
                         String mid = Double.toString(C.round(current_amount - amount_sum));
