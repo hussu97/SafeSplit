@@ -471,9 +471,9 @@ public class AddBill extends AppCompatActivity {
         }
         for(HashMap<String,String> i: transactions){
             if(i.get(C.TRANSACTION_TO)=="You")
-                transactionDB.createTransaction(i.get(C.TRANSACTION_TO),C.formatNumber(i.get(C.TRANSACTION_TO_ID)),username,C.formatNumber(i.get(C.TRANSACTION_FROM_ID)),C.round(Double.valueOf(i.get(C.TRANSACTION_AMOUNT))));
+                transactionDB.createTransaction(username,C.formatNumber(i.get(C.TRANSACTION_TO_ID)),C.formatNumber(i.get(C.TRANSACTION_FROM)),C.formatNumber(i.get(C.TRANSACTION_FROM_ID)),C.round(Double.valueOf(i.get(C.TRANSACTION_AMOUNT))));
             else if(i.get(C.TRANSACTION_FROM)=="You")
-                transactionDB.createTransaction(username,C.formatNumber(i.get(C.TRANSACTION_TO_ID)),username,C.formatNumber(i.get(C.TRANSACTION_FROM_ID)),C.round(Double.valueOf(i.get(C.TRANSACTION_AMOUNT))));
+                transactionDB.createTransaction(i.get(C.TRANSACTION_TO),C.formatNumber(i.get(C.TRANSACTION_TO_ID)),username,C.formatNumber(i.get(C.TRANSACTION_FROM_ID)),C.round(Double.valueOf(i.get(C.TRANSACTION_AMOUNT))));
             else
                 transactionDB.createTransaction(i.get(C.TRANSACTION_TO),C.formatNumber(i.get(C.TRANSACTION_TO_ID)),i.get(C.TRANSACTION_FROM),C.formatNumber(i.get(C.TRANSACTION_FROM_ID)),C.round(Double.valueOf(i.get(C.TRANSACTION_AMOUNT))));
             activityDB.createActivity(C.formatNumber(i.get(C.TRANSACTION_TO_ID)),"You are owed -"+C.TRANSACTION_AMOUNT+"- from "+i.get(C.TRANSACTION_FROM),C.ACTIVITY_TYPE_NEW_TRANSACTION,new Date());

@@ -41,6 +41,7 @@ public class AddUsers extends AppCompatActivity implements AdapterView.OnItemCli
 
     // Data Structures
     static ArrayList<String> FRIENDS;
+    static ArrayList<String> NUMBERS;
     static ArrayList<HashMap<String, String>> Friend_IDs;
     static ArrayList<HashMap<String, String>> users_IDs;
     private ListView friendslist;
@@ -68,8 +69,10 @@ public class AddUsers extends AppCompatActivity implements AdapterView.OnItemCli
         // Initializing FRIENDS
         //------------------------------------------------------------------------------------------
         FRIENDS = new ArrayList<>();
+        NUMBERS = new ArrayList<>();
         for(int i = 0; i < contactData.size(); i++){
             FRIENDS.add(contactData.get(i).get("name"));
+            NUMBERS.add(contactData.get(i).get("number"));
         }
 
         // Initializing Friend_IDs
@@ -112,16 +115,17 @@ public class AddUsers extends AppCompatActivity implements AdapterView.OnItemCli
         friendslist = (ListView) findViewById(R.id.friendslistview);
 
         ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
-        for (String friend:FRIENDS){
+        for (int i=0;i<FRIENDS.size();i++){
             HashMap<String, String> map = new HashMap<String, String>();
-            map.put("name", friend);
+            map.put("name", FRIENDS.get(i));
+            map.put("number", NUMBERS.get(i));
             data.add(map);
         }
 
 
         int resource = R.layout.contacts_list;
-        String[] from = {"name"};
-        int[] to = {R.id.titleTextView};
+        String[] from = {"name","number"};
+        int[] to = {R.id.titleTextView,R.id.numberTextView};
 
         SimpleAdapter adapter = new SimpleAdapter(this, data, resource, from, to);
         friendslist.setAdapter(adapter);

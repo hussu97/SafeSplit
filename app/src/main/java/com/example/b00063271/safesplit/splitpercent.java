@@ -7,7 +7,10 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +18,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+
+import com.example.b00063271.safesplit.Database.C;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -89,7 +94,13 @@ public class splitpercent extends Fragment {
         View view = inflater.inflate(R.layout.fragment_splitpercent, container, false);
 
         infopercent = view.findViewById(R.id.infopercent);
-        infopercent.setText("Percent remaining: 100%");
+        String startStr = "Percent remaining: ";
+        String mid = "100";
+        String end = "%";
+        String finalStr = startStr+mid+end;
+        Spannable spannable = new SpannableString(finalStr);
+        spannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorSecondary)), startStr.length(), (startStr + mid).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        infopercent.setText(spannable, TextView.BufferType.SPANNABLE);
 
         each_percent = new ArrayList<>();
         for(int i = 0; i < users_without_custom.size(); i++){
@@ -143,6 +154,13 @@ public class splitpercent extends Fragment {
                         for(Float am:each_percent)
                             amount_sum+=am;
 //                        Float percentpayed = 100*((Float)amount_sum/(Float)current_amount);
+                        String startStr = "Percent remaining: ";
+                        String mid = Double.toString(C.round(100 - amount_sum));
+                        String end = "%";
+                        String finalStr = startStr+mid+end;
+                        Spannable spannable = new SpannableString(finalStr);
+                        spannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorSecondary)), startStr.length(), (startStr + mid).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        infopercent.setText(spannable, TextView.BufferType.SPANNABLE);
                         infopercent.setText("Percent remaining: " + Float.toString(100 - amount_sum) + "%.");
                     }
 

@@ -6,6 +6,9 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -162,7 +165,13 @@ public class splitequally extends Fragment {
                             }
                             prevpos = pos;
                         }
-                        info.setText("AED" + Float.toString(amount_per_person) + "/person.");
+                        String start = "AED ";
+                        String mid = Double.toString(C.round(amount_per_person));
+                        String end = "/person";
+                        String finalStr = start+mid+end;
+                        Spannable spannable = new SpannableString(finalStr);
+                        spannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorSecondary)), start.length(), (start + mid).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        info.setText(spannable, TextView.BufferType.SPANNABLE);
                     }
                 });
 
@@ -192,7 +201,13 @@ public class splitequally extends Fragment {
 
 
         amount_per_person = (Float)current_amount/no_of_users;
-        info.setText("AED" + Float.toString(amount_per_person) + "/person.");
+        String start = "AED ";
+        String mid = Double.toString(C.round(amount_per_person));
+        String end = "/person";
+        String finalStr = start+mid+end;
+        Spannable spannable = new SpannableString(finalStr);
+        spannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorSecondary)), start.length(), (start + mid).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        info.setText(spannable, TextView.BufferType.SPANNABLE);
         for(int i = 0; i < users_without_custom.size(); i++){
             splittersequal.get(i).put("amount", Float.toString(amount_per_person));
         }

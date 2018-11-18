@@ -68,6 +68,7 @@
             android:background="@drawable/textviewborder"
             android:clickable="true"
             android:textColor="@color/colorSecondary"
+            android:fontFamily="@font/basic"
             android:padding="5dp"
             android:text="@string/paidbytv"
             android:textSize="12sp" />
@@ -93,6 +94,7 @@
             android:background="@drawable/textviewborder"
             android:textColor="@color/colorSecondary"
             android:clickable="true"
+            android:fontFamily="@font/basic"
             android:padding="5dp"
             android:text="@string/splittv"
             android:textSize="12sp" />

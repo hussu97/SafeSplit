@@ -10,6 +10,8 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,7 +26,7 @@ public class CustomPayment extends AppCompatActivity {
 
     ListView participants;
     ArrayList<String> users;
-
+    private TextView amountRemaining;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         System.out.println("1 ------------------------------------------------");
@@ -32,7 +34,7 @@ public class CustomPayment extends AppCompatActivity {
         setContentView(R.layout.activity_custom_payment);
 
         participants = (ListView) findViewById(R.id.custom_list);
-
+        amountRemaining = (TextView) findViewById(R.id.amountRemaining);
         users = getIntent().getStringArrayListExtra("users");
         users.remove(0);        // remove "custom"
 
@@ -59,14 +61,8 @@ public class CustomPayment extends AppCompatActivity {
         int[] to = {R.id.user_participant, R.id.payed_amount};
 
         SimpleAdapter adapter = new SimpleAdapter(this, namedata, resource, from, to);
+
         participants.setAdapter(adapter);
-
-
-
-
-
-
-
 
         System.out.println("1111" + users.size());
         System.out.println("2 ------------------------------------------------");
