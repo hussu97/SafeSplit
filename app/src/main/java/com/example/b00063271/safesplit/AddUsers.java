@@ -296,17 +296,22 @@ public class AddUsers extends AppCompatActivity implements AdapterView.OnItemCli
                 break;
             }
             case R.id.usernextmenu:{
-                Intent intent = new Intent(getApplicationContext(), AddBill.class);
-                if(users_IDs.size() == 0)
-                    Toast.makeText(getApplicationContext(), "Please add users!", Toast.LENGTH_SHORT).show();
-                else{
-                    startingchange = true;
-                    simpleMultiAutoCompleteTextView.setText(check());
-                    simpleMultiAutoCompleteTextView.setSelection(simpleMultiAutoCompleteTextView.getText().length());
-                    startingchange = false;
-                    intent.putExtra("users", users_IDs);
-                    intent.putExtra("payer", "You");
-                    startActivity(intent);
+                if (users_IDs.size()>1){
+                    Intent intent = new Intent(getApplicationContext(), AddBill.class);
+                    if(users_IDs.size() == 0)
+                        Toast.makeText(getApplicationContext(), "Please add users!", Toast.LENGTH_SHORT).show();
+                    else{
+                        startingchange = true;
+                        simpleMultiAutoCompleteTextView.setText(check());
+                        simpleMultiAutoCompleteTextView.setSelection(simpleMultiAutoCompleteTextView.getText().length());
+                        startingchange = false;
+                        intent.putExtra("users", users_IDs);
+                        intent.putExtra("payer", "You");
+                        startActivity(intent);
+                    }
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Please add at least 1 user!", Toast.LENGTH_SHORT).show();
                 }
                 break;
             }
