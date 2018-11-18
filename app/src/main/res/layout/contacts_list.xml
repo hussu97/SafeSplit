@@ -26,5 +26,4 @@
         android:fontFamily="@font/basic"
         android:textSize="@dimen/text_size_small"
         android:text="www" />
-
 </LinearLayout>
