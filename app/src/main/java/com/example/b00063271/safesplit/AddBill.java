@@ -183,6 +183,9 @@ public class AddBill extends AppCompatActivity {
             splittersexact.add(splitter);
             splitterspercent.add(splitter);
         }
+        for(int i = 0; i < splittersequal.size(); i++){
+            System.out.println(splittersequal.get(i).get("name") + splittersequal.get(i).get("amount") + "=============");
+        }
 
 
     }
@@ -220,6 +223,10 @@ public class AddBill extends AppCompatActivity {
                         ArrayList<Float> expense = new ArrayList<>();
                         for(int i = 0; i < users_without_custom.size(); i++){
                             payed.add(payers.get(users_without_custom.get(i)));                 // Get the list of payed amounts
+                            System.out.println("SIZE --> " + splittersequal.size());
+                            for(int j = 0; j < splittersequal.size(); j++){
+                                System.out.println("--" + splittersequal.get(i).get("name") + "--");
+                            }
                             expense.add(Float.parseFloat(splittersequal.get(i).get("amount")) - payers.get(users_without_custom.get(i))); // Get the list of expenses
                         }
 
