@@ -26,6 +26,7 @@ import static com.example.b00063271.safesplit.AddUsers.users_IDs;
 import static com.example.b00063271.safesplit.HomeScreenActivity.currentuserid;
 
 import java.lang.Math.*;
+import java.util.Map;
 
 public class AddBill extends AppCompatActivity {
 
@@ -101,7 +102,6 @@ public class AddBill extends AppCompatActivity {
         //ArrayList<String> fromprev = getIntent().getStringArrayListExtra("users");
         for(int i = 0; i < users_IDs.size(); i++){
             users.add(users_IDs.get(i).get("name"));
-            payers.put(users_IDs.get(i).get("name"), 0f);
         }
 
         paidby.setOnClickListener(new View.OnClickListener() {
@@ -174,6 +174,7 @@ public class AddBill extends AppCompatActivity {
         users_without_custom = new ArrayList<String>();
         for (int i = 1; i < users.size(); i++){
             users_without_custom.add(users.get(i));
+            payers.put(users.get(i), 0f);
         }
         for(int i = 0; i < users_without_custom.size(); i++){
             HashMap<String, String> splitter = new HashMap<>();
@@ -183,8 +184,9 @@ public class AddBill extends AppCompatActivity {
             splittersexact.add(splitter);
             splitterspercent.add(splitter);
         }
-        for(int i = 0; i < splittersequal.size(); i++){
-            System.out.println(splittersequal.get(i).get("name") + splittersequal.get(i).get("amount") + "=============");
+        System.out.println("PAYERS: ");
+        for(Map.Entry<String, Float> entry : payers.entrySet()){
+            System.out.println(entry.getKey() + " --> " + entry.getValue());
         }
 
 
@@ -221,13 +223,30 @@ public class AddBill extends AppCompatActivity {
                         // Create the tables
                         ArrayList<Float> payed = new ArrayList<>();
                         ArrayList<Float> expense = new ArrayList<>();
+
+/*                        System.out.println("PAYERS2: ");
+                        for(Map.Entry<String, Float> entry : payers.entrySet()){
+                            System.out.println(entry.getKey() + " --> " + entry.getValue());
+                        }
+                        System.out.println("PAYERS should be: ");
+                        for(int i = 0; i < users_without_custom.size(); i++){
+                            System.out.println(users_without_custom.get(i));
+                        }
+*/
+
                         for(int i = 0; i < users_without_custom.size(); i++){
                             payed.add(payers.get(users_without_custom.get(i)));                 // Get the list of payed amounts
-                            System.out.println("SIZE --> " + splittersequal.size());
+/*                            System.out.println("SIZE --> " + splittersequal.size());
                             for(int j = 0; j < splittersequal.size(); j++){
-                                System.out.println("--" + splittersequal.get(i).get("name") + "--");
-                            }
-                            expense.add(Float.parseFloat(splittersequal.get(i).get("amount")) - payers.get(users_without_custom.get(i))); // Get the list of expenses
+                                System.out.println("--" + splittersequal.get(j).get("name") + "--");
+                                System.out.println("--" + splittersequal.get(j).get("amount") + "--");
+
+                                System.out.println("~~" + payed.get(i) + "~~");
+                            }*/
+//                            System.out.println("==" + splittersequal.get(i).get("amount") + "==");
+                            Float _amount_ = Float.parseFloat(splittersequal.get(i).get("amount"));
+//                            System.out.println("AMOUNT: " + _amount_);
+                            expense.add(Float.parseFloat(splittersequal.get(i).get("amount")) - payed.get(i)); // Get the list of expenses
                         }
 
                         // Find the transactions
@@ -483,6 +502,7 @@ public class AddBill extends AppCompatActivity {
                     System.out.println("amount: " + temp.get(C.TRANSACTION_AMOUNT));
                     System.out.println("---------------------------------------------------");
                 }
+
 //                finish();
             }
         }

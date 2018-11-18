@@ -62,14 +62,14 @@ public class paidByActivity extends Activity {
                 }
                 else if (position == 1){
                     //paidby.setText("You");
-                    payers.clear();
+//                    payers.clear();
                     payers.put(users.get(position),Float.parseFloat(amount.getText().toString()));
                     UpdateView();
                     finish();
                 }
                 else{
                     //paidby.setText(users.get(position));
-                    payers.clear();
+//                    payers.clear();
                     payers.put(users.get(position),Float.parseFloat(amount.getText().toString()));
                     UpdateView();
                     finish();

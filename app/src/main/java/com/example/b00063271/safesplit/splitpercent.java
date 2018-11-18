@@ -132,7 +132,9 @@ public class splitpercent extends Fragment {
                             each_percent.set(position, 0f);
                         }
                         else if(!percent.getText().toString().isEmpty()){
-                            splittersexact.get(position).put("amount", percent.getText().toString());
+                            Float _percent_ = Float.parseFloat(percent.getText().toString());
+                            Float _amount_ = (_percent_*current_amount)/100;
+                            splittersexact.get(position).put("amount", Float.toString(_amount_));
                             each_percent.set(position, Float.parseFloat(percent.getText().toString()));
                         }
                         else {
