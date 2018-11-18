@@ -5,11 +5,24 @@
     android:layout_height="match_parent"
     tools:context=".FriendsFragment.MoneyOwedFragment">
 
+    <TextView
+        android:id="@+id/noMoneyOwedTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/basic"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="@color/positiveValue"
+        android:textAlignment="center"
+        android:padding="10dp"
+        android:layout_marginTop="@dimen/money_top_margin"
+        android:text="@string/empty_list"
+        android:visibility="gone"/>
+
     <ListView
         android:id="@+id/money_owed_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="40sp"
+        android:layout_marginTop="@dimen/money_top_margin"
         android:scrollbars="vertical"
         android:visibility="visible"
         android:padding="10dp"/>

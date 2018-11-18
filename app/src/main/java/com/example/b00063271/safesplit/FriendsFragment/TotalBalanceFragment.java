@@ -12,9 +12,11 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.b00063271.safesplit.Database.ActivityDB;
 import com.example.b00063271.safesplit.Database.C;
+import com.example.b00063271.safesplit.Database.TransactionDB;
 import com.example.b00063271.safesplit.Entities.Transactions;
 import com.example.b00063271.safesplit.R;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -29,6 +31,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,30 +43,29 @@ public class TotalBalanceFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private final String TAG = "TotalBalanceFrag";
 
-    private final String TRANSACTION_COLLECTION = "transaction";
-    private final String USERS_COLLECTION = "users";
-
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference rf_t = db.collection(TRANSACTION_COLLECTION);
-    private CollectionReference rf_u = db.collection(USERS_COLLECTION);
+    private CollectionReference rf_t = db.collection(C.COLLECTION_TRANSACTION);
 
     private String userMobile;
     private String userName;
 
     private ActivityDB activityDB;
+    private final ActivityDB.OnDatabaseInteractionListener mListener2=null;
 
-    private OnFragmentInteractionListener mListener;
+    private TransactionDB transactionDB;
+    private TotalBalanceFragment.OnFragmentInteractionListener mListener;
+    private TransactionDB.OnDatabaseInteractionListener mDBListener= new TransactionDB.OnDatabaseInteractionListener() {
+        @Override
+        public void onDatabaseInteration(int requestCode, ArrayList<Double> a, ArrayList<Double> b, ArrayList<Double> c) { }
+    };
 
-    private TabItem totalBalTabItem;
     private ListView totalBalListView;
-    private TextView totalBalAmtTextView;
-    private TextView totalBalPersonTextView;
-    private ImageButton totalBalSettleUpButton;
-    private HashMap<String,Double> balTransactions;
     private HashMap<String,Double> oweTransactions;
     private HashMap<String,String> oweTransactionsNames;
     private HashMap<String,Double> owedTransactions;
     private HashMap<String,String> owedTransactionsNames;
+    private HashMap<String,ArrayList<String>> oweTransactionsIDs;
+    private HashMap<String,ArrayList<String>> owedTransactionsIDs;
     private ArrayList<HashMap<String,String>> data;
     private SimpleAdapter simpleAdapter;
 
@@ -83,12 +85,14 @@ public class TotalBalanceFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activityDB = new ActivityDB();
-        balTransactions = new HashMap<>();
+        activityDB = new ActivityDB(mListener2);
         oweTransactions = new HashMap<>();
         oweTransactionsNames = new HashMap<>();
+        oweTransactionsIDs = new HashMap<>();
         owedTransactions = new HashMap<>();
         owedTransactionsNames = new HashMap<>();
+        owedTransactionsIDs = new HashMap<>();
+        transactionDB = new TransactionDB(mDBListener);
         data = new ArrayList<>();
         if (getArguments() != null) {
             userMobile = getArguments().getString(ARG_PARAM1);
@@ -102,11 +106,7 @@ public class TotalBalanceFragment extends Fragment {
         // Inflate the layout for this fragment
         getBalTransactions(userMobile);
         View view =  inflater.inflate(R.layout.fragment_total_balance, container, false);
-        totalBalTabItem = (TabItem) view.findViewById(R.id.total_balance_tab_item);
         totalBalListView = (ListView) view.findViewById(R.id.total_balance_list_view);
-        totalBalPersonTextView = (TextView) view.findViewById(R.id.totalBalPerson);
-        totalBalAmtTextView = (TextView) view.findViewById(R.id.totalBalAmt);
-        totalBalSettleUpButton = (ImageButton) view.findViewById(R.id.totalBalSettleUp);
         return view;
 
     }
@@ -126,13 +126,31 @@ public class TotalBalanceFragment extends Fragment {
                 map.put("amount", String.valueOf(C.round(entry.getValue())));
                 data.add(map);
             }
-        } else {
+        }
+        else if (owedTransactions.size()==0){
+            for (Map.Entry<String, Double> entry : oweTransactions.entrySet()) {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("person", oweTransactionsNames.get(entry.getKey()));
+                map.put("personID", entry.getKey());
+                map.put("amount", String.valueOf(C.round(entry.getValue())));
+                data.add(map);
+            }
+        }
+        else {
             for (Map.Entry<String, Double> entry : oweTransactions.entrySet()) {
                 HashMap<String, String> map = new HashMap<>();
                 map.put("person", oweTransactionsNames.get(entry.getKey()));
                 double owed_amount = owedTransactions.containsKey(entry.getKey()) ? owedTransactions.get(entry.getKey()) : 0;
                 map.put("personID", entry.getKey());
                 map.put("amount", String.valueOf(C.round(owed_amount-entry.getValue())));
+                data.add(map);
+            }
+            for (Map.Entry<String, Double> entry : owedTransactions.entrySet()) {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("person", owedTransactionsNames.get(entry.getKey()));
+                double owed_amount = oweTransactions.containsKey(entry.getKey()) ? oweTransactions.get(entry.getKey()) : 0;
+                map.put("personID", entry.getKey());
+                map.put("amount", String.valueOf(C.round(entry.getValue()-owed_amount)));
                 data.add(map);
             }
         }
@@ -147,6 +165,7 @@ public class TotalBalanceFragment extends Fragment {
                     public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
                         oweTransactions.clear();
                         oweTransactionsNames.clear();
+                        oweTransactionsIDs.clear();
                         Log.d(TAG, "onEvent: in snapShot getOwedTrans "+queryDocumentSnapshots.size());
                         for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
                             double amount = C.round(doc.getDouble("amount"));
@@ -155,6 +174,9 @@ public class TotalBalanceFragment extends Fragment {
                             double prev_amount = oweTransactions.containsKey(fromID) ? oweTransactions.get(fromID) : 0;
                             oweTransactions.put(fromID, C.round(prev_amount + amount));
                             oweTransactionsNames.put(fromID,from);
+                            ArrayList<String> prev_transactions = oweTransactionsIDs.containsKey(fromID) ? oweTransactionsIDs.get(fromID) : new ArrayList<String>();
+                            prev_transactions.add(doc.getId());
+                            oweTransactionsIDs.put(fromID,prev_transactions);
                         }
                         getBalTransactionDetails();
                     }
@@ -169,6 +191,7 @@ public class TotalBalanceFragment extends Fragment {
                     public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
                         owedTransactions.clear();
                         owedTransactionsNames.clear();
+                        owedTransactionsIDs.clear();
                         Log.d(TAG, "onEvent: in snapShot getOwedTrans "+queryDocumentSnapshots.size());
                         for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
                             HashMap<String,String> map=new HashMap<>();
@@ -178,6 +201,9 @@ public class TotalBalanceFragment extends Fragment {
                             double prev_amount = owedTransactions.containsKey(toID) ? owedTransactions.get(toID) : 0;
                             owedTransactions.put(toID, C.round(prev_amount + amount));
                             owedTransactionsNames.put(toID,to);
+                            ArrayList<String> prev_transactions = owedTransactionsIDs.containsKey(toID) ? owedTransactionsIDs.get(toID) : new ArrayList<String>();
+                            prev_transactions.add(doc.getId());
+                            owedTransactionsIDs.put(toID,prev_transactions);
                         }
                         getBalTransactionDetails();
                     }
@@ -187,6 +213,13 @@ public class TotalBalanceFragment extends Fragment {
         int resource = R.layout.total_bal_list;
         String[] from = {"person", "personID","amount"};
         int[] to = {R.id.totalBalPerson, R.id.totalBalPersonID,R.id.totalBalAmt};
+        try {
+            TextView empty = super.getView().findViewById(R.id.noTotalBalanceTextView);
+            if (data.size() == 0) {
+                empty.setVisibility(View.VISIBLE);
+                return;
+            } else empty.setVisibility(View.GONE);
+        } catch (NullPointerException e) { }
         // create and set the adapter
         simpleAdapter=new SimpleAdapter(getActivity(),data,resource,from,to) {
             @Override
@@ -194,7 +227,11 @@ public class TotalBalanceFragment extends Fragment {
                 View v = super.getView(position, convertView, parent);
                 ImageButton b = (ImageButton) v.findViewById(R.id.totalBalSettleUp);
                 final String person = ((TextView) v.findViewById(R.id.totalBalPerson)).getText().toString();
-                final String amt = ((TextView) v.findViewById(R.id.totalBalAmt)).getText().toString();
+                TextView amnt = (TextView)v.findViewById(R.id.totalBalAmt);
+                final String amt = amnt.getText().toString();
+                final double amount = Double.valueOf(amt);
+                if(amount >= 0) amnt.setTextColor(getResources().getColor(R.color.positiveValue));
+                else amnt.setTextColor(getResources().getColor(R.color.negativeValue));
                 final String personID = ((TextView) v.findViewById(R.id.totalBalPersonID)).getText().toString();
                 b.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -205,13 +242,18 @@ public class TotalBalanceFragment extends Fragment {
                                 .setMessage("Are you sure you want to create a transaction to settle "+amt+" with "+person)
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
-                                        double amount = Double.valueOf(amt);
+                                        try{
+                                            for(String transactionID: oweTransactionsIDs.get(personID)){ transactionDB.deleteTransaction(userMobile,transactionID); }
+                                        } catch (NullPointerException e){}
+                                        try {
+                                            for(String transactionID: owedTransactionsIDs.get(personID)){ transactionDB.deleteTransaction(userMobile,transactionID); }
+                                        } catch (NullPointerException e) {}
                                         if(amount>0){
-                                            createTransaction(person,personID,userName,userMobile,amount);
-                                            activityDB.createActivity(userMobile,"You settled your debt with "+person+" by receiving -"+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP);
+                                            activityDB.createActivity(userMobile,"You settled your debt with "+person+" by receiving -"+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP, new Date());
+                                            activityDB.createActivity(personID,"Your debt with "+userName+" has been settled by paying -"+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP, new Date());
                                         } else {
-                                            createTransaction(userName,userMobile,person,personID,-1*amount);
-                                            activityDB.createActivity(userMobile,"You settled your debt with "+person+" by paying -"+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP);
+                                            activityDB.createActivity(userMobile,"You settled your debt with "+person+" by paying "+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP, new Date());
+                                            activityDB.createActivity(personID,"Your debt with "+userName+" has been settled by receiving -"+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP, new Date());
                                         }
                                     }
                                 })
@@ -231,22 +273,7 @@ public class TotalBalanceFragment extends Fragment {
         simpleAdapter.notifyDataSetChanged();
     }
 
-    private void createTransaction(String from, String fromID, String to, String toID, double amount){
-        final DocumentReference df = rf_t.document();
-        Transactions transaction = new Transactions(from,fromID,to,toID,amount);
-        df.set(transaction).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                rf_u.document(userMobile).update("transactionIds", FieldValue.arrayUnion(df.getId()));
-            }
-        });
-    }
-
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
+    public void onButtonPressed(Uri uri) { if (mListener != null) { mListener.onFragmentInteraction(uri); } }
 
     @Override
     public void onAttach(Context context) {
@@ -265,8 +292,5 @@ public class TotalBalanceFragment extends Fragment {
         mListener = null;
     }
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
+    public interface OnFragmentInteractionListener { void onFragmentInteraction(Uri uri); }
 }

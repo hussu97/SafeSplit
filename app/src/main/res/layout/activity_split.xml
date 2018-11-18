@@ -64,16 +64,18 @@
     </RadioGroup>
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/currentpagetv"
         android:layout_width="match_parent"
-        android:layout_height="34dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:layout_weight="0"
         android:background="@color/stage3"
+        android:fontFamily="@font/basic"
         android:gravity="center_vertical"
-        android:paddingLeft="10dp"
-        android:text="TextView"
-        android:textColor="@color/stage8"
+        android:padding="5dp"
+        android:textAlignment="center"
+        android:textColor="@color/colorSecondary"
         android:textSize="20sp" />
 
     <androidx.viewpager.widget.ViewPager

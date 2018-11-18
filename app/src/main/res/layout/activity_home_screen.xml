@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
+    android:id="@+id/homeScreenContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".HomeScreenActivity">
@@ -15,21 +15,23 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:backgroundTint="@color/stage8"
         android:clickable="true"
+        android:src="@drawable/plus"
+        android:tint="@color/colorSecondary"
         app:layout_constraintBottom_toTopOf="@+id/navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.975"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/frame_container"
-        app:layout_constraintVertical_bias="0.965"
-        android:backgroundTint="@color/colorSecondary"
-        android:src="@drawable/plus"
-        android:tint="@color/stage8"/>
+        app:layout_constraintVertical_bias="0.965" />
 
     <FrameLayout
         android:id="@+id/frame_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/navigation"
+        app:layout_constraintTop_toTopOf="parent">
 
     </FrameLayout>
 
@@ -37,16 +39,16 @@
         android:id="@+id/navigation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
         android:background="@color/stage2"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        app:itemIconTint="@color/bottom_nav_bar"
+        app:itemTextColor="@color/bottom_nav_bar"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:itemTextColor="@color/bottom_nav_bar"
-        app:itemIconTint="@color/bottom_nav_bar"
-        app:menu="@menu/navigation" >
+        app:menu="@menu/navigation">
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 

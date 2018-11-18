@@ -9,36 +9,16 @@ public class User {
     private String mobile;
     private List<String> transactionIds;
     private List<String> groupIds;
-    private List<History> histories;
-
-    public User(String ID, String name, String email, String mobile, List<String> transactionIds, List<String> groupIds, List<History> histories) {
-        this.ID = ID;
-        this.name = name;
-        this.email = email;
-        this.mobile = mobile;
-        this.transactionIds = transactionIds;
-        this.groupIds = groupIds;
-        this.histories = histories;
-    }
 
     public User() {
     }
 
-    public User(String name, String email, String mobile, List<String> transactionIds, List<String> groupIds, List<History> histories) {
+    public User(String name, String email, String mobile, List<String> transactionIds, List<String> groupIds) {
         this.name = name;
         this.email = email;
         this.mobile = mobile;
         this.transactionIds = transactionIds;
         this.groupIds = groupIds;
-        this.histories = histories;
-    }
-
-    public String getID() {
-        return ID;
-    }
-
-    public void setID(String ID) {
-        this.ID = ID;
     }
 
     public String getName() {
@@ -79,13 +59,5 @@ public class User {
 
     public void setGroupIds(List<String> groupIds) {
         this.groupIds = groupIds;
-    }
-
-    public List<History> getHistories() {
-        return histories;
-    }
-
-    public void setHistories(List<History> histories) {
-        this.histories = histories;
     }
 }

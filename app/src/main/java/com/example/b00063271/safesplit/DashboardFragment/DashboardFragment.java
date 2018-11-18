@@ -1,4 +1,4 @@
-package com.example.b00063271.safesplit;
+package com.example.b00063271.safesplit.DashboardFragment;
 
 import android.content.Context;
 import android.net.Uri;
@@ -8,12 +8,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.example.b00063271.safesplit.Database.ActivityDB;
 import com.example.b00063271.safesplit.Database.C;
+import com.example.b00063271.safesplit.Entities.Activities;
+import com.example.b00063271.safesplit.Entities.NotificationText;
+import com.example.b00063271.safesplit.R;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -34,9 +40,18 @@ public class DashboardFragment extends Fragment {
 
     private String userMobile;
     private String userName;
+    private TextView noDashboard;
+    private ActivityDB activityDB;
+    private final ActivityDB.OnDatabaseInteractionListener mDBListener=new ActivityDB.OnDatabaseInteractionListener() {
+        @Override
+        public void onDatabaseInteration(int requestCode, boolean isConnected, ArrayList<Activities> a, NotificationText b) {
+            switch (requestCode){
+                case C.CALLBACK_GET_ACTIVITIES:
+                    updateList(a);
+            }
+        }
+    };
 
-    private ArrayList<String> activities;
-    private ArrayList<Integer> activityType;
     private ListView dashboardListView;
     private OnFragmentInteractionListener mListener;
 
@@ -56,8 +71,6 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activities = new ArrayList<>();
-        activityType = new ArrayList<>();
         if (getArguments() != null) {
             userMobile = getArguments().getString(ARG_PARAM1);
             userName = getArguments().getString(ARG_PARAM2);
@@ -69,36 +82,19 @@ public class DashboardFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        getDashboardActivity(userMobile);
+        activityDB = new ActivityDB(mDBListener);
+        activityDB.getActivity(userMobile);
+        noDashboard = v.findViewById(R.id.noDashboardTextView);
         dashboardListView = (ListView) v.findViewById(R.id.dashboardListView);
         return v;
     }
 
-    private void getDashboardActivity(String userMobile){
-        rf_u.document(userMobile).collection(C.COLLECTION_USERS_HISTORY)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                activities.clear();
-                activityType.clear();
-                for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
-                    activities.add(doc.getString(C.USERS_HISTORY_ACTIVITY));
-                    int type = (int)Math.round(doc.getDouble(C.USERS_HISTORY_TYPE));
-                    switch(type){
-                        case C.ACTIVITY_TYPE_SETTLE_UP:
-                            activityType.add(R.drawable.baseline_accessibility_black_18dp);
-                            break;
-                            default:
-                                Log.d(TAG, "onEvent: Type not found");
-                    }
-                }
-                updateList();
-            }
-        });
-    }
-
-    private void updateList() {
-        dashboardListView.setAdapter(new CustomAdapter(this, activities,activityType));
+    private void updateList(ArrayList<Activities> a) {
+        if(a.size()!=0) {
+            noDashboard.setVisibility(View.GONE);
+            dashboardListView.setAdapter(new CustomAdapter(this, a));
+        }
+        else noDashboard.setVisibility(View.VISIBLE);
     }
 
     public void onButtonPressed(Uri uri) {

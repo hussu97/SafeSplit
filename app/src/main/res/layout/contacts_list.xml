@@ -10,10 +10,20 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:paddingBottom="15dp"
+        android:paddingBottom="5dp"
         android:paddingTop="10dp"
         android:textColor="@color/colorSecondary"
         android:fontFamily="@font/basic"
         android:textSize="@dimen/text_size" />
 
+    <TextView
+        android:id="@+id/numberTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textColor="@color/stage5"
+        android:fontFamily="@font/basic"
+        android:textSize="@dimen/text_size_small"
+        android:text="www" />
 </LinearLayout>

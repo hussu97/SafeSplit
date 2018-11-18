@@ -30,6 +30,11 @@
     <string name="split">and split</string>
     <string name="splittv">equally</string>
 
+    <string name="empty_list">Seems pretty lonely here, Add a bill and watch the magic 😉</string>
     <string name="settle_up_button">Settle up</string>
+
+    <string name="copyright">Made with ❤ by Hussain Abbasi and Asif Towheed \n Copyright \u00A9 2018 SafeSplit Co.</string>
+    <string name="title_activity_change_email_dialog">changeEmailDialog</string>
+    <string name="loading_text">Please wait while we are retreiving contacts...</string>
 
 </resources>

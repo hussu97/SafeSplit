@@ -6,10 +6,12 @@
         android:id="@+id/userprevmenu"
         android:title="Prev"
         app:showAsAction="always"
+        android:icon="@drawable/back"
         android:iconTint="@color/colorSecondary"/>
     <item
         android:id="@+id/usernextmenu"
         android:title="Next"
         app:showAsAction="always"
+        android:icon="@drawable/next"
         android:iconTint="@color/colorSecondary"/>
 </menu>

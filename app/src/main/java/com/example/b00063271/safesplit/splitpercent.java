@@ -6,16 +6,30 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
+
+import com.example.b00063271.safesplit.Database.C;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.example.b00063271.safesplit.AddBill.current_amount;
+import static com.example.b00063271.safesplit.AddBill.splittersexact;
+import static com.example.b00063271.safesplit.AddBill.splitterspercent;
 import static com.example.b00063271.safesplit.AddBill.users;
+import static com.example.b00063271.safesplit.SplitActivity.percenttotal;
+import static com.example.b00063271.safesplit.AddBill.users_without_custom;
 
 
 /**
@@ -70,12 +84,40 @@ public class splitpercent extends Fragment {
     }
 
     static ListView percentpayers;
+    private Float amount_sum_value = 0f;
+    private Float amount_sum_tv = 0f;
+    private ArrayList<Float> each_percent_value;
+    private ArrayList<Float> each_percent_tv;
+    private TextView infopercent;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_splitpercent, container, false);
+        final View view = inflater.inflate(R.layout.fragment_splitpercent, container, false);
+
+        infopercent = view.findViewById(R.id.infopercent);
+        String startStr = "Percent remaining: ";
+        String mid = "100";
+        String end = "%";
+        String finalStr = startStr+mid+end;
+        Spannable spannable = new SpannableString(finalStr);
+        spannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorSecondary)), startStr.length(), (startStr + mid).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        infopercent.setText(spannable, TextView.BufferType.SPANNABLE);
+
+        each_percent_value = new ArrayList<>();
+        for(int i = 0; i < users_without_custom.size(); i++){
+            each_percent_value.add(0f);
+        }
+        each_percent_tv = new ArrayList<>();
+        for(int i = 0; i < users_without_custom.size(); i++){
+            each_percent_tv.add(0f);
+        }
+
+        for(int i = 0; i < splitterspercent.size(); i++){
+            splitterspercent.get(i).put("amount", Float.toString(0f));
+        }
+
 
         //List View
         //------------------------------------------------------------------------------------------
@@ -89,11 +131,73 @@ public class splitpercent extends Fragment {
         }
 
 
+
         int resource = R.layout.percentpayerslist_item;
         String[] from = {"name"};
         int[] to = {R.id.percentpayerslist_item};
 
-        SimpleAdapter adapter = new SimpleAdapter(getContext(), data, resource, from, to);
+        SimpleAdapter adapter = new SimpleAdapter(getContext(), data, resource, from, to){
+            @Override
+            public View getView(final int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+                EditText percent = (EditText) v.findViewById(R.id.percentamount);
+
+                if(position == 0) v.setVisibility(View.INVISIBLE);
+                percent.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (s.toString().equals(".")) {
+                            splitterspercent.get(position - 1).put("amount", Float.toString(0f));
+                            each_percent_value.set(position - 1, 0f);
+                            each_percent_tv.set(position - 1, 0f);
+                        }
+                        else if(!s.toString().isEmpty()){
+                            Float _percent_ = Float.parseFloat(s.toString());
+                            Float _amount_ = (_percent_*current_amount)/100;
+                            splitterspercent.get(position - 1).put("amount", Float.toString(_amount_));
+                            each_percent_value.set(position - 1, _amount_);
+                            each_percent_tv.set(position - 1, _percent_);
+                        }
+                        else {
+                            splitterspercent.get(position - 1).put("amount", Float.toString(0f));
+                            each_percent_value.set(position - 1, 0f);
+                            each_percent_tv.set(position - 1, 0f);
+                        }
+                        amount_sum_value = 0f;
+
+                        for(Float am:each_percent_value)
+                            amount_sum_value+=am;
+                        amount_sum_tv = 0f;
+
+                        amount_sum_tv = 0f;
+
+                        for(Float am:each_percent_tv)
+                            amount_sum_tv+=am;
+                        percenttotal = 100 - amount_sum_tv;
+//                        Float percentpayed = 100*((Float)amount_sum/(Float)current_amount);
+
+                        String startStr = "Percent remaining: ";
+                        String mid = Double.toString(C.round(100 - amount_sum_tv));
+                        String end = "%";
+                        String finalStr = startStr+mid+end;
+                        Spannable spannable = new SpannableString(finalStr);
+                        spannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorSecondary)), startStr.length(), (startStr + mid).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        infopercent.setText(spannable, TextView.BufferType.SPANNABLE);
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        System.out.println("helellloeleoleol");
+                    }
+                });
+                return v;
+            }
+        };
         percentpayers.setAdapter(adapter);
         //equalpayers.setOnItemClickListener(this);
         //------------------------------------------------------------------------------------------
@@ -138,4 +242,14 @@ public class splitpercent extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    public void submit(){
+        for(int i = 0; i < each_percent_value.size(); i++){
+            splitterspercent.get(i).put("amount", Float.toString(each_percent_value.get(i)));
+        }
+        for(int i = 0; i < splitterspercent.size(); i++){
+            System.out.println(splitterspercent.get(i).get("name") + " " + splitterspercent.get(i).get("amount"));
+        }
+    }
+
 }

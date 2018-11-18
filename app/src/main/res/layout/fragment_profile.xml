@@ -1,14 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileFragment">
+    tools:context=".ProfileFragment.ProfileFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="profile" />
+        android:background="@color/stage1">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="@dimen/avatar_size_w"
+            android:layout_height="@dimen/avatar_size_h"
+            android:layout_marginTop="30dp"
+            android:layout_marginHorizontal="@dimen/avatar_margin"
+            android:src="@drawable/pokemon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_marginVertical="@dimen/profile_text_margin_v"
+            android:layout_marginHorizontal="@dimen/profile_text_margin_h"
+            android:textSize="@dimen/text_size"
+            android:fontFamily="@font/basic"
+            android:text="Logged in as"
+            android:textColor="@color/colorSecondary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.502"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/userNameProfileTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/profile_text_margin_v"
+            android:layout_marginHorizontal="@dimen/profile_text_margin_h"
+            android:textSize="@dimen/text_size_large"
+            android:fontFamily="@font/basic"
+            android:textColor="@color/stage8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+        <TextView
+            android:id="@+id/userEmailProfileTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/profile_text_margin_v"
+            android:layout_marginHorizontal="@dimen/profile_text_margin_h"
+            android:textSize="@dimen/text_size"
+            android:fontFamily="@font/basic"
+            android:textColor="@color/colorSecondary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toBottomOf="@+id/userNameProfileTextView" />
+
+        <Button
+            android:id="@+id/changeEmailButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/profile_button_margin"
+            android:layout_marginTop="44dp"
+            android:layout_marginEnd="@dimen/profile_button_margin"
+            android:text="Change Email"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/userEmailProfileTextView"
+            android:textColor="@color/colorSecondary"
+            android:background="@drawable/textviewborder"/>
+
+        <Button
+            android:id="@+id/changePasscodeButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/profile_button_margin"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/profile_button_margin"
+            android:text="Change Password"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/changeEmailButton"
+            android:textColor="@color/colorSecondary"
+            android:background="@drawable/textviewborder"/>
+
+        <Button
+            android:id="@+id/signOutButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/profile_button_margin"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/profile_button_margin"
+            android:text="Sign Out"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/changePasscodeButton"
+            android:textColor="@color/colorSecondary"
+            android:background="@drawable/textviewborder"/>
+
+        <TextView
+            android:id="@+id/copyrightTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
+            android:textSize="@dimen/text_size_small"
+            android:fontFamily="@font/basic"
+            android:text="@string/copyright"
+            android:textAlignment="center"
+            android:textColor="@color/colorSecondary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

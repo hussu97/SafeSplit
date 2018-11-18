@@ -17,7 +17,8 @@
             android:paddingTop="10dp"
             android:paddingBottom="5dp"
             android:textColor="@color/stage8"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:fontFamily="@font/basic" />
 
         <EditText
             android:id="@+id/percentamount"
@@ -32,6 +33,7 @@
             android:paddingTop="10dp"
             android:paddingBottom="5dp"
             android:textAlignment="textEnd"
+            android:fontFamily="@font/basic"
             android:textColor="@color/colorSecondary"
             android:textColorHint="@color/stage3"
             android:textSize="20sp" />
@@ -46,7 +48,8 @@
             android:paddingBottom="5dp"
             android:text="%"
             android:textAlignment="center"
-            android:textColor="@color/stage8"
+            android:fontFamily="@font/basic"
+            android:textColor="@color/colorSecondary"
             android:textSize="16sp" />
 
     </TableRow>
