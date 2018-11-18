@@ -120,6 +120,7 @@ public class splitpercent extends Fragment {
         }
 
 
+
         int resource = R.layout.percentpayerslist_item;
         String[] from = {"name"};
         int[] to = {R.id.percentpayerslist_item};
