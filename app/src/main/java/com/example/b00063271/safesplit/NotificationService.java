@@ -63,14 +63,15 @@ public class NotificationService extends Service {
     }
 
     private void createNotification(NotificationText a){
-        Intent intent = new Intent(this, HomeScreenActivity.class);
+        Intent intent = new Intent(this, Loading.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
         String CHANNEL_ID = "PI";
         NotificationCompat.Builder mBuilder;
+        int notificationId = a.getNotificationID().hashCode();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "SafeSplit";
-            String description = a.getNotificationText();
+            String description = "Different style of notifications";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
@@ -78,7 +79,7 @@ public class NotificationService extends Service {
             // or other notification behaviors after this
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
-        } else{
+        }
             mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
                     .setSmallIcon(R.drawable.logo)
                     .setTicker("SafeSplit activity occurred")
@@ -87,10 +88,8 @@ public class NotificationService extends Service {
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                     .setContentIntent(pendingIntent)
                     .setAutoCancel(true);
-            int notificationId = a.getNotificationID().hashCode();
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
             notificationManager.notify(notificationId, mBuilder.build());
-        }
     }
 
     @Override

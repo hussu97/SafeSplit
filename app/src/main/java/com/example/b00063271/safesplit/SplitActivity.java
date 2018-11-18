@@ -22,6 +22,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.b00063271.safesplit.Database.C;
 import com.example.b00063271.safesplit.FriendsFragment.MainFragment;
 import com.example.b00063271.safesplit.FriendsFragment.MoneyOweFragment;
 import com.example.b00063271.safesplit.FriendsFragment.MoneyOwedFragment;
@@ -198,7 +199,7 @@ public class SplitActivity extends AppCompatActivity implements splitpercent.OnF
                     }
                     case 1:{
                         if(exacttotal != 0){
-                            Toast.makeText(getApplicationContext(), "Please enter right amounts!", Toast.LENGTH_SHORT).show();
+                            C.buildDialog(this,"Amount remaining not equal to 0!");
                         }
                         else {
                             exact.submit();
@@ -210,7 +211,7 @@ public class SplitActivity extends AppCompatActivity implements splitpercent.OnF
                     }
                     case 2:{
                         if(exacttotal != 0){
-                            Toast.makeText(getApplicationContext(), "Please enter right amounts!", Toast.LENGTH_SHORT).show();
+                            C.buildDialog(this,"Percentage not equal to 0%");
                         }
                         else{
                             percent.submit();

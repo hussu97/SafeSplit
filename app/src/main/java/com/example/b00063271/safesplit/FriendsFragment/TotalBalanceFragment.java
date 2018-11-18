@@ -148,9 +148,9 @@ public class TotalBalanceFragment extends Fragment {
             for (Map.Entry<String, Double> entry : owedTransactions.entrySet()) {
                 HashMap<String, String> map = new HashMap<>();
                 map.put("person", owedTransactionsNames.get(entry.getKey()));
-                double owe_amount = oweTransactions.containsKey(entry.getKey()) ? oweTransactions.get(entry.getKey()) : 0;
+                double owed_amount = oweTransactions.containsKey(entry.getKey()) ? oweTransactions.get(entry.getKey()) : 0;
                 map.put("personID", entry.getKey());
-                map.put("amount", String.valueOf(C.round(entry.getValue()-owe_amount)));
+                map.put("amount", String.valueOf(C.round(entry.getValue()-owed_amount)));
                 data.add(map);
             }
         }
@@ -242,13 +242,13 @@ public class TotalBalanceFragment extends Fragment {
                                 .setMessage("Are you sure you want to create a transaction to settle "+amt+" with "+person)
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
+                                        try{
+                                            for(String transactionID: oweTransactionsIDs.get(personID)){ transactionDB.deleteTransaction(userMobile,transactionID); }
+                                        } catch (NullPointerException e){}
+                                        try {
+                                            for(String transactionID: owedTransactionsIDs.get(personID)){ transactionDB.deleteTransaction(userMobile,transactionID); }
+                                        } catch (NullPointerException e) {}
                                         if(amount>0){
-                                            try{
-                                                for(String transactionID: oweTransactionsIDs.get(personID)){ transactionDB.deleteTransaction(userMobile,transactionID); }
-                                            } catch (NullPointerException e){}
-                                            try {
-                                                for(String transactionID: owedTransactionsIDs.get(personID)){ transactionDB.deleteTransaction(userMobile,transactionID); }
-                                            } catch (NullPointerException e) {}
                                             activityDB.createActivity(userMobile,"You settled your debt with "+person+" by receiving -"+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP, new Date());
                                             activityDB.createActivity(personID,"Your debt with "+userName+" has been settled by paying -"+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP, new Date());
                                         } else {

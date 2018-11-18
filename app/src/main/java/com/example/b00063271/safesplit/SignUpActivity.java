@@ -96,7 +96,7 @@ public class SignUpActivity extends AppCompatActivity {
     public void signup() {
         Log.d(TAG, "Signup");
         if (!validate()) {
-            onSignupFailed();
+            onSignupFailed("Input fields not validated");
             return;
         }
         signUpButton.setEnabled(false);
@@ -122,8 +122,9 @@ public class SignUpActivity extends AppCompatActivity {
                             userDB.addUser(user);
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            SignUpActivity.this.onSignupFailed();
+                            Log.d(TAG,task.getException().getMessage());
+                            SignUpActivity.this.onSignupFailed(task.getException().getMessage());
+                            dialog.dismiss();
                         }
                     }
                 });
@@ -136,8 +137,8 @@ public class SignUpActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onSignupFailed() {
-        Snackbar snackbar = Snackbar.make((ScrollView)findViewById(R.id.signUpLayout),"Sign up failed \uD83D\uDE14",Snackbar.LENGTH_SHORT);
+    public void onSignupFailed(String message) {
+        Snackbar snackbar = Snackbar.make((ScrollView)findViewById(R.id.signUpLayout),message+" \uD83D\uDE14",Snackbar.LENGTH_SHORT);
         Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout)snackbar.getView();
         layout.setPadding(0, 0, 0, 0);
         snackbar.show();

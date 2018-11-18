@@ -183,7 +183,7 @@ public class MoneyOwedFragment extends Fragment {
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         for(String transactionID: owedTransactionsIDs.get(toID)){ transactionDB.deleteTransaction(userMobile,transactionID); }
-                                        activityDB.createActivity(userMobile,"You settled your debt with "+to+" by receiving -"+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP,new Date());
+                                        activityDB.createActivity(userMobile,"You settled your debt with "+to+" by paying -"+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP,new Date());
                                         activityDB.createActivity(toID,"Your debt with "+userName+" has been settled by receiving -"+amt+"- AED",C.ACTIVITY_TYPE_SETTLE_UP, new Date());
                                     }
                                 })
