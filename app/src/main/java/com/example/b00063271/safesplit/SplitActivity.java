@@ -36,6 +36,7 @@ import static com.example.b00063271.safesplit.AddBill.Default_split;
 import static com.example.b00063271.safesplit.AddBill.UpdateView;
 import static com.example.b00063271.safesplit.AddBill.amount;
 import static com.example.b00063271.safesplit.AddBill.chosen;
+import static com.example.b00063271.safesplit.AddBill.current_amount;
 import static com.example.b00063271.safesplit.AddBill.payers;
 import static com.example.b00063271.safesplit.AddBill.split;
 
@@ -52,13 +53,15 @@ public class SplitActivity extends AppCompatActivity implements splitpercent.OnF
     private splitexactamounts exact;
     private splitpercent percent;
 
+    static Float exacttotal = current_amount;
+    static Float percenttotal = 100f;
+
     private ViewPager viewPager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_split);
 
-        Default_split = false;
 
         rg = (RadioGroup) findViewById(R.id.rg_split);
         rbequal = (RadioButton) findViewById(R.id.radio0);
@@ -190,18 +193,31 @@ public class SplitActivity extends AppCompatActivity implements splitpercent.OnF
                         equal.submit();
                         split.setText("Equally");
                         chosen = 0;
+                        Default_split = false;
                         break;
                     }
                     case 1:{
-                        exact.submit();
-                        split.setText("Exact Amount");
-                        chosen = 1;
-                        break;
+                        if(exacttotal != 0){
+                            Toast.makeText(getApplicationContext(), "Please enter right amounts!", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            exact.submit();
+                            split.setText("Exact Amount");
+                            chosen = 1;
+                            Default_split = false;
+                        }
+                            break;
                     }
                     case 2:{
-                        percent.submit();
-                        split.setText("By Percent");
-                        chosen = 2;
+                        if(exacttotal != 0){
+                            Toast.makeText(getApplicationContext(), "Please enter right amounts!", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            percent.submit();
+                            split.setText("By Percent");
+                            chosen = 2;
+                            Default_split = false;
+                        }
                         break;
                     }
                 }
