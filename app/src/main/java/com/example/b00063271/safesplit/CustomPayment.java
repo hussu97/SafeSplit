@@ -99,6 +99,7 @@ public class CustomPayment extends AppCompatActivity {
                 else if (sum > currAmount){
                     C.buildDialog(this,"You need to remove "+ Double.valueOf(C.round(sum - currAmount))+" AED");
                 }
+
                 else{
                     Iterator itt = payers.keySet().iterator();
                     System.out.println(payers.size() + "===========================================");
