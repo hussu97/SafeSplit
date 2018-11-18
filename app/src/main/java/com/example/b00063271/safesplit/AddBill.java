@@ -42,10 +42,12 @@ public class AddBill extends AppCompatActivity {
     static Button paidby;
     static Button split;
     static EditText amount;
+    static EditText description;
     private Boolean First = true;
 
-    // Current Sum Total
+    // Current Sum Total and Description
     static float current_amount;
+    private String description_text;
 
     // For recording users who are involved in the bill
     static ArrayList<String> users;
@@ -78,6 +80,7 @@ public class AddBill extends AppCompatActivity {
         paidby = (Button) findViewById(R.id.paidbybutton);
         split = (Button) findViewById(R.id.splitbutton);
         amount = (EditText) findViewById(R.id.amount);
+        description = (EditText) findViewById(R.id.description);
 
         transactionDB = new TransactionDB(mListener);
         activityDB = new ActivityDB(mListener2);
@@ -113,6 +116,7 @@ public class AddBill extends AppCompatActivity {
         for (int i = 0; i < users_IDs.size(); i++) {
             users.add(users_IDs.get(i).get("name"));
             numbers.add(users_IDs.get(i).get("number"));
+            payers.put(users_IDs.get(i).get("name"), 0f);
         }
 
         paidby.setOnClickListener(new View.OnClickListener() {
@@ -139,6 +143,24 @@ public class AddBill extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), SplitActivity.class);
                     startActivity(intent);
                 }
+            }
+        });
+
+        description.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(description.getText().toString().isEmpty()) description_text = "";
+                else description_text = description.getText().toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
 
@@ -173,6 +195,9 @@ public class AddBill extends AppCompatActivity {
             splittersequal.add(splitter);
             splittersexact.add(splitter);
             splitterspercent.add(splitter);
+        }
+        for(int i = 0; i < splittersequal.size(); i++){
+            System.out.println(splittersequal.get(i).get("name") + splittersequal.get(i).get("amount") + "=============");
         }
 
 
@@ -229,9 +254,7 @@ public class AddBill extends AppCompatActivity {
                 for (int i = 0; i < users_without_custom.size(); i++) {
                     payed.add(payers.get(users_without_custom.get(i)));                 // Get the list of payed amounts
                     expense.add(Float.parseFloat(splittersequal.get(i).get("amount")) - payers.get(users_without_custom.get(i))); // Get the list of expenses
-                }
-
-                // Find the transactions
+                }                // Find the transactions
                 while (true) {
 
                     // Vars to store positions:
