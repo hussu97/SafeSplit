@@ -89,6 +89,9 @@ public class splitexactamounts extends Fragment {
     private ArrayList<Float> each_amount;
     private TextView infoexact;
 
+
+    private ArrayList<EditText> edittexts;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -107,13 +110,14 @@ public class splitexactamounts extends Fragment {
         for(int i = 0; i < users_without_custom.size(); i++){
             each_amount.add(0f);
         }
+        edittexts = new ArrayList<>();
 
         //List View
         //------------------------------------------------------------------------------------------
         exactpayers = (ListView) view.findViewById(R.id.exactpayerslist);
 
         ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
-        for (String user:users_without_custom){
+        for (String user:users){
             HashMap<String, String> map = new HashMap<String, String>();
             map.put("name", user);
             data.add(map);
@@ -130,6 +134,7 @@ public class splitexactamounts extends Fragment {
                 View v = super.getView(position, convertView, parent);
                 final EditText exactamount = (EditText) v.findViewById(R.id.exactamount);
 
+                if(position == 0) v.setVisibility(View.INVISIBLE);
                 exactamount.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -145,18 +150,18 @@ public class splitexactamounts extends Fragment {
                         System.out.println("---------------------------------------");
                         if (exactamount.getText().toString().equals(".")) {
                             System.out.println("111111111---------------------------------------");
-                            splittersexact.get(position).put("amount", Float.toString(0f));
-                            each_amount.set(position, 0f);
+                            splittersexact.get(position - 1).put("amount", Float.toString(0f));
+                            each_amount.set(position - 1, 0f);
                         }
                         else if(!exactamount.getText().toString().isEmpty()){
                             System.out.println("2222222222222---------------------------------------");
-                            splittersexact.get(position).put("amount", exactamount.getText().toString());
-                            each_amount.set(position, Float.parseFloat(exactamount.getText().toString()));
+                            splittersexact.get(position - 1).put("amount", exactamount.getText().toString());
+                            each_amount.set(position - 1, Float.parseFloat(exactamount.getText().toString()));
                         }
                         else {
                             System.out.println("3333333333333---------------------------------------");
-                            splittersexact.get(position).put("amount", Float.toString(0f));
-                            each_amount.set(position, 0f);
+                            splittersexact.get(position - 1).put("amount", Float.toString(0f));
+                            each_amount.set(position - 1, 0f);
                         }
                         amount_sum = 0f;
                         for(Float am:each_amount)

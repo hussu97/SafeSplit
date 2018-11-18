@@ -209,7 +209,7 @@ public class SplitActivity extends AppCompatActivity implements splitpercent.OnF
                             break;
                     }
                     case 2:{
-                        if(exacttotal != 0){
+                        if(percenttotal != 0){
                             Toast.makeText(getApplicationContext(), "Please enter right amounts!", Toast.LENGTH_SHORT).show();
                         }
                         else{
