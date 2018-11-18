@@ -24,6 +24,7 @@ public class paidByActivity extends Activity {
 
     ListView participants;
     ArrayList<String> users;
+    ArrayList<String> numbers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,20 +34,21 @@ public class paidByActivity extends Activity {
         participants = (ListView) findViewById(R.id.participants);
 
         users = getIntent().getStringArrayListExtra("users");
-
+        numbers = getIntent().getStringArrayListExtra("number");
         //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, users);
 
         ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
-        for (String user:users){
+        for (int i =0 ;i<users.size();i++){
             HashMap<String, String> map = new HashMap<String, String>();
-            map.put("name", user);
+            map.put("name", users.get(i));
+            map.put("number",numbers.get(i));
             data.add(map);
         }
 
 
         int resource = R.layout.contacts_list;
-        String[] from = {"name"};
-        int[] to = {R.id.titleTextView};
+        String[] from = {"name","number"};
+        int[] to = {R.id.titleTextView,R.id.numberTextView};
 
         SimpleAdapter adapter = new SimpleAdapter(this, data, resource, from, to);
         participants.setAdapter(adapter);

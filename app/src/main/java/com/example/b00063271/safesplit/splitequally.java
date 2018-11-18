@@ -137,8 +137,6 @@ public class splitequally extends Fragment {
                         if (cb_temp.isChecked()) {
                             no_of_users++;
 
-                            Toast.makeText(getContext(), users_without_custom.get(pos) + " Selected!", Toast.LENGTH_SHORT).show();
-
                             amount_per_person = (Float)current_amount/no_of_users;
                             splitter.put("name", users_without_custom.get(pos));
                             splitter.put("amount", Float.toString(amount_per_person));
@@ -151,7 +149,6 @@ public class splitequally extends Fragment {
                         }
                         else {
                             no_of_users--;
-                            Toast.makeText(getContext(), users_without_custom.get(pos) + " Deselected!", Toast.LENGTH_SHORT).show();
                             amount_per_person = (Float)current_amount/no_of_users;
 
 

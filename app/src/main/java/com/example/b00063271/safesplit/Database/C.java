@@ -1,5 +1,15 @@
 package com.example.b00063271.safesplit.Database;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
+
+import com.example.b00063271.safesplit.R;
+
+import java.util.Date;
+
+import androidx.appcompat.app.AlertDialog;
+
 public class C {
 
     public static final double round(double value){ return Math.round(value * 100.0) / 100.0; }
@@ -10,6 +20,19 @@ public class C {
         number = number.replaceFirst("^6","06");
         number = number.replaceFirst("^4","04");
         return number;
+    }
+
+    public static void buildDialog(Context context, String message){
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(context, R.style.myDialog);
+        builder.setTitle(C.SETTLE_UP)
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .show();
     }
 
     public static final String COLLECTION_TRANSACTION = "transaction";

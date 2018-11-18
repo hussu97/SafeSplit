@@ -10,6 +10,8 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.b00063271.safesplit.Database.C;
+
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -26,7 +28,6 @@ public class CustomPayment extends AppCompatActivity {
 
     ListView participants;
     ArrayList<String> users;
-    private TextView amountRemaining;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         System.out.println("1 ------------------------------------------------");
@@ -34,7 +35,6 @@ public class CustomPayment extends AppCompatActivity {
         setContentView(R.layout.activity_custom_payment);
 
         participants = (ListView) findViewById(R.id.custom_list);
-        amountRemaining = (TextView) findViewById(R.id.amountRemaining);
         users = getIntent().getStringArrayListExtra("users");
         users.remove(0);        // remove "custom"
 
@@ -61,7 +61,6 @@ public class CustomPayment extends AppCompatActivity {
         int[] to = {R.id.user_participant, R.id.payed_amount};
 
         SimpleAdapter adapter = new SimpleAdapter(this, namedata, resource, from, to);
-
         participants.setAdapter(adapter);
 
         System.out.println("1111" + users.size());
@@ -93,11 +92,12 @@ public class CustomPayment extends AppCompatActivity {
                         System.out.println(users.get(i) + " added to the list --------------------");
                     }
                 }
-                if (sum < Float.parseFloat(amount.getText().toString())){
-                    Toast.makeText(getApplicationContext(), "Insufficient amount entered!", Toast.LENGTH_SHORT).show();
+                Float currAmount = Float.parseFloat(amount.getText().toString());
+                if (sum < currAmount){
+                    C.buildDialog(this,"You still have "+ Double.valueOf(C.round(currAmount - sum))+" AED remaining");
                 }
-                else if (sum > Float.parseFloat(amount.getText().toString())){
-                    Toast.makeText(getApplicationContext(), "Excess amount entered!", Toast.LENGTH_SHORT).show();
+                else if (sum > currAmount){
+                    C.buildDialog(this,"You need to remove "+ Double.valueOf(C.round(sum - currAmount))+" AED");
                 }
                 else{
                     Iterator itt = payers.keySet().iterator();

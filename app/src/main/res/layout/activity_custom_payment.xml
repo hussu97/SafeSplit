@@ -25,5 +25,6 @@
         android:textSize="@dimen/text_size"
         android:textColor="@color/stage8"
         android:fontFamily="@font/basic"
-        android:text="TextView" />
+        android:text="TextView"
+        android:visibility="gone"/>
 </LinearLayout>
