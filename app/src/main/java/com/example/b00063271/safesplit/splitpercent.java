@@ -28,6 +28,7 @@ import static com.example.b00063271.safesplit.AddBill.current_amount;
 import static com.example.b00063271.safesplit.AddBill.splittersexact;
 import static com.example.b00063271.safesplit.AddBill.splitterspercent;
 import static com.example.b00063271.safesplit.AddBill.users;
+import static com.example.b00063271.safesplit.SplitActivity.percenttotal;
 import static com.example.b00063271.safesplit.AddBill.users_without_custom;
 
 
@@ -170,8 +171,9 @@ public class splitpercent extends Fragment {
                         for(Float am:each_percent_value)
                             amount_sum_value+=am;
                         amount_sum_tv = 0f;
-                        for(Float am:each_percent_value)
+                        for(Float am:each_percent_tv)
                             amount_sum_tv+=am;
+                        percenttotal = 100 - amount_sum_tv;
 //                        Float percentpayed = 100*((Float)amount_sum/(Float)current_amount);
                         String startStr = "Percent remaining: ";
                         String mid = Double.toString(C.round(100 - amount_sum_tv));
