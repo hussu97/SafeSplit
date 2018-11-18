@@ -72,6 +72,8 @@ public class SplitActivity extends AppCompatActivity implements splitpercent.OnF
         viewPager = (ViewPager)findViewById(R.id.splitOptionsViewPager);
         setupViewPager();
 
+
+
 /*
         fragment_title.setOnClickListener(new View.OnClickListener() {
             @Override
