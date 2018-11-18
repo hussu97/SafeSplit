@@ -148,19 +148,25 @@ public class splitequally extends Fragment {
                             }
                         }
                         else {
-                            no_of_users--;
-                            amount_per_person = (Float)current_amount/no_of_users;
+                            if(no_of_users>1){
+                                no_of_users--;
+                                amount_per_person = (Float)current_amount/no_of_users;
 
 
-                            for(int i = 0; i < splittersequal.size(); i++){
-                                if (splittersequal.get(i).get("name").equals(users_without_custom.get(pos)) || splittersequal.get(i).get("amount").equals("0")){
-                                    splittersequal.get(i).put("amount", "0");
+                                for(int i = 0; i < splittersequal.size(); i++){
+                                    if (splittersequal.get(i).get("name").equals(users_without_custom.get(pos)) || splittersequal.get(i).get("amount").equals("0")){
+                                        splittersequal.get(i).put("amount", "0");
+                                    }
+                                    else {
+                                        splittersequal.get(i).put("amount", Float.toString(amount_per_person));
+                                    }
                                 }
-                                else {
-                                    splittersequal.get(i).put("amount", Float.toString(amount_per_person));
-                                }
+                                prevpos = pos;
                             }
-                            prevpos = pos;
+                            else{
+                                Toast.makeText(getContext(), "One person needs to split, at least!", Toast.LENGTH_SHORT).show();
+                                cb_temp.setChecked(true);
+                            }
                         }
                         String start = "AED ";
                         String mid = Double.toString(C.round(amount_per_person));
