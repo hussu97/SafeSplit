@@ -24,7 +24,7 @@ public class Loading extends Activity {
                 } catch (Exception e) {
 
                 } finally {
-                    Intent i = new Intent(Loading.this, HomeScreenActivity.class);
+                    Intent i = new Intent(Loading.this, SignInActivity.class);
                     startActivity(i);
                     finish();
                 }

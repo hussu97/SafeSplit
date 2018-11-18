@@ -61,10 +61,6 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
         Intent intent = getIntent();
         userMobile = intent.getStringExtra(C.USERS_MOBILE);
         userName = intent.getStringExtra(C.USERS_NAME);
-        if(userMobile==null){
-            userMobile="12345";
-            userName="Hussu";
-        }
         currentuserid = userMobile;
         username = userName;
         fragmentManager = getSupportFragmentManager();
