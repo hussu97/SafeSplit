@@ -8,9 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.example.b00063271.safesplit.Database.ActivityDB;
 import com.example.b00063271.safesplit.Database.C;
 import com.example.b00063271.safesplit.Entities.Activities;
+import com.example.b00063271.safesplit.Entities.NotificationText;
 import com.example.b00063271.safesplit.R;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
@@ -37,8 +40,18 @@ public class DashboardFragment extends Fragment {
 
     private String userMobile;
     private String userName;
+    private TextView noDashboard;
+    private ActivityDB activityDB;
+    private final ActivityDB.OnDatabaseInteractionListener mDBListener=new ActivityDB.OnDatabaseInteractionListener() {
+        @Override
+        public void onDatabaseInteration(int requestCode, boolean isConnected, ArrayList<Activities> a, NotificationText b) {
+            switch (requestCode){
+                case C.CALLBACK_GET_ACTIVITIES:
+                    updateList(a);
+            }
+        }
+    };
 
-    private ArrayList<Activities> activities;
     private ListView dashboardListView;
     private OnFragmentInteractionListener mListener;
 
@@ -58,7 +71,6 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activities = new ArrayList<>();
         if (getArguments() != null) {
             userMobile = getArguments().getString(ARG_PARAM1);
             userName = getArguments().getString(ARG_PARAM2);
@@ -70,41 +82,19 @@ public class DashboardFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        getDashboardActivity(userMobile);
+        activityDB = new ActivityDB(mDBListener);
+        activityDB.getActivity(userMobile);
+        noDashboard = v.findViewById(R.id.noDashboardTextView);
         dashboardListView = (ListView) v.findViewById(R.id.dashboardListView);
         return v;
     }
 
-    private void getDashboardActivity(String userMobile){
-        rf_u.document(userMobile).collection(C.COLLECTION_USERS_HISTORY).orderBy(C.USERS_HISTORY_TIMESTAMP,Query.Direction.DESCENDING)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                activities.clear();
-                for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
-                    Activities a = new Activities();
-                    a.setActivityString(doc.getString(C.USERS_HISTORY_ACTIVITY));
-                    a.setTimeStamp(doc.getDate(C.USERS_HISTORY_TIMESTAMP));
-                    int type = (int)Math.round(doc.getDouble(C.USERS_HISTORY_TYPE));
-                    switch(type){
-                        case C.ACTIVITY_TYPE_SETTLE_UP:
-                            a.setActivityType(R.drawable.settle_up);
-                            break;
-                        case C.ACTIVITY_TYPE_UPDATE_PROFILE:
-                            a.setActivityType(R.drawable.update);
-                            break;
-                            default:
-                                Log.d(TAG, "onEvent: Type not found");
-                    }
-                    activities.add(a);
-                }
-                updateList();
-            }
-        });
-    }
-
-    private void updateList() {
-        if(activities.size()!=0) dashboardListView.setAdapter(new CustomAdapter(this, activities));
+    private void updateList(ArrayList<Activities> a) {
+        if(a.size()!=0) {
+            noDashboard.setVisibility(View.GONE);
+            dashboardListView.setAdapter(new CustomAdapter(this, a));
+        }
+        else noDashboard.setVisibility(View.VISIBLE);
     }
 
     public void onButtonPressed(Uri uri) {

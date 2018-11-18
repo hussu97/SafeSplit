@@ -6,22 +6,17 @@ public class Transactions {
     private String to;
     private String fromID;
     private String toID;
-    private String groupID;
 
     public Transactions() {
     }
 
-    public Transactions(String from, String fromID,String to,String toID,double amount, String groupID) {
+    public Transactions(String from, String fromID,String to,String toID,double amount) {
         Amount = amount;
         this.from = from;
         this.to = to;
         this.fromID = fromID;
         this.toID = toID;
     }
-
-    public String getGroupID() { return groupID; }
-
-    public void setGroupID(String groupID) { this.groupID = groupID; }
 
     public double getAmount() {
         return Amount;

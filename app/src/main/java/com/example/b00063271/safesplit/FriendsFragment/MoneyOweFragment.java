@@ -44,6 +44,7 @@ public class MoneyOweFragment extends Fragment {
     private final String TAG = "MoneyOweFrag";
 
     private ActivityDB activityDB;
+    private final ActivityDB.OnDatabaseInteractionListener mListener2=null;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference rf_t = db.collection(C.COLLECTION_TRANSACTION);
@@ -82,7 +83,7 @@ public class MoneyOweFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: Called");
-        activityDB = new ActivityDB();
+        activityDB = new ActivityDB(mListener2);
         oweTransactions = new HashMap<>();
         oweTransactionsNames = new HashMap<>();
         oweTransactions = new HashMap<>();

@@ -50,6 +50,7 @@ public class TotalBalanceFragment extends Fragment {
     private String userName;
 
     private ActivityDB activityDB;
+    private final ActivityDB.OnDatabaseInteractionListener mListener2=null;
 
     private TransactionDB transactionDB;
     private TotalBalanceFragment.OnFragmentInteractionListener mListener;
@@ -84,7 +85,7 @@ public class TotalBalanceFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activityDB = new ActivityDB();
+        activityDB = new ActivityDB(mListener2);
         oweTransactions = new HashMap<>();
         oweTransactionsNames = new HashMap<>();
         oweTransactionsIDs = new HashMap<>();

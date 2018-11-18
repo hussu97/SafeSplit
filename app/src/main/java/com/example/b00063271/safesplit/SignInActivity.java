@@ -110,14 +110,11 @@ public class SignInActivity extends AppCompatActivity {
 
     public void login() {
         Log.d(TAG, "Login");
-
         if (!validate()) {
             onLoginFailed();
             return;
         }
-
         loginButton.setEnabled(false);
-
         dialog=new ProgressDialog(this);
         dialog.setMessage("Logging In");
         dialog.setCancelable(false);

@@ -12,41 +12,51 @@
         android:layout_marginTop="5dp"
         android:layout_marginLeft="20dp">
 
-        <TextView
-            android:id="@+id/moneyOwePersonID"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"/>
+            android:orientation="vertical"
+            android:layout_weight="5">
 
-        <TextView
-            android:id="@+id/moneyOwePerson"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="5"
-            android:padding="5dp"
-            android:textSize="@dimen/text_size"
-            android:fontFamily="@font/basic"
-            android:textColor="@color/stage8"/>
+            <TextView
+                android:id="@+id/moneyOwePerson"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:fontFamily="@font/basic"
+                android:padding="5dp"
+                android:textColor="@color/stage8"
+                android:textSize="@dimen/text_size" />
+
+            <TextView
+                android:id="@+id/moneyOwePersonID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/stage4"
+                android:padding="5dp"
+                android:fontFamily="@font/basic"
+                android:textSize="@dimen/text_size_small"/>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/moneyOweAmt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:padding="5dp"
-            android:layout_gravity="center_vertical"
             android:layout_weight="2"
+            android:gravity="center"
+            android:textAlignment="center"
             android:textSize="@dimen/text_size"
             android:fontFamily="@font/basic"
-            android:textColor="@color/positiveValue"/>
+            android:textColor="@color/negativeValue"/>
 
         <ImageButton
             android:id="@+id/moneyOweSettleUp"
             android:layout_width="@dimen/settle_up_size_w"
             android:layout_height="@dimen/settle_up_size_h"
             android:adjustViewBounds="true"
-            android:padding="@dimen/settle_up_padding"
             android:scaleType="fitCenter"
+            android:padding="@dimen/settle_up_padding"
             app:srcCompat="@drawable/settle_up"
             android:tint="@color/colorSecondary"
             android:background="@drawable/textviewborder"/>

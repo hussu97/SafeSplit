@@ -5,6 +5,9 @@
         <item name="android:foreground">@color/stage8</item>
     </style>
 
+    <style name="myDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowNoTitle">true</item>
+    </style>
     <style name="MyActionBar" parent="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
         <item name="android:titleTextStyle">@style/MyTextTitle</item>
     </style>

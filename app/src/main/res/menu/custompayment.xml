@@ -5,6 +5,8 @@
     <item
         android:id="@+id/donecustompayment"
         android:title="Done"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        android:icon="@drawable/next"
+        android:iconTint="@color/colorSecondary"/>
 
 </menu>

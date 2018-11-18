@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/basic"
         android:textSize="@dimen/text_size_small"
-        android:textColor="@color/negativeValue"
+        android:textColor="@color/positiveValue"
         android:textAlignment="center"
         android:padding="10dp"
         android:layout_marginTop="@dimen/money_top_margin"

@@ -43,8 +43,6 @@ public class SplitActivity extends AppCompatActivity implements splitpercent.OnF
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
-    private String userID="xJNsNNf39VJ62aiETsiO";
-    private String username = "hussu";
     private RadioGroup rg;
     private RadioButton rbequal, rbexact, rbpercent;
     private TextView fragment_title;
@@ -63,7 +61,7 @@ public class SplitActivity extends AppCompatActivity implements splitpercent.OnF
         rbequal = (RadioButton) findViewById(R.id.radio0);
         rbexact = (RadioButton) findViewById(R.id.radio1);
         rbpercent = (RadioButton) findViewById(R.id.radio2);
-        fragment_title = (TextView) findViewById(R.id.textView3);
+        fragment_title = (TextView) findViewById(R.id.currentSplitTextView);
 
         fragmentManager = getSupportFragmentManager();
         percent = new splitpercent();
@@ -72,18 +70,8 @@ public class SplitActivity extends AppCompatActivity implements splitpercent.OnF
         viewPager = (ViewPager)findViewById(R.id.splitOptionsViewPager);
         setupViewPager();
 
-
-
-/*
-        fragment_title.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewPager.setCurrentItem(2, true);
-                rbpercent.setChecked(true);
-            }
-        });
-*/
-
+        viewPager.setCurrentItem(0, true);
+        fragment_title.setText("Equal");
 
         rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -91,14 +79,17 @@ public class SplitActivity extends AppCompatActivity implements splitpercent.OnF
                 switch (checkedId){
                     case R.id.radio0:{
                         viewPager.setCurrentItem(0, true);
+                        fragment_title.setText("Equal");
                         break;
                     }
                     case R.id.radio1:{
                         viewPager.setCurrentItem(1, true);
+                        fragment_title.setText("Exact");
                         break;
                     }
                     case R.id.radio2:{
                         viewPager.setCurrentItem(2, true);
+                        fragment_title.setText("Percent");
                         break;
                     }
                 }

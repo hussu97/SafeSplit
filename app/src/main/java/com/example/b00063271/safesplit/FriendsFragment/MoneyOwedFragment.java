@@ -47,6 +47,7 @@ public class MoneyOwedFragment extends Fragment {
     private final String TAG = "MoneyOwedFrag";
 
     private ActivityDB activityDB;
+    private final ActivityDB.OnDatabaseInteractionListener mListener2=null;
 
     private final String TRANSACTION_COLLECTION = "transaction";
     private final String USERS_COLLECTION = "users";
@@ -65,7 +66,6 @@ public class MoneyOwedFragment extends Fragment {
         public void onDatabaseInteration(int requestCode, ArrayList<Double> a, ArrayList<Double> b, ArrayList<Double> c) { }
     };
 
-    private TabItem moneyOwedTabItem;
     private ListView moneyOwedListView;
     private SimpleAdapter simpleAdapter;
     private HashMap<String,Double> owedTransactions;
@@ -89,7 +89,7 @@ public class MoneyOwedFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activityDB = new ActivityDB();
+        activityDB = new ActivityDB(mListener2);
         owedTransactions = new HashMap<>();
         owedTransactionsNames = new HashMap<>();
         owedTransactionsIDs = new HashMap<>();
@@ -108,7 +108,6 @@ public class MoneyOwedFragment extends Fragment {
         // Inflate the layout for this fragment
         getOwedTransactions(userMobile);
         View view =  inflater.inflate(R.layout.fragment_money_owed, container, false);
-        moneyOwedTabItem = (TabItem) view.findViewById(R.id.owed_tab_item);
         moneyOwedListView = (ListView) view.findViewById(R.id.money_owed_listview);
         return view;
     }
