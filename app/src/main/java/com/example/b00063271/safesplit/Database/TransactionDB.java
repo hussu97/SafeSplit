@@ -73,9 +73,9 @@ public class TransactionDB {
                     }});
     }
 
-    public void createTransaction(final String from,final String fromID,final String to,final String toID,final double amount,final String groupID){
+    public void createTransaction(final String from,final String fromID,final String to,final String toID,final double amount){
         final DocumentReference df = rf_t.document();
-        Transactions transaction = new Transactions(from,fromID,to,toID,amount, groupID);
+        Transactions transaction = new Transactions(from,fromID,to,toID,amount);
         df.set(transaction).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {

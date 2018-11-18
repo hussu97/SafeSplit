@@ -1,7 +1,9 @@
 package com.example.b00063271.safesplit.ProfileFragment;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,12 +12,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.b00063271.safesplit.Database.ActivityDB;
 import com.example.b00063271.safesplit.Database.C;
 import com.example.b00063271.safesplit.Database.UserDB;
+import com.example.b00063271.safesplit.Entities.Activities;
+import com.example.b00063271.safesplit.Entities.NotificationText;
+import com.example.b00063271.safesplit.NotificationService;
 import com.example.b00063271.safesplit.R;
 import com.example.b00063271.safesplit.SignInActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.ArrayList;
 
 import androidx.fragment.app.Fragment;
 
@@ -29,10 +37,26 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private Button changePasswordButton;
     private Button signOutButton;
 
-    private boolean emailFirst,passwordFirst;
+    private String userMobile, userName;
 
     private UserDB userDB;
-    private String userMobile, userName;
+    private ActivityDB activityDB;
+    private ActivityDB.OnDatabaseInteractionListener mDBListener2 = new ActivityDB.OnDatabaseInteractionListener() {
+        @Override
+        public void onDatabaseInteration(int requestCode, boolean isConnected, ArrayList<Activities> param1, NotificationText param2) {
+            switch (requestCode){
+                case C.CALLBACK_CHANGED_CONNECTION:
+                    if(isConnected){
+                        changeEmailButton.setEnabled(true);
+                        changePasswordButton.setEnabled(true);
+                    }
+                    else {
+                        changePasswordButton.setEnabled(false);
+                        changeEmailButton.setEnabled(false);
+                    }
+            }
+        }
+    };
     private UserDB.OnDatabaseInteractionListener mDBListener = new UserDB.OnDatabaseInteractionListener() {
         @Override
         public void onDatabaseInteration(int requestCode, String userEmail, String param2) {
@@ -46,9 +70,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
-
     private OnFragmentInteractionListener mListener;
-
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -92,9 +114,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         changeEmailButton.setOnClickListener(this);
         changePasswordButton.setOnClickListener(this);
         signOutButton.setOnClickListener(this);
-
-        emailFirst = true;
-        passwordFirst = true;
+        activityDB = new ActivityDB(mDBListener2);
         return v;
     }
 
@@ -138,6 +158,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 mAuth.signOut();
                 Intent intent2 = new Intent(getActivity(),SignInActivity.class);
                 intent2.putExtra(C.USERS_MOBILE,userMobile);
+                getActivity().stopService(new Intent(getContext(),NotificationService.class));
                 startActivity(intent2);
                 break;
 

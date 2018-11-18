@@ -7,7 +7,10 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +19,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+
+import com.example.b00063271.safesplit.Database.C;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -89,7 +94,13 @@ public class splitexactamounts extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_splitexactamounts, container, false);
         infoexact = view.findViewById(R.id.infoexact);
-        infoexact.setText("Amount remaining" + Float.toString(current_amount) + "AED");
+        String start = "Amount remaining: ";
+        String mid = Double.toString(C.round(current_amount - amount_sum));
+        String end = "AED";
+        String finalStr = start+mid+end;
+        Spannable spannable = new SpannableString(finalStr);
+        spannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorSecondary)), start.length(), (start + mid).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        infoexact.setText(spannable, TextView.BufferType.SPANNABLE);
 
         each_amount = new ArrayList<>();
         for(int i = 0; i < users_without_custom.size(); i++){
@@ -149,7 +160,13 @@ public class splitexactamounts extends Fragment {
                         amount_sum = 0f;
                         for(Float am:each_amount)
                             amount_sum+=am;
-                        infoexact.setText("Amount remaining: " + Float.toString(current_amount - amount_sum)  + "AED");
+                        String start = "Amount remaining: ";
+                        String mid = Double.toString(C.round(current_amount - amount_sum));
+                        String end = "AED";
+                        String finalStr = start+mid+end;
+                        Spannable spannable = new SpannableString(finalStr);
+                        spannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorSecondary)), start.length(), (start + mid).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        infoexact.setText(spannable, TextView.BufferType.SPANNABLE);
                     }
                 });
                 return v;
