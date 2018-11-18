@@ -20,6 +20,7 @@ import java.util.Iterator;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import static com.example.b00063271.safesplit.AddBill.Default_payer;
 import static com.example.b00063271.safesplit.AddBill.UpdateView;
 import static com.example.b00063271.safesplit.AddBill.amount;
 import static com.example.b00063271.safesplit.AddBill.payers;
@@ -109,7 +110,8 @@ public class CustomPayment extends AppCompatActivity {
                         System.out.println(payers.get(key));
                     }
                     System.out.println("===========================================");
-                    UpdateView();
+                    Default_payer = false;
+                    UpdateView("Custom");
                     finish();
                 }
             }

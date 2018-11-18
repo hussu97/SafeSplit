@@ -219,6 +219,10 @@ public class splitexactamounts extends Fragment {
 
 
     public void submit(){
+        System.out.println("+++++++++++++++++++++++");
+        for(int i = 0; i < each_amount.size(); i++){
+            splittersexact.get(i).put("amount", Float.toString(each_amount.get(i)));
+        }
         for(int i = 0; i < splittersexact.size(); i++){
             System.out.println(splittersexact.get(i).get("name") + " " + splittersexact.get(i).get("amount"));
         }

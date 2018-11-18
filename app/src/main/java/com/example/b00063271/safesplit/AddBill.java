@@ -61,6 +61,8 @@ public class AddBill extends AppCompatActivity {
     static ArrayList<HashMap<String, String>> splittersequal;
     static ArrayList<HashMap<String, String>> splittersexact;
     static ArrayList<HashMap<String, String>> splitterspercent;
+    static Boolean Default_split = true;
+    static Boolean Default_payer = true;
     static int chosen = 0;
 
     // For recording final transactions required
@@ -76,6 +78,9 @@ public class AddBill extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_bill);
+
+        Default_payer = true;
+        Default_split = true;
 
         paidby = (Button) findViewById(R.id.paidbybutton);
         split = (Button) findViewById(R.id.splitbutton);
@@ -116,7 +121,7 @@ public class AddBill extends AppCompatActivity {
         for (int i = 0; i < users_IDs.size(); i++) {
             users.add(users_IDs.get(i).get("name"));
             numbers.add(users_IDs.get(i).get("number"));
-            payers.put(users_IDs.get(i).get("name"), 0f);
+            //payers.put(users_IDs.get(i).get("name"), 0f);
         }
 
         paidby.setOnClickListener(new View.OnClickListener() {
@@ -189,6 +194,7 @@ public class AddBill extends AppCompatActivity {
             users_without_custom.add(users.get(i));
             payers.put(users.get(i), 0f);
         }
+//        payers.put("You", current_amount);
         for (int i = 0; i < users_without_custom.size(); i++) {
             HashMap<String, String> splitter = new HashMap<>();
             splitter.put("name", users_without_custom.get(i));
@@ -206,13 +212,8 @@ public class AddBill extends AppCompatActivity {
     }
 
 
-    static void UpdateView() {
-        if (payers.size() == 1) {
-            paidby.setText(payers.keySet().iterator().next());
-        } else {
-            paidby.setText("Custom");
-
-        }
+    static void UpdateView(String who) {
+        paidby.setText(who);
     }
 
 
@@ -246,6 +247,20 @@ public class AddBill extends AppCompatActivity {
     }
     private void addBill() {
         transactions.clear();
+        if(Default_split){
+            for(int i = 0; i < users_without_custom.size(); i++){
+                HashMap<String, String> splitter = new HashMap<>();
+                splitter.put("name", users_without_custom.get(i));
+                splitter.put("amount", Float.toString(current_amount/users_without_custom.size()));
+                splittersequal.set(i,splitter);
+            }
+        }
+        if(Default_payer){
+            for (int i = 1; i < users.size(); i++) {
+                if(i == 1) payers.put(users.get(i), current_amount);
+                else payers.put(users.get(i), 0f);
+            }
+        }
         switch (chosen) {
             case 0: {
                 System.out.println("SIZE0: " + (users_without_custom.size() == splittersequal.size()));

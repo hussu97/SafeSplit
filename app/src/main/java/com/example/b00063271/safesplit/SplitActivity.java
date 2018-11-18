@@ -32,6 +32,7 @@ import org.w3c.dom.Text;
 
 import java.util.Iterator;
 
+import static com.example.b00063271.safesplit.AddBill.Default_split;
 import static com.example.b00063271.safesplit.AddBill.UpdateView;
 import static com.example.b00063271.safesplit.AddBill.amount;
 import static com.example.b00063271.safesplit.AddBill.chosen;
@@ -57,11 +58,13 @@ public class SplitActivity extends AppCompatActivity implements splitpercent.OnF
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_split);
 
+        Default_split = false;
+
         rg = (RadioGroup) findViewById(R.id.rg_split);
         rbequal = (RadioButton) findViewById(R.id.radio0);
         rbexact = (RadioButton) findViewById(R.id.radio1);
         rbpercent = (RadioButton) findViewById(R.id.radio2);
-        fragment_title = (TextView) findViewById(R.id.currentSplitTextView);
+        fragment_title = (TextView) findViewById(R.id.currentpagetv);
 
         fragmentManager = getSupportFragmentManager();
         percent = new splitpercent();
