@@ -126,13 +126,31 @@ public class TotalBalanceFragment extends Fragment {
                 map.put("amount", String.valueOf(C.round(entry.getValue())));
                 data.add(map);
             }
-        } else {
+        }
+        else if (owedTransactions.size()==0){
+            for (Map.Entry<String, Double> entry : oweTransactions.entrySet()) {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("person", oweTransactionsNames.get(entry.getKey()));
+                map.put("personID", entry.getKey());
+                map.put("amount", String.valueOf(C.round(entry.getValue())));
+                data.add(map);
+            }
+        }
+        else {
             for (Map.Entry<String, Double> entry : oweTransactions.entrySet()) {
                 HashMap<String, String> map = new HashMap<>();
                 map.put("person", oweTransactionsNames.get(entry.getKey()));
                 double owed_amount = owedTransactions.containsKey(entry.getKey()) ? owedTransactions.get(entry.getKey()) : 0;
                 map.put("personID", entry.getKey());
                 map.put("amount", String.valueOf(C.round(owed_amount-entry.getValue())));
+                data.add(map);
+            }
+            for (Map.Entry<String, Double> entry : owedTransactions.entrySet()) {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("person", owedTransactionsNames.get(entry.getKey()));
+                double owe_amount = oweTransactions.containsKey(entry.getKey()) ? oweTransactions.get(entry.getKey()) : 0;
+                map.put("personID", entry.getKey());
+                map.put("amount", String.valueOf(C.round(entry.getValue()-owe_amount)));
                 data.add(map);
             }
         }
