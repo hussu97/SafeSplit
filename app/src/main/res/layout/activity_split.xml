@@ -64,15 +64,15 @@
     </RadioGroup>
 
     <TextView
-        android:id="@+id/currentSplitTextView"
+        android:id="@+id/currentpagetv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:layout_weight="0"
         android:background="@color/stage3"
-        android:gravity="center_vertical"
         android:fontFamily="@font/basic"
+        android:gravity="center_vertical"
         android:padding="5dp"
         android:textAlignment="center"
         android:textColor="@color/colorSecondary"

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import static com.example.b00063271.safesplit.AddBill.Default_payer;
 import static com.example.b00063271.safesplit.AddBill.UpdateView;
 import static com.example.b00063271.safesplit.AddBill.amount;
 import static com.example.b00063271.safesplit.AddBill.payers;
@@ -65,15 +66,17 @@ public class paidByActivity extends Activity {
                 else if (position == 1){
                     //paidby.setText("You");
 //                    payers.clear();
+                    Default_payer = false;
                     payers.put(users.get(position),Float.parseFloat(amount.getText().toString()));
-                    UpdateView();
+                    UpdateView(users.get(position));
                     finish();
                 }
                 else{
                     //paidby.setText(users.get(position));
 //                    payers.clear();
+                    Default_payer = false;
                     payers.put(users.get(position),Float.parseFloat(amount.getText().toString()));
-                    UpdateView();
+                    UpdateView(users.get(position));
                     finish();
                 }
             }
