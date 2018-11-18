@@ -51,7 +51,10 @@ public class NotificationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        userMobile = intent.getStringExtra(C.USERS_MOBILE);
+        if(intent==null)
+            userMobile = getSharedPreferences(C.LOCAL_FILE_NAME,MODE_PRIVATE).getString(C.USERS_MOBILE,"");
+        else
+            userMobile = intent.getStringExtra(C.USERS_MOBILE);
         if(userMobile == ""|| userMobile ==null)
             Log.d(TAG, "onStartCommand error");
         activityDB = new ActivityDB(mListener);
@@ -84,7 +87,7 @@ public class NotificationService extends Service {
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                     .setContentIntent(pendingIntent)
                     .setAutoCancel(true);
-            int notificationId = a.hashCode();
+            int notificationId = a.getNotificationID().hashCode();
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
             notificationManager.notify(notificationId, mBuilder.build());
         }

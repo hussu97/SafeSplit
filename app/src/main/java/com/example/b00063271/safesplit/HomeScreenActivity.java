@@ -82,7 +82,6 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
             serviceIntent.putExtra(C.USERS_MOBILE,userMobile);
             startService(serviceIntent);
         } else Log.d(TAG, "onCreate: Service running");
-        
         internetSnackbar = null;
     }
 
@@ -125,6 +124,7 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
         editor.putString(C.USERS_MOBILE,userMobile);
         editor.putString(C.USERS_NAME,userName);
         editor.commit();
+
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
