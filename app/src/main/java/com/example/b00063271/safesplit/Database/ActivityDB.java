@@ -4,7 +4,10 @@ import android.util.Log;
 import com.example.b00063271.safesplit.Entities.Activities;
 import com.example.b00063271.safesplit.Entities.NotificationText;
 import com.example.b00063271.safesplit.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -16,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import javax.annotation.Nullable;
+
+import androidx.annotation.NonNull;
 
 public class ActivityDB {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -30,8 +35,14 @@ public class ActivityDB {
         if(mListener!=null) mListener.onDatabaseInteration(C.CALLBACK_CHANGED_CONNECTION,isConnected,null,null);
     }
 
-    public void createActivity(String userMobile, String description, double type, Date timeStamp){
-        rf_u.document(userMobile).collection(C.COLLECTION_USERS_HISTORY).add(new Activities(description,type, timeStamp));
+    public void createActivity(final String userMobile,final String description,final double type,final Date timeStamp){
+        rf_u.document(userMobile).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.getResult().exists())
+                    rf_u.document(userMobile).collection(C.COLLECTION_USERS_HISTORY).add(new Activities(description,type, timeStamp));
+            }
+        });
     }
     public void setIsConnected(boolean value){
         isConnected = value;
