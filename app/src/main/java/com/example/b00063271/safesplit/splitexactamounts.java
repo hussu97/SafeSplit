@@ -111,6 +111,7 @@ public class splitexactamounts extends Fragment {
         for(int i = 0; i < users_without_custom.size(); i++){
             each_amount.add(0f);
         }
+        edittexts = new ArrayList<>();
 
         for(int i = 0; i < splittersexact.size(); i++){
             splittersexact.get(i).put("amount", Float.toString(0f));

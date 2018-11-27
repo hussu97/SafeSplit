@@ -51,10 +51,14 @@ public class NotificationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if(intent==null)
+        try {
+            if (intent.getStringExtra(C.USERS_MOBILE) == "")
+                userMobile = getSharedPreferences(C.LOCAL_FILE_NAME, MODE_PRIVATE).getString(C.USERS_MOBILE, "");
+            else
+                userMobile = intent.getStringExtra(C.USERS_MOBILE);
+        } catch (Exception e){
             userMobile = getSharedPreferences(C.LOCAL_FILE_NAME,MODE_PRIVATE).getString(C.USERS_MOBILE,"");
-        else
-            userMobile = intent.getStringExtra(C.USERS_MOBILE);
+        }
         if(userMobile == ""|| userMobile ==null)
             Log.d(TAG, "onStartCommand error");
         activityDB = new ActivityDB(mListener);

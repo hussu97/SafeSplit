@@ -10,8 +10,9 @@
     <color name="titletextcolor">#FFFF00</color>
     <color name="stage1">#000</color>
     <color name="stage2">#202020</color>
-    <color name="stage3">#404040</color>
-    <color name="stage4">#606060</color>
+    <color name="stage3">#808080</color>
+    <color name="stage3_5">#404040</color>
+    <color name="stage4">#808080</color>
     <color name="stage5">#808080</color>
     <color name="stage6">#A0A0A0</color>
     <color name="stage7">#C0C0C0</color>

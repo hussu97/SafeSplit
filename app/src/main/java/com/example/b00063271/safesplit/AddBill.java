@@ -513,14 +513,19 @@ public class AddBill extends AppCompatActivity {
                 activityDB.createActivity(C.formatNumber(j.get("number")),"A new bill -"+description_text+" ("+C.round(current_amount)+" AED)- has been added",C.ACTIVITY_TYPE_NEW_BILL,new Date());
         }
         for (HashMap<String, String> i : transactions) {
-            if (i.get(C.TRANSACTION_TO) == "You")
+            if (i.get(C.TRANSACTION_TO) == "You") {
                 transactionDB.createTransaction(username, C.formatNumber(i.get(C.TRANSACTION_TO_ID)), i.get(C.TRANSACTION_FROM), C.formatNumber(i.get(C.TRANSACTION_FROM_ID)), C.round(Double.valueOf(i.get(C.TRANSACTION_AMOUNT))));
-            else if (i.get(C.TRANSACTION_FROM) == "You")
+                activityDB.createActivity(C.formatNumber(i.get(C.TRANSACTION_TO_ID)), "You are owed -" + C.round(Double.valueOf(i.get(C.TRANSACTION_AMOUNT))) + "- from " + i.get(C.TRANSACTION_FROM), C.ACTIVITY_TYPE_NEW_TRANSACTION, new Date());
+                activityDB.createActivity(C.formatNumber(i.get(C.TRANSACTION_FROM_ID)), "You owe -" + C.round(Double.valueOf(i.get(C.TRANSACTION_AMOUNT))) + "- to " + username, C.ACTIVITY_TYPE_NEW_TRANSACTION, new Date());
+            } else if (i.get(C.TRANSACTION_FROM) == "You") {
                 transactionDB.createTransaction(i.get(C.TRANSACTION_TO), C.formatNumber(i.get(C.TRANSACTION_TO_ID)), username, C.formatNumber(i.get(C.TRANSACTION_FROM_ID)), C.round(Double.valueOf(i.get(C.TRANSACTION_AMOUNT))));
-            else
+                activityDB.createActivity(C.formatNumber(i.get(C.TRANSACTION_TO_ID)), "You are owed -" + C.round(Double.valueOf(i.get(C.TRANSACTION_AMOUNT))) + "- from " + username, C.ACTIVITY_TYPE_NEW_TRANSACTION, new Date());
+                activityDB.createActivity(C.formatNumber(i.get(C.TRANSACTION_FROM_ID)), "You owe -" + C.round(Double.valueOf(i.get(C.TRANSACTION_AMOUNT))) + "- to " + i.get(C.TRANSACTION_TO), C.ACTIVITY_TYPE_NEW_TRANSACTION, new Date());
+            } else {
                 transactionDB.createTransaction(i.get(C.TRANSACTION_TO), C.formatNumber(i.get(C.TRANSACTION_TO_ID)), i.get(C.TRANSACTION_FROM), C.formatNumber(i.get(C.TRANSACTION_FROM_ID)), C.round(Double.valueOf(i.get(C.TRANSACTION_AMOUNT))));
-            activityDB.createActivity(C.formatNumber(i.get(C.TRANSACTION_TO_ID)), "You are owed -" + C.round(Double.valueOf(i.get(C.TRANSACTION_AMOUNT))) + "- from " + i.get(C.TRANSACTION_FROM), C.ACTIVITY_TYPE_NEW_TRANSACTION, new Date());
-            activityDB.createActivity(C.formatNumber(i.get(C.TRANSACTION_FROM_ID)), "You owe -" + C.round(Double.valueOf(i.get(C.TRANSACTION_AMOUNT))) + "- to " + i.get(C.TRANSACTION_TO), C.ACTIVITY_TYPE_NEW_TRANSACTION, new Date());
+                activityDB.createActivity(C.formatNumber(i.get(C.TRANSACTION_TO_ID)), "You are owed -" + C.round(Double.valueOf(i.get(C.TRANSACTION_AMOUNT))) + "- from " + i.get(C.TRANSACTION_FROM), C.ACTIVITY_TYPE_NEW_TRANSACTION, new Date());
+                activityDB.createActivity(C.formatNumber(i.get(C.TRANSACTION_FROM_ID)), "You owe -" + C.round(Double.valueOf(i.get(C.TRANSACTION_AMOUNT))) + "- to " + i.get(C.TRANSACTION_TO), C.ACTIVITY_TYPE_NEW_TRANSACTION, new Date());
+            }
         }
         Intent intent = new Intent(this, HomeScreenActivity.class);
         intent.putExtra(C.USERS_MOBILE, currentuserid);

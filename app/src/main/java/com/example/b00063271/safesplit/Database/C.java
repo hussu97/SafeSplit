@@ -63,6 +63,7 @@ public class C {
     public static final int ACTIVITY_TYPE_UPDATE_PROFILE = 1031;
     public static final int ACTIVITY_TYPE_NEW_BILL = 1032;
     public static final int ACTIVITY_TYPE_NEW_TRANSACTION= 1033;
+    public static final int ACTIVITY_TYPE_NULL= 1034;
 
     public static final int CALLBACK_GET_TRANSACTIONS = 35;
     public static final int CALLBACK_GET_USER_EMAIL = 36;

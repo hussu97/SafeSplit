@@ -16,6 +16,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,12 +49,10 @@ public class UserDB {
         rf_u.document(user.getMobile()).set(docData).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
+                rf_u.document(user.getMobile()).collection(C.COLLECTION_USERS_HISTORY).document().set(new Activities("",C.ACTIVITY_TYPE_NULL,new Date()));
                 mListener.onDatabaseInteration(C.CALLBACK_ADD_USER,user.getMobile(),user.getName());
             }
         });
-
-    }
-    public void deleteUser(User user){
 
     }
     public void getUserEmail(String userMobile){

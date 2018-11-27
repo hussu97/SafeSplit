@@ -77,50 +77,14 @@ public class TransactionDB {
                     }});
     }
 
-    public String userExists(final String ID){
-        final ArrayList<String> x= new ArrayList<>();
-        rf_u.document(ID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(!task.getResult().exists())
-                    x.add(task.getResult().getString("name"));
-                else x.add("Error");
-            }
-        });
-        while(x.size()==0);
-        return x.get(0);
-    }
     public void createTransaction(final String from,final String fromID,final String to,final String toID,final double amount){
-        final DocumentReference df = rf_t.document(fromID+"/"+toID+"/"+String.valueOf(amount)+"/"+new Date());
-        String toInFunc,fromInFunc;
-        if(userExists(fromID)=="Error"){
-            fromInFunc = fromID;
-        } else {
-            fromInFunc = userExists(fromID);
-        }
-        if(userExists(toID)=="Error"){
-            toInFunc = toID;
-        } else {
-            toInFunc = userExists(toID);
-        }
-        Transactions transaction = new Transactions(fromInFunc,fromID,toInFunc,toID,amount);
+        final DocumentReference df = rf_t.document();
+        Transactions transaction = new Transactions(from,fromID,to,toID,amount);
         df.set(transaction).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                rf_u.document(fromID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if(task.getResult().exists())
-                        rf_u.document(fromID).update(C.USERS_TRANSACTIONS, FieldValue.arrayUnion(df.getId()));
-                    }
-                });
-                rf_u.document(toID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if(task.getResult().exists())
-                        rf_u.document(toID).update(C.USERS_TRANSACTIONS, FieldValue.arrayUnion(df.getId()));
-                    }
-                });
+                rf_u.document(fromID).update(C.USERS_TRANSACTIONS, FieldValue.arrayUnion(df.getId()));
+                rf_u.document(toID).update(C.USERS_TRANSACTIONS, FieldValue.arrayUnion(df.getId()));
                 if(mListener!=null){
                     mListener.onDatabaseInteration(C.CALLBACK_CREATE_TRANSACTION,moneyOweTransactions,moneyOwedTransactions,totalBalanceTransactions);
                 }

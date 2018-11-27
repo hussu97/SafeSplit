@@ -144,10 +144,10 @@ public class AddUsers extends AppCompatActivity implements AdapterView.OnItemCli
             @Override
             public void onChanged() {
                 super.onChanged();
-                System.out.println("dataset changed");
+                //System.out.println("dataset changed");
                 Object item = friends.getItem(0);
                 topoption = item.toString();
-                System.out.println("item.toString "+ item.toString());
+                //System.out.println("item.toString "+ item.toString());
             }
         });
 
@@ -160,34 +160,27 @@ public class AddUsers extends AppCompatActivity implements AdapterView.OnItemCli
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 startingchange = true;
-                System.out.println(position + "position position position");
+                //System.out.println(position + "position position position");
                 HashMap<String, String> temp = new HashMap<>();
 
-                // get the selected string from the dropdown (since it automatically gets added to the edittext)
-//               String value = simpleMultiAutoCompleteTextView.getText().toString();
-//               String[] data = value.split(", ");
-
-                // the last index holds the newly entered value --> get the index of the first instance
-                // of similar names in the main FRIENDS arraylist
-//                String newentry = data[data.length-1];
                 int nameindex = FRIENDS.indexOf(topoption);
-                System.out.println("TOP OPTION: " + topoption);
+                //System.out.println("TOP OPTION: " + topoption);
 
                 // sum of the first instance
                 temp.put("name", FRIENDS.get(nameindex+position));
                 temp.put("number", contactData.get(nameindex+position).get("number"));
-                System.out.println("NAME: " + FRIENDS.get(nameindex+position));
-                System.out.println("NUMBER: " + contactData.get(nameindex+position).get("number"));
+                //System.out.println("NAME: " + FRIENDS.get(nameindex+position));
+                //System.out.println("NUMBER: " + contactData.get(nameindex+position).get("number"));
 
                 if (!users_IDs.contains(temp)){              // The chosen users have a similar name
-                    System.out.println("ADDDDDDIINNGGGG " + FRIENDS.get(nameindex+position));
+                    //System.out.println("ADDDDDDIINNGGGG " + FRIENDS.get(nameindex+position));
                     users_IDs.add(temp);
                 }
 
                 for (int i = 0; i < users_IDs.size(); i++)
-                    System.out.println(users_IDs.get(i).get("name") + " --> " + users_IDs.get(i).get("number"));
+                    //System.out.println(users_IDs.get(i).get("name") + " --> " + users_IDs.get(i).get("number"));
 
-                simpleMultiAutoCompleteTextView.setText(check());
+                    simpleMultiAutoCompleteTextView.setText(check());
                 simpleMultiAutoCompleteTextView.setSelection(simpleMultiAutoCompleteTextView.getText().length());
                 startingchange = false;
             }
@@ -197,18 +190,33 @@ public class AddUsers extends AppCompatActivity implements AdapterView.OnItemCli
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 previousLength = s.length();
+                int cursor = simpleMultiAutoCompleteTextView.getSelectionEnd();
+/*                if(!startingchange){
+                    if(s.length() > 0){
+                        if(s.charAt(s.length()-1) == ',' && cursor == s.length()){
+                            System.out.println("THIS ONE IS CALLED 00===================================================");
+                            simpleMultiAutoCompleteTextView.setText(check());
+                            simpleMultiAutoCompleteTextView.setSelection(simpleMultiAutoCompleteTextView.getText().length());
+                        }
+                        System.out.println(s.length());
+                        System.out.println(s.charAt(s.length()-1));
+                        System.out.println(s.charAt(s.length()-2));
+                        System.out.println(s.charAt(s.length()-3));
+                    }
+                    startingchange = false;
+                }*/
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                int index2 = simpleMultiAutoCompleteTextView.getSelectionEnd();
+                int cursor = simpleMultiAutoCompleteTextView.getSelectionEnd();
                 if(previousLength > s.length()) backSpace = true;
                 else backSpace = false;
-                if(!startingchange && index2 != 0 && s.charAt(index2 - 1) == ','){
+                if(!startingchange && cursor != 0 && s.charAt(cursor - 1) == ','){
                     startingchange = true;
                     if (backSpace){
-                        if(s.charAt(s.length()-1) == ',' && s.charAt(s.length()-2) == ','){
-                            System.out.println("THIS ONE IS CALLED");
+                        if(s.charAt(s.length()-1) == ',' && cursor == s.length()){
+                            System.out.println("THIS ONE IS CALLED ===================================================");
                             simpleMultiAutoCompleteTextView.setText(check());
                             simpleMultiAutoCompleteTextView.setSelection(simpleMultiAutoCompleteTextView.getText().length());
                         }
@@ -224,15 +232,29 @@ public class AddUsers extends AppCompatActivity implements AdapterView.OnItemCli
                                     }
                                     i++;
                                 }
-                                users_IDs.remove(comma_count);
-                                System.out.println("THIS ONE IS CALLED 22");
+                                System.out.println(comma_count);
+                                System.out.println(users_IDs.size());
+                                if (comma_count >= users_IDs.size() - 1){
+                                    System.out.println("1111111111111111111111");
+                                    simpleMultiAutoCompleteTextView.setText(check());
+                                    simpleMultiAutoCompleteTextView.setSelection(simpleMultiAutoCompleteTextView.getText().length());
+                                }
+                                else{
+                                    System.out.println("22222222222222222222222");
+                                    users_IDs.remove(comma_count + 1);
+                                }
+                                System.out.println("THIS ONE IS CALLED 22 ===================================================");
+                                System.out.println(s.length());
+                                System.out.println(s.charAt(s.length()-1));
+                                System.out.println(s.charAt(s.length()-2));
+                                System.out.println(s.charAt(s.length()-3));
                                 simpleMultiAutoCompleteTextView.setText(check());
                                 simpleMultiAutoCompleteTextView.setSelection(simpleMultiAutoCompleteTextView.getText().length());
                                 startingchange = false;
                             }
                         }
                     }
-                    System.out.println("THIS ONE IS CALLED 33");
+                    System.out.println("THIS ONE IS CALLED 33 ===================================================");
                     simpleMultiAutoCompleteTextView.setText(check());
                     simpleMultiAutoCompleteTextView.setSelection(simpleMultiAutoCompleteTextView.getText().length());
                     startingchange = false;
@@ -250,8 +272,18 @@ public class AddUsers extends AppCompatActivity implements AdapterView.OnItemCli
                             }
                             i++;
                         }
-                        if(users_IDs.size() > comma_count) users_IDs.remove(comma_count);
-                        System.out.println("THIS ONE IS CALLED 44");
+                        System.out.println(comma_count);
+                        System.out.println(users_IDs.size());
+                        if (comma_count >= users_IDs.size() - 1){
+                            System.out.println("1111111111111111111111");
+                            simpleMultiAutoCompleteTextView.setText(check());
+                            simpleMultiAutoCompleteTextView.setSelection(simpleMultiAutoCompleteTextView.getText().length());
+                        }
+                        else{
+                            System.out.println("22222222222222222222222");
+                            users_IDs.remove(comma_count + 1);
+                        }
+                        System.out.println("THIS ONE IS CALLED 44 ===================================================");
                         simpleMultiAutoCompleteTextView.setText(check());
                         simpleMultiAutoCompleteTextView.setSelection(simpleMultiAutoCompleteTextView.getText().length());
                         startingchange = false;
@@ -321,10 +353,10 @@ public class AddUsers extends AppCompatActivity implements AdapterView.OnItemCli
 
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        System.out.println("HEERRRRRRRREEEEEEEEEEEEEEEEEEEEEE");
+        //System.out.println("HEERRRRRRRREEEEEEEEEEEEEEEEEEEEEE");
         switch (v.getId()){
             case R.id.multiAutoCompleteTextView:{
-                System.out.println("THIS METHOD WAS CALLEDDDDDDDDDDDDDDDDDDDDDDD");
+                //System.out.println("THIS METHOD WAS CALLEDDDDDDDDDDDDDDDDDDDDDDD");
                 startingchange = true;
 //                simpleMultiAutoCompleteTextView.setText(check());
                 simpleMultiAutoCompleteTextView.setSelection(simpleMultiAutoCompleteTextView.getText().length());
@@ -350,9 +382,10 @@ public class AddUsers extends AppCompatActivity implements AdapterView.OnItemCli
     public String check(){
         String result = "";
         for (int i = 1; i < users_IDs.size(); i++){
-            System.out.println("ADDING " + users_IDs.get(i).get("name"));
+            //System.out.println("ADDING " + users_IDs.get(i).get("name"));
             result += users_IDs.get(i).get("name") + ", ";
         }
+        if (result.length() != 0) result = result.substring(0, result.length() - 1);
         return result;
     }
 
@@ -367,45 +400,24 @@ public class AddUsers extends AppCompatActivity implements AdapterView.OnItemCli
 /*            System.out.println("case 1");
             System.out.println(entered + "22222222222222222222222222222");*/
 
-            Boolean contains = false;
-            int tempindex;
-
             temp.put("name", FRIENDS.get(position));
             temp.put("number", contactData.get(position).get("number"));
 
             if (!users_IDs.contains(temp)){              // The chosen users have a similar name
-/*                contains = true;
-                tempindex = users_IDs.indexOf(temp);    //must check if ID is the same --> number
-                if (!Friend_IDs.get(position).get("number").equals(users_IDs.get(tempindex).get(getname()))){
-                    simpleMultiAutoCompleteTextView.setText(entered + FRIENDS.get(position) + ", ");
-                    users_IDs.add(temp);
-                }*/
-                //simpleMultiAutoCompleteTextView.setText(entered + FRIENDS.get(position) + ", ");
                 users_IDs.add(temp);
             }
-//            else users_IDs.add(temp);
 
-            System.out.println(FRIENDS.get(position) + Friend_IDs.get(position).get("number"));
+            //System.out.println(FRIENDS.get(position) + Friend_IDs.get(position).get("number"));
         }
         else {
 //            System.out.println("case 2");
-            Boolean contains = false;
-            int tempindex;
 
             temp.put("name", FRIENDS.get(position));
             temp.put("number", contactData.get(position).get("number"));
 
             if (!users_IDs.contains(temp)){              // The chosen users have a similar name
-                /*contains = true;
-                tempindex = users_IDs.indexOf(temp);    //must check if ID is the same --> number
-                if (!Friend_IDs.get(position).get("number").equals(users_IDs.get(tempindex).get(FRIENDS.get(position)))){
-                    simpleMultiAutoCompleteTextView.setText(FRIENDS.get(position) + ", ");
-                    users_IDs.add(temp);
-                }*/
-                //simpleMultiAutoCompleteTextView.setText(FRIENDS.get(position) + ", ");
                 users_IDs.add(temp);
             }
-//            else users_IDs.add(temp);
 
             System.out.println(FRIENDS.get(position) + Friend_IDs.get(position).get("number"));
         }

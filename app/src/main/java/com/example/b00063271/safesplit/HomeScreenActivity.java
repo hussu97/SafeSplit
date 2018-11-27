@@ -71,8 +71,10 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
         navigation.setSelectedItemId(R.id.navigation_friends);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         sharedPreferences = getSharedPreferences(C.LOCAL_FILE_NAME,MODE_PRIVATE);
-        registerReceiver(broadcastReceiver, new IntentFilter(C.NO_INTERNET_BROADCAST));
-        registerReceiver(broadcastReceiver2, new IntentFilter(C.INTERNET_BROADCAST));
+        try {
+            registerReceiver(broadcastReceiver, new IntentFilter(C.NO_INTERNET_BROADCAST));
+            registerReceiver(broadcastReceiver2, new IntentFilter(C.INTERNET_BROADCAST));
+        } catch(Exception e) {}
         if(!isMyServiceRunning(NotificationService.class)){
             Intent serviceIntent = new Intent(this,NotificationService.class);
             serviceIntent.putExtra(C.USERS_MOBILE,userMobile);
@@ -80,6 +82,16 @@ public class HomeScreenActivity extends AppCompatActivity implements MainFragmen
         } else Log.d(TAG, "onCreate: Service running");
         internetSnackbar = null;
     }
+
+    @Override
+    protected void onStop() {
+        try {
+            unregisterReceiver(broadcastReceiver);
+            unregisterReceiver(broadcastReceiver2);
+        } catch(Exception e){}
+        super.onStop();
+    }
+
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);

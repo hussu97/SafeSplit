@@ -36,13 +36,7 @@ public class ActivityDB {
     }
 
     public void createActivity(final String userMobile,final String description,final double type,final Date timeStamp){
-        rf_u.document(userMobile).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.getResult().exists())
-                    rf_u.document(userMobile).collection(C.COLLECTION_USERS_HISTORY).add(new Activities(description,type, timeStamp));
-            }
-        });
+        rf_u.document(userMobile).collection(C.COLLECTION_USERS_HISTORY).add(new Activities(description,type, timeStamp));
     }
     public void setIsConnected(boolean value){
         isConnected = value;
@@ -74,10 +68,15 @@ public class ActivityDB {
                                     break;
                                 case C.ACTIVITY_TYPE_NEW_TRANSACTION:
                                     a.setActivityType(R.drawable.owe_dashboard);
+                                    break;
+                                case C.ACTIVITY_TYPE_NULL:
+                                    a.setActivityType(C.ACTIVITY_TYPE_NULL);
+                                    break;
                                 default:
-                                    Log.d(TAG, "onEvent: Type not found");
+                                    Log.d(TAG, "on Event: Type not found");
                             }
-                            activities.add(a);
+                            if(a.getActivityType()!=C.ACTIVITY_TYPE_NULL)
+                                activities.add(a);
                         }
                         if(mListener!= null) mListener.onDatabaseInteration(C.CALLBACK_GET_ACTIVITIES,isConnected,activities, null);
                     }
@@ -89,7 +88,7 @@ public class ActivityDB {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                      for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
-                         if(mListener!=null){
+                         if(mListener!=null && doc.getDouble(C.USERS_HISTORY_TYPE)/1 != C.ACTIVITY_TYPE_NULL){
                              NotificationText a = new NotificationText(doc.getString(C.USERS_HISTORY_ACTIVITY),doc.getId());
                              mListener.onDatabaseInteration(C.CALLBACK_GET_NEW_ACTIVITY,isConnected,null,a);
                          }

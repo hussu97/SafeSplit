@@ -3,7 +3,7 @@
     android:id="@+id/signUpLayout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/stage2"
+    android:background="@color/stage1"
     android:fitsSystemWindows="true">
 
     <LinearLayout

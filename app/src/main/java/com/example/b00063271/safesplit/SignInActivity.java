@@ -33,7 +33,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class SignInActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
-    private static final int REQUEST_SIGNUP = 0;
 
     private final String USERS_COLLECTION = "users";
 
@@ -111,7 +110,7 @@ public class SignInActivity extends AppCompatActivity {
     public void login() {
         Log.d(TAG, "Login");
         if (!validate()) {
-            onLoginFailed();
+            onLoginFailed("Login failed");
             return;
         }
         loginButton.setEnabled(false);
@@ -135,7 +134,7 @@ public class SignInActivity extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            SignInActivity.this.onLoginFailed();
+                            SignInActivity.this.onLoginFailed(task.getException().getMessage());
                             dialog.dismiss();
                         }
 
@@ -169,6 +168,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     public void onLoginSuccess(String userMobile, String userName) {
+        dialog.dismiss();
         loginButton.setEnabled(true);
         Intent intent = new Intent(this, HomeScreenActivity.class);
         intent.putExtra(C.USERS_MOBILE,userMobile);
@@ -176,8 +176,8 @@ public class SignInActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onLoginFailed() {
-        Snackbar snackbar = Snackbar.make((ScrollView)findViewById(R.id.signInLayout),"Login failed \uD83D\uDE14",Snackbar.LENGTH_SHORT);
+    public void onLoginFailed(String message) {
+        Snackbar snackbar = Snackbar.make((ScrollView)findViewById(R.id.signInLayout),message+" \uD83D\uDE14",Snackbar.LENGTH_SHORT);
         Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout)snackbar.getView();
         layout.setPadding(0, 0, 0, 0);
         snackbar.show();

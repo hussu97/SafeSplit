@@ -51,7 +51,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:foregroundTint="@color/colorSecondary"
-            android:textColorHint="@color/stage8"
+            android:textColorHint="@color/stage3"
             app:passwordToggleContentDescription="Enter a valid password"
             app:passwordToggleTint="@color/colorSecondary">
 
