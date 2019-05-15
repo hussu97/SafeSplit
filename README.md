@@ -7,7 +7,7 @@
 ***
 A productivity-based Android application to allow users to create bills and split them in any way possible with other users.
 
-#####The application uses Google Firebase tools for different modules of the application
+##### The application uses Google Firebase tools for different modules of the application
 * [FirebaseAuth](https://firebase.google.com/products/auth/) - For registration and authentication of users
 * [Firebase Realtime Database](https://firebase.google.com/products/realtime-database/) - A realtime database to store user information and information about bills, updated within the application in real-time
 
