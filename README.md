@@ -1,5 +1,5 @@
 # SafeSplit
-![Main Page](/screenshots/main.jpg)![Login Page](/screenshots/login.jpg)  
+![Main Page](/screenshots/main.jpg)  
 **Project for - CMP354 - Mobile Apps**  
 **Project Duration - October-December 2018**  
 **Collaborators - [Asif Towheed](https://github.com/asiftowheed)**  
